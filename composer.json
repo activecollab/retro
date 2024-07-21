@@ -1,0 +1,35 @@
+{
+    "name": "activecollab/retro",
+    "type": "library",
+    "description": "Library that ties together different bits needed to write a web app",
+    "license": "MIT",
+    "homepage": "https://labs.activecollab.com",
+    "authors": [
+        {
+            "name": "Ilija Studen",
+            "email": "ilija.studen@activecollab.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "/Users/ilijastuden/Projects/Components/sitemap"
+        }
+    ],
+    "require": {
+        "php": ">=8.2",
+        "activecollab/sitemap": "dev-master"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.0",
+        "phpunit/phpunit": "~9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ActiveCollab\\Retro\\": "src",
+            "ActiveCollab\\Retro\\Test\\": "test/src"
+        }
+    }
+}
