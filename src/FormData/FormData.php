@@ -29,7 +29,7 @@ class FormData implements FormDataInterface
         ServerRequestInterface $request,
         string $fieldName,
         string $default = '',
-        callable $modifier = null
+        callable $modifier = null,
     ): string
     {
         $parsedBody = $request->getParsedBody();

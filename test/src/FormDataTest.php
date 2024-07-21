@@ -22,14 +22,149 @@ class FormDataTest extends TestCase
 {
     public function testWillExtractStringFromRequest(): void
     {
-        $logger = $this->createMock(LoggerInterface::class);
-
         $this->assertSame(
             'this is a string value',
-            (new FormData($logger))->extractStringFromRequest(
+            (new FormData($this->createMock(LoggerInterface::class)))->extractStringFromRequest(
                 $this->prepareRequest(
                     [
                         'field_name' => 'this is a string value',
+                    ]
+                ),
+                'field_name',
+            ),
+        );
+    }
+
+    public function testWillExtractTrimmedString(): void
+    {
+        $this->assertSame(
+            'this is a string value',
+            (new FormData($this->createMock(LoggerInterface::class)))->extractTrimmedStringFromRequest(
+                $this->prepareRequest(
+                    [
+                        'field_name' => '    this is a string value   ',
+                    ]
+                ),
+                'field_name',
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider provideValuesForIntExtraction
+     */
+    public function testWillExtractIntFromRequest(
+        mixed $rawInputValue,
+        int $expectedValue,
+    )
+    {
+        $this->assertSame(
+            $expectedValue,
+            (new FormData($this->createMock(LoggerInterface::class)))->extractIntFromRequest(
+                $this->prepareRequest(
+                    [
+                        'field_name' => $rawInputValue,
+                    ]
+                ),
+                'field_name',
+            ),
+        );
+    }
+
+    public function provideValuesForIntExtraction(): array
+    {
+        return [
+            ['123', 123],
+            [123, 123],
+        ];
+    }
+
+    /**
+     * @dataProvider provideValuesForFloatExtraction
+     */
+    public function testWillExtractFloatFromRequest(
+        mixed $rawInputValue,
+        float $expectedValue,
+    )
+    {
+        $this->assertSame(
+            $expectedValue,
+            (new FormData($this->createMock(LoggerInterface::class)))->extractFloatFromRequest(
+                $this->prepareRequest(
+                    [
+                        'field_name' => $rawInputValue,
+                    ]
+                ),
+                'field_name',
+            ),
+        );
+    }
+
+    public function provideValuesForFloatExtraction(): array
+    {
+        return [
+            ['123', 123.0],
+            ['123.4', 123.4],
+            [123.5, 123.5],
+        ];
+    }
+
+    public function testWillReturnNullWhenValueIsOptional(): void
+    {
+        $this->assertNull(
+            (new FormData($this->createMock(LoggerInterface::class)))->extractOptionalIntFromRequest(
+                $this->prepareRequest([]),
+                'field_name',
+            ),
+        );
+
+        $this->assertNull(
+            (new FormData($this->createMock(LoggerInterface::class)))->extractOptionalFloatFromRequest(
+                $this->prepareRequest([]),
+                'field_name',
+            ),
+        );
+    }
+
+    public function testWillExtractArrayFromRequest(): void
+    {
+        $this->assertSame(
+            [
+                '1',
+                '2',
+                '3',
+            ],
+            (new FormData($this->createMock(LoggerInterface::class)))->extractArrayFromRequest(
+                $this->prepareRequest(
+                    [
+                        'field_name' => [
+                            '1',
+                            '2',
+                            '3',
+                        ],
+                    ]
+                ),
+                'field_name',
+            ),
+        );
+    }
+
+    public function testWillExtractArrayOfIdsFromRequest(): void
+    {
+        $this->assertSame(
+            [
+                1,
+                2,
+                3,
+            ],
+            (new FormData($this->createMock(LoggerInterface::class)))->extractArrayOfIdsFromRequest(
+                $this->prepareRequest(
+                    [
+                        'field_name' => [
+                            '1',
+                            2,
+                            '3',
+                        ],
                     ]
                 ),
                 'field_name',
