@@ -10,10 +10,13 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\Test;
 
+use ActiveCollab\PhoneNumber\Factory\PhoneNumberFactory;
 use ActiveCollab\PhoneNumber\Factory\PhoneNumberFactoryInterface;
+use ActiveCollab\PhoneNumber\PhoneNumberInterface;
 use ActiveCollab\Retro\FormData\FormData;
 use ActiveCollab\Retro\Test\Base\TestCase;
 use Laminas\Diactoros\ServerRequestFactory;
+use libphonenumber\PhoneNumberUtil;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 
@@ -190,6 +193,25 @@ class FormDataTest extends TestCase
                 'field_name',
             ),
         );
+    }
+
+    public function testWillExtractPhoneNumberFromRequest(): void
+    {
+        $logger = $this->createMock(LoggerInterface::class);
+        $phoneNumberFactory = new PhoneNumberFactory(PhoneNumberUtil::getInstance());
+
+        $phoneNumber = (new FormData($logger, $phoneNumberFactory))->extractPhoneNumber(
+            $this->prepareRequest(
+                [
+                    'phone_country' => 'US',
+                    'phone' => '800 444 4444',
+                ]
+            ),
+            'phone',
+        );
+
+        $this->assertInstanceOf(PhoneNumberInterface::class, $phoneNumber);
+        $this->assertSame('+18004444444', $phoneNumber->getPhoneNumber());
     }
 
     private function prepareRequest(mixed $payload): ServerRequestInterface
