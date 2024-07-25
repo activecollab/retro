@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\FormData;
 
 use ActiveCollab\DatabaseObject\Exception\ValidationException;
+use ActiveCollab\PhoneNumber\PhoneNumberInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 interface FormDataInterface
@@ -66,6 +67,11 @@ interface FormDataInterface
         string $fieldName,
         array $default = [],
     ): array;
+
+    public function extractPhoneNumber(
+        ServerRequestInterface $request,
+        string $fieldName,
+    ): ?PhoneNumberInterface;
 
     public function getFieldValue(string $fieldName, mixed $default = null): mixed;
     public function setFieldValue(string $fieldName, mixed $value): void;

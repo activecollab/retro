@@ -21,7 +21,8 @@
     "require": {
         "php": ">=8.2",
         "activecollab/databasestructure": "dev-master",
-        "activecollab/sitemap": "dev-master"
+        "activecollab/sitemap": "dev-master",
+        "giggsey/libphonenumber-for-php": "^8.13"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.0",

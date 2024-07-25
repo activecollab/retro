@@ -10,11 +10,10 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\Test;
 
+use ActiveCollab\PhoneNumber\Factory\PhoneNumberFactoryInterface;
 use ActiveCollab\Retro\FormData\FormData;
 use ActiveCollab\Retro\Test\Base\TestCase;
-use Laminas\Diactoros\RequestFactory;
 use Laminas\Diactoros\ServerRequestFactory;
-use Laminas\Diactoros\StreamFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 
@@ -22,9 +21,12 @@ class FormDataTest extends TestCase
 {
     public function testWillExtractStringFromRequest(): void
     {
+        $logger = $this->createMock(LoggerInterface::class);
+        $phoneNumberFactory = $this->createMock(PhoneNumberFactoryInterface::class);
+
         $this->assertSame(
             'this is a string value',
-            (new FormData($this->createMock(LoggerInterface::class)))->extractStringFromRequest(
+            (new FormData($logger, $phoneNumberFactory))->extractStringFromRequest(
                 $this->prepareRequest(
                     [
                         'field_name' => 'this is a string value',
@@ -37,9 +39,12 @@ class FormDataTest extends TestCase
 
     public function testWillExtractTrimmedString(): void
     {
+        $logger = $this->createMock(LoggerInterface::class);
+        $phoneNumberFactory = $this->createMock(PhoneNumberFactoryInterface::class);
+
         $this->assertSame(
             'this is a string value',
-            (new FormData($this->createMock(LoggerInterface::class)))->extractTrimmedStringFromRequest(
+            (new FormData($logger, $phoneNumberFactory))->extractTrimmedStringFromRequest(
                 $this->prepareRequest(
                     [
                         'field_name' => '    this is a string value   ',
@@ -58,9 +63,12 @@ class FormDataTest extends TestCase
         int $expectedValue,
     )
     {
+        $logger = $this->createMock(LoggerInterface::class);
+        $phoneNumberFactory = $this->createMock(PhoneNumberFactoryInterface::class);
+
         $this->assertSame(
             $expectedValue,
-            (new FormData($this->createMock(LoggerInterface::class)))->extractIntFromRequest(
+            (new FormData($logger, $phoneNumberFactory))->extractIntFromRequest(
                 $this->prepareRequest(
                     [
                         'field_name' => $rawInputValue,
@@ -87,9 +95,12 @@ class FormDataTest extends TestCase
         float $expectedValue,
     )
     {
+        $logger = $this->createMock(LoggerInterface::class);
+        $phoneNumberFactory = $this->createMock(PhoneNumberFactoryInterface::class);
+
         $this->assertSame(
             $expectedValue,
-            (new FormData($this->createMock(LoggerInterface::class)))->extractFloatFromRequest(
+            (new FormData($logger, $phoneNumberFactory))->extractFloatFromRequest(
                 $this->prepareRequest(
                     [
                         'field_name' => $rawInputValue,
@@ -111,15 +122,18 @@ class FormDataTest extends TestCase
 
     public function testWillReturnNullWhenValueIsOptional(): void
     {
+        $logger = $this->createMock(LoggerInterface::class);
+        $phoneNumberFactory = $this->createMock(PhoneNumberFactoryInterface::class);
+
         $this->assertNull(
-            (new FormData($this->createMock(LoggerInterface::class)))->extractOptionalIntFromRequest(
+            (new FormData($logger, $phoneNumberFactory))->extractOptionalIntFromRequest(
                 $this->prepareRequest([]),
                 'field_name',
             ),
         );
 
         $this->assertNull(
-            (new FormData($this->createMock(LoggerInterface::class)))->extractOptionalFloatFromRequest(
+            (new FormData($logger, $phoneNumberFactory))->extractOptionalFloatFromRequest(
                 $this->prepareRequest([]),
                 'field_name',
             ),
@@ -128,13 +142,16 @@ class FormDataTest extends TestCase
 
     public function testWillExtractArrayFromRequest(): void
     {
+        $logger = $this->createMock(LoggerInterface::class);
+        $phoneNumberFactory = $this->createMock(PhoneNumberFactoryInterface::class);
+
         $this->assertSame(
             [
                 '1',
                 '2',
                 '3',
             ],
-            (new FormData($this->createMock(LoggerInterface::class)))->extractArrayFromRequest(
+            (new FormData($logger, $phoneNumberFactory))->extractArrayFromRequest(
                 $this->prepareRequest(
                     [
                         'field_name' => [
@@ -151,13 +168,16 @@ class FormDataTest extends TestCase
 
     public function testWillExtractArrayOfIdsFromRequest(): void
     {
+        $logger = $this->createMock(LoggerInterface::class);
+        $phoneNumberFactory = $this->createMock(PhoneNumberFactoryInterface::class);
+
         $this->assertSame(
             [
                 1,
                 2,
                 3,
             ],
-            (new FormData($this->createMock(LoggerInterface::class)))->extractArrayOfIdsFromRequest(
+            (new FormData($logger, $phoneNumberFactory))->extractArrayOfIdsFromRequest(
                 $this->prepareRequest(
                     [
                         'field_name' => [
@@ -176,7 +196,7 @@ class FormDataTest extends TestCase
     {
         return (new ServerRequestFactory())->createServerRequest(
             'POST',
-            'http://example.com', [], 'this is a string value'
+            'https://example.com',
         )->withParsedBody($payload);
     }
 }

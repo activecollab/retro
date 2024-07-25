@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\FormData;
 
 use ActiveCollab\DatabaseObject\Exception\ValidationException;
+use ActiveCollab\PhoneNumber\Factory\PhoneNumberFactoryInterface;
+use ActiveCollab\PhoneNumber\PhoneNumberInterface;
 use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -19,6 +21,7 @@ class FormData implements FormDataInterface
 {
     public function __construct(
         private LoggerInterface $logger,
+        private PhoneNumberFactoryInterface $phoneNumberFactory,
         private array $fieldValues = [],
         private array $fieldErrors = [],
     )
@@ -162,6 +165,67 @@ class FormData implements FormDataInterface
             fn (mixed $value) => (int) $value,
             $this->extractArrayFromRequest($request, $fieldName, $default),
         );
+    }
+
+    public function extractPhoneNumber(
+        ServerRequestInterface $request,
+        string $fieldName,
+    ): ?PhoneNumberInterface
+    {
+        $phoneNumber = $this->extractTrimmedStringFromRequest($request, $fieldName);
+
+        if (empty($phoneNumber)) {
+            return null;
+        }
+
+        $phoneNumberCountry = $this->extractTrimmedStringFromRequest(
+            $request,
+            sprintf('%s_country', $fieldName),
+        );
+
+        if (empty($phoneNumberCountry)) {
+            $this->logger->notice(
+                'Phone number {phone_number} provided, but country code is missing.',
+                [
+                    'phone_number' => $phoneNumber,
+                ]
+            );
+
+            return null;
+        }
+
+        $countryCode = $this->phoneNumberFactory->getCountryCodeForRegion($phoneNumberCountry);
+
+        if (empty($countryCode)) {
+            $this->logger->notice(
+                'Phone number {phone_number} provided, but country {country_code} is not valid.',
+                [
+                    'phone_number' => $phoneNumber,
+                    'country_code' => $phoneNumberCountry,
+                ]
+            );
+
+            return null;
+        }
+
+        try {
+            return $this->phoneNumberFactory->createPhoneNumber(
+                sprintf(
+                    '+%d%s',
+                    $countryCode,
+                    $phoneNumber,
+                )
+            );
+        } catch (InvalidArgumentException) {
+            $this->logger->notice(
+                'Phone number {phone_number} is not valid.',
+                [
+                    'phone_number' => $phoneNumber,
+                ]
+            );
+
+            return null;
+        }
     }
 
     private function hasNumericField(mixed $parsedBody, string $fieldName): bool
