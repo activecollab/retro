@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bbbd6a24e81ec1b07b7082cfb5f7938b",
+    "content-hash": "d6276d7f4a019da6fc306776be3bd0dc",
     "packages": [
         {
             "name": "activecollab/containeraccess",
@@ -489,7 +489,7 @@
             "source": {
                 "type": "git",
                 "url": "/Users/ilijastuden/Projects/Components/sitemap",
-                "reference": "7a34435b97ac42a45ec82b4669fb4b0601a0e296"
+                "reference": "16bd902f2028f6189cf0758e0af03d682621f77b"
             },
             "require": {
                 "activecollab/containeraccess": "^2.0",
@@ -525,7 +525,50 @@
             ],
             "description": "File system based router",
             "homepage": "https://labs.activecollab.com",
-            "time": "2024-07-19T07:55:31+00:00"
+            "time": "2024-07-26T07:25:37+00:00"
+        },
+        {
+            "name": "activecollab/templatedui",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "/Users/ilijastuden/Projects/Components/templatedui",
+                "reference": "584c0f917580279e0ac901daf1e2054b180486ba"
+            },
+            "require": {
+                "activecollab/containeraccess": "^2.0",
+                "activecollab/datevalue": "^2.0",
+                "activecollab/templateengine": "^3.0",
+                "activecollab/user": "^4.0",
+                "activecollab/utils": "^3.0",
+                "php": ">=8.2",
+                "shark/simple_html_dom": "dev-master",
+                "smarty/smarty": "^4.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.0",
+                "phpunit/phpunit": "~9.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ActiveCollab\\TemplatedUI\\": "src",
+                    "ActiveCollab\\TemplatedUI\\Test\\": "test/src"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ilija Studen",
+                    "email": "ilija.studen@activecollab.com"
+                }
+            ],
+            "description": "Library for building web interfaces using templates, on the backend.",
+            "homepage": "https://labs.activecollab.com",
+            "time": "2024-07-26T12:28:52+00:00"
         },
         {
             "name": "activecollab/templateengine",
@@ -908,16 +951,16 @@
         },
         {
             "name": "giggsey/libphonenumber-for-php",
-            "version": "8.13.40",
+            "version": "8.13.41",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giggsey/libphonenumber-for-php.git",
-                "reference": "795e0b760e5c439b6fa1ffa787c1d90c2face1ff"
+                "reference": "d7131cda85cf9244e7c97d73edd14d8dad73640c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/795e0b760e5c439b6fa1ffa787c1d90c2face1ff",
-                "reference": "795e0b760e5c439b6fa1ffa787c1d90c2face1ff",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/d7131cda85cf9244e7c97d73edd14d8dad73640c",
+                "reference": "d7131cda85cf9244e7c97d73edd14d8dad73640c",
                 "shasum": ""
             },
             "require": {
@@ -979,7 +1022,7 @@
                 "issues": "https://github.com/giggsey/libphonenumber-for-php/issues",
                 "source": "https://github.com/giggsey/libphonenumber-for-php"
             },
-            "time": "2024-07-01T11:38:07+00:00"
+            "time": "2024-07-24T12:24:43+00:00"
         },
         {
             "name": "giggsey/locale",
@@ -1645,6 +1688,54 @@
             "time": "2021-05-03T11:20:27+00:00"
         },
         {
+            "name": "shark/simple_html_dom",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/samacs/simple_html_dom.git",
+                "reference": "d0a7686635945ac324d4c54cee6f8aa57d409b97"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/samacs/simple_html_dom/zipball/d0a7686635945ac324d4c54cee6f8aa57d409b97",
+                "reference": "d0a7686635945ac324d4c54cee6f8aa57d409b97",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.2.4"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "simple_html_dom.php"
+                ],
+                "classmap": [
+                    "simple_html_dom.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "S.C. Chen",
+                    "email": "me578022@gmail.com",
+                    "homepage": "http://simplehtmldom.sourceforge.net/"
+                }
+            ],
+            "description": "Simple HTML DOM package.",
+            "homepage": "http://simplehtmldom.sourceforge.net/",
+            "keywords": [
+                "dom",
+                "php dom"
+            ],
+            "support": {
+                "issues": "https://github.com/samacs/simple_html_dom/issues",
+                "source": "https://github.com/samacs/simple_html_dom/tree/master"
+            },
+            "time": "2018-11-08T03:30:17+00:00"
+        },
+        {
             "name": "slim/slim",
             "version": "4.14.0",
             "source": {
@@ -1759,6 +1850,72 @@
                 }
             ],
             "time": "2024-06-13T08:54:48+00:00"
+        },
+        {
+            "name": "smarty/smarty",
+            "version": "v4.5.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/smarty-php/smarty.git",
+                "reference": "9fc96a13dbaf546c3d7bcf95466726578cd4e0fa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/9fc96a13dbaf546c3d7bcf95466726578cd4e0fa",
+                "reference": "9fc96a13dbaf546c3d7bcf95466726578cd4e0fa",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1 || ^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.5 || ^7.5",
+                "smarty/smarty-lexer": "^3.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.0.x-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "libs/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Monte Ohrt",
+                    "email": "monte@ohrt.com"
+                },
+                {
+                    "name": "Uwe Tews",
+                    "email": "uwe.tews@googlemail.com"
+                },
+                {
+                    "name": "Rodney Rehm",
+                    "email": "rodney.rehm@medialize.de"
+                },
+                {
+                    "name": "Simon Wisselink",
+                    "homepage": "https://www.iwink.nl/"
+                }
+            ],
+            "description": "Smarty - the compiling PHP template engine",
+            "homepage": "https://smarty-php.github.io/smarty/",
+            "keywords": [
+                "templating"
+            ],
+            "support": {
+                "forum": "https://github.com/smarty-php/smarty/discussions",
+                "issues": "https://github.com/smarty-php/smarty/issues",
+                "source": "https://github.com/smarty-php/smarty/tree/v4.5.3"
+            },
+            "time": "2024-05-28T21:46:01+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -5798,7 +5955,8 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "activecollab/databasestructure": 20,
-        "activecollab/sitemap": 20
+        "activecollab/sitemap": 20,
+        "activecollab/templatedui": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

@@ -16,12 +16,17 @@
         {
             "type": "vcs",
             "url": "/Users/ilijastuden/Projects/Components/sitemap"
+        },
+        {
+            "type": "vcs",
+            "url": "/Users/ilijastuden/Projects/Components/templatedui"
         }
     ],
     "require": {
         "php": ">=8.2",
         "activecollab/databasestructure": "dev-master",
         "activecollab/sitemap": "dev-master",
+        "activecollab/templatedui": "dev-master",
         "giggsey/libphonenumber-for-php": "^8.13"
     },
     "require-dev": {
