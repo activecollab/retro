@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\Bootstrapper\Bundle\Manager;
 
+use ActiveCollab\Retro\Bootstrapper\Bundle\BundleInterface;
 use LogicException;
-use PhpCloudOrg\Feud\Bootstrap\App\Bundle\BundleInterface;
 
 class BundleManager implements BundleManagerInterface
 {
