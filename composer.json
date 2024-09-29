@@ -24,6 +24,7 @@
     ],
     "require": {
         "php": ">=8.2",
+        "activecollab/authentication": "dev-master",
         "activecollab/baseline": "^3.0",
         "activecollab/eventsdispatcher": "^1.0",
         "activecollab/databasemigrations": "^4.0",
