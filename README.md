@@ -17,10 +17,15 @@ To be continued…
 /logs
 /public/assets
 /public/index.php
+/test/unit/log
 /test/unit/src
 /test/unit/boostrap.php
 /upload
+.gitignore
+.php_cs.php
+.php_qc.php
 composer.json
 composer.lock
 phpunit.xml
 README.md
+VERSION
