@@ -8,3 +8,19 @@ Building blocks of Retro:
 1. **Form processing** using a simple mechanism to capture data from forms, validate it, and re-render the form with errors when needed.
 
 To be continued…
+
+## Project Structure
+
+/app/current/src - where application is being built
+/cache
+/config
+/logs
+/public/assets
+/public/index.php
+/test/unit/src
+/test/unit/boostrap.php
+/upload
+composer.json
+composer.lock
+phpunit.xml
+README.md

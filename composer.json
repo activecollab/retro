@@ -24,13 +24,21 @@
     ],
     "require": {
         "php": ">=8.2",
+        "activecollab/baseline": "^3.0",
+        "activecollab/eventsdispatcher": "^1.0",
+        "activecollab/databasemigrations": "^4.0",
         "activecollab/databasestructure": "dev-master",
         "activecollab/sitemap": "dev-master",
         "activecollab/templatedui": "dev-master",
-        "giggsey/libphonenumber-for-php": "^8.13"
+        "akrabat/ip-address-middleware": "^2.1",
+        "giggsey/libphonenumber-for-php": "^8.13",
+        "php-di/php-di": "^6.3",
+        "php-di/slim-bridge": "^3.2",
+        "symfony/console": "^4.0||^5.0||^6.0",
+        "vlucas/phpdotenv": "^5.0.0"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.0",
+        "friendsofphp/php-cs-fixer": "3.4.0",
         "phpunit/phpunit": "~9.0"
     },
     "autoload": {
