@@ -46,7 +46,8 @@
     "autoload": {
         "psr-4": {
             "ActiveCollab\\Retro\\": "src",
-            "ActiveCollab\\Retro\\Test\\": "test/src"
+            "ActiveCollab\\Retro\\Test\\": "test/src",
+            "ActiveCollab\\Retro\\Test\\Fixtures\\": "test/fixtures"
         }
     }
 }

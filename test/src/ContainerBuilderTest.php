@@ -12,6 +12,7 @@ namespace ActiveCollab\Retro\Test;
 
 use ActiveCollab\Retro\Bootstrapper\ContainerBuilder\ContainerBuilder;
 use ActiveCollab\Retro\Test\Base\TestCase;
+use ActiveCollab\Retro\Test\Fixtures\TestBundle\TestBundle;
 
 class ContainerBuilderTest extends TestCase
 {
@@ -28,5 +29,16 @@ class ContainerBuilderTest extends TestCase
         $this->assertContains('/var/www/app/app/1.0.0/routes.php', $definitions);
         $this->assertContains('/var/www/app/app/1.0.0/auth.php', $definitions);
         $this->assertContains('/var/www/app/app/1.0.0/utils.php', $definitions);
+    }
+
+    public function testWillLoadBundleDependencies(): void
+    {
+        $this->assertContains(
+            TestBundle::DEPENDENCIES,
+            (new ContainerBuilder('/var/www/app'))->buildDefinitions(
+                '1.0.0',
+                TestBundle::class,
+            )
+        );
     }
 }

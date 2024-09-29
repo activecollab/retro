@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\Bootstrapper\ContainerBuilder;
 
+use ActiveCollab\Retro\Bootstrapper\Bundle\BundleInterface;
 use DI\ContainerBuilder as BaseContainerBuilder;
 use Psr\Container\ContainerInterface;
 
@@ -73,6 +74,12 @@ class ContainerBuilder implements ContainerBuilderInterface
 
     private function getBundleDependenciesFiles(string $bundleClass): string
     {
+        $bundleClassReflection = new \ReflectionClass($bundleClass);
 
+        if (!$bundleClassReflection->implementsInterface(BundleInterface::class)) {
+            throw new \LogicException('Invalid bundle class provided.');
+        }
+
+        return $bundleClassReflection->getConstant('DEPENDENCIES');
     }
 }
