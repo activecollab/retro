@@ -15,11 +15,13 @@ use ActiveCollab\ContainerAccess\ContainerAccessInterface;
 use ActiveCollab\Retro\Bootstrapper\AppBootstrapper\AppBootstrapper;
 use ActiveCollab\Retro\Bootstrapper\AppBootstrapper\AppBootstrapperInterface;
 use ActiveCollab\Retro\Command\CommandInterface;
+use InvalidArgumentException;
+use LogicException;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 
-class SymfonyConsoleAppBootstrapper extends AppBootstrapper implements CliAppBootstrapperInterface
+abstract class SymfonyConsoleAppBootstrapper extends AppBootstrapper implements CliAppBootstrapperInterface
 {
     private Application $app;
     private int $exit_code = 0;
@@ -60,16 +62,13 @@ class SymfonyConsoleAppBootstrapper extends AppBootstrapper implements CliAppBoo
             return $command;
         }
 
-        throw new \InvalidArgumentException("Command '$commandName' not found.");
+        throw new InvalidArgumentException(sprintf("Command '%s' not found.", $commandName));
     }
 
-    /**
-     * @param Command|CommandInterface $command
-     */
     public function addCommand(CommandInterface $command): CliAppBootstrapperInterface
     {
         if (!$this->isBootstrapped()) {
-            throw new \LogicException('App needs to be bootstrapped before we can add commands to it.');
+            throw new LogicException('App needs to be bootstrapped before we can add commands to it.');
         }
 
         $this->app->add($command);
@@ -77,7 +76,7 @@ class SymfonyConsoleAppBootstrapper extends AppBootstrapper implements CliAppBoo
         return $this;
     }
 
-    protected function scanDirsForCommands(Application $app, ContainerInterface $container)
+    protected function scanDirsForCommands(Application $app, ContainerInterface $container): void
     {
         (new ClassFinder())->scanDirsForInstances(
             $this->getDirsToScan(),

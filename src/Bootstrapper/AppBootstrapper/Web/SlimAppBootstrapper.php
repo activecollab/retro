@@ -18,7 +18,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\App as SlimApp;
 
-class SlimAppBootstrapper extends AppBootstrapper implements WebAppBootstrapperInterface
+abstract class SlimAppBootstrapper extends AppBootstrapper implements WebAppBootstrapperInterface
 {
     private ?SlimApp $app = null;
 
