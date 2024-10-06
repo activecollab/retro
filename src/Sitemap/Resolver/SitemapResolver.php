@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\Sitemap\Resolver;
 
-use ActiveCollab\Retro\Sitemap\Resolver\SitemapResolverInterface;
 use ActiveCollab\Sitemap\Sitemap\SitemapInterface;
 use Psr\Container\ContainerInterface;
 
