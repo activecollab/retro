@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\Command\Retro;
 
-use ActiveCollab\Retro\Command\Traits\FileManagementTrait;
+use ActiveCollab\Retro\FileManagementTrait;
 use InvalidArgumentException;
 use Nette\PhpGenerator\ClassType;
 use Symfony\Component\Console\Input\InputArgument;

@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace ActiveCollab\Retro\Command\Traits;
+namespace ActiveCollab\Retro;
 
 use RuntimeException;
 use Symfony\Component\Console\Output\OutputInterface;
