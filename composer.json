@@ -43,6 +43,9 @@
         "nette/php-generator": "^4.0",
         "phpunit/phpunit": "~9.0"
     },
+    "suggest": {
+        "nette/php-generator": "To run code generation commands"
+    },
     "autoload": {
         "psr-4": {
             "ActiveCollab\\Retro\\": "src",

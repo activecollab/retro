@@ -10,21 +10,22 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\Bootstrapper\AppBootstrapper\Cli;
 
+use ActiveCollab\ClassFinder\ClassDir\ClassDir;
 use ActiveCollab\ClassFinder\ClassFinder;
 use ActiveCollab\ContainerAccess\ContainerAccessInterface;
 use ActiveCollab\Retro\Bootstrapper\AppBootstrapper\AppBootstrapper;
 use ActiveCollab\Retro\Bootstrapper\AppBootstrapper\AppBootstrapperInterface;
+use ActiveCollab\Retro\Command\Command;
 use ActiveCollab\Retro\Command\CommandInterface;
 use InvalidArgumentException;
 use LogicException;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Command\Command;
 
 abstract class SymfonyConsoleAppBootstrapper extends AppBootstrapper implements CliAppBootstrapperInterface
 {
     private Application $app;
-    private int $exit_code = 0;
+    private int $exitCode = 0;
 
     public function bootstrap(): AppBootstrapperInterface
     {
@@ -48,10 +49,15 @@ abstract class SymfonyConsoleAppBootstrapper extends AppBootstrapper implements 
     {
         parent::run($silent);
 
-        $this->exit_code = $this->app->run();
+        $this->exitCode = $this->app->run();
         $this->setIsRan();
 
         return $this;
+    }
+
+    public function getExitCode(): int
+    {
+        return $this->exitCode;
     }
 
     public function getCommand(string $commandName): CommandInterface
@@ -92,6 +98,16 @@ abstract class SymfonyConsoleAppBootstrapper extends AppBootstrapper implements 
 
     protected function getDirsToScan(): array
     {
-        return [];
+        return [
+            new ClassDir(
+                sprintf(
+                    dirname(__DIR__, 3) . '/Command',
+                    $this->getAppMetadata()->getPath(),
+                    $this->getAppMetadata()->getVersion(),
+                ),
+                Command::class,
+                CommandInterface::class,
+            ),
+        ];
     }
 }
