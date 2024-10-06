@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace ActiveCollab\Retro\Sitemap;
+namespace ActiveCollab\Retro\Sitemap\Trait;
 
 use ActiveCollab\DatabaseObject\Entity\EntityInterface;
 use ActiveCollab\DatabaseObject\PoolInterface;
