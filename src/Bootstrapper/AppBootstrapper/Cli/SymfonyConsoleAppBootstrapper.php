@@ -20,6 +20,7 @@ use ActiveCollab\Retro\Command\CommandInterface;
 use InvalidArgumentException;
 use LogicException;
 use Psr\Container\ContainerInterface;
+use ReflectionClass;
 use Symfony\Component\Console\Application;
 
 abstract class SymfonyConsoleAppBootstrapper extends AppBootstrapper implements CliAppBootstrapperInterface
@@ -105,7 +106,7 @@ abstract class SymfonyConsoleAppBootstrapper extends AppBootstrapper implements 
                     $this->getAppMetadata()->getPath(),
                     $this->getAppMetadata()->getVersion(),
                 ),
-                Command::class,
+                (new ReflectionClass(Command::class))->getNamespaceName(),
                 CommandInterface::class,
             ),
         ];
