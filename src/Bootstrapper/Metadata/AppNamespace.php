@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\Bootstrapper\Metadata;
 
-class AppAppNamespace implements AppNamespaceInterface
+class AppNamespace implements AppNamespaceInterface
 {
     public function __construct(private string $appNamespace)
     {
