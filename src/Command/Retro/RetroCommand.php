@@ -29,7 +29,7 @@ abstract class RetroCommand extends Command implements RetroCommandInterface
             throw new LogicException('Inflector is not available.');
         }
 
-        return $this->getContainer()->get(Inflector::class);
+        return $this->get(Inflector::class);
     }
 
     protected function getAppPath(): string
@@ -38,7 +38,7 @@ abstract class RetroCommand extends Command implements RetroCommandInterface
             throw new LogicException('Path is not available.');
         }
 
-        return $this->getContainer()->get(PathInterface::class)->getPath();
+        return $this->get(PathInterface::class)->getPath();
     }
 
     protected function getAppNamespace(): string
@@ -47,6 +47,6 @@ abstract class RetroCommand extends Command implements RetroCommandInterface
             throw new LogicException('App namespace is not available.');
         }
 
-        return $this->getContainer()->get(AppNamespaceInterface::class)->getNamespace();
+        return $this->get(AppNamespaceInterface::class)->getNamespace();
     }
 }

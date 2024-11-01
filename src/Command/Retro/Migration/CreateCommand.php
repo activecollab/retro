@@ -47,16 +47,12 @@ class CreateCommand extends MigrationCommand
 
     protected function getHeaderComment(): string
     {
-        return $this->getContainer()
-            ->get(MigrationsHeaderCommentResolverInterface::class)
-                ->getMigrationsHeaderComment();
+        return $this->get(MigrationsHeaderCommentResolverInterface::class)->getMigrationsHeaderComment();
     }
 
     protected function getNamespace(): string
     {
-        return $this->getContainer()
-            ->get(MigrationsNamespaceResolverInterface::class)
-                ->getMigrationsNamespace();
+        return $this->get(MigrationsNamespaceResolverInterface::class)->getMigrationsNamespace();
     }
 
     public function getMigrationName(InputInterface $input): string

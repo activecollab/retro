@@ -101,17 +101,17 @@ class BuildStructureCommand extends RetroCommand
 
     private function getConnection(): ConnectionInterface
     {
-        return $this->getContainer()->get(ConnectionInterface::class);
+        return $this->get(ConnectionInterface::class);
     }
 
     public function getStructure(): StructureInterface
     {
-        return $this->getContainer()->get(StructureInterface::class);
+        return $this->get(StructureInterface::class);
     }
 
     public function getMigrations(): MigrationsInterface
     {
-        $migrations = $this->getContainer()->get(MigrationsInterface::class);
+        $migrations = $this->get(MigrationsInterface::class);
 
         if ($migrations instanceof MigrationsInterface) {
             return $migrations;
@@ -122,6 +122,6 @@ class BuildStructureCommand extends RetroCommand
 
     public function getSystemPath(): PathInterface
     {
-        return $this->getContainer()->get(PathInterface::class);
+        return $this->get(PathInterface::class);
     }
 }

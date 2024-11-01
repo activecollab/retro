@@ -23,7 +23,7 @@ abstract class MigrationCommand extends RetroCommand
 
     protected function getMigrations(): MigrationsInterface
     {
-        $migrations = $this->getContainer()->get(MigrationsInterface::class);
+        $migrations = $this->get(MigrationsInterface::class);
 
         if ($migrations instanceof MigrationsInterface) {
             return $migrations;
