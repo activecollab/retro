@@ -8,18 +8,17 @@
 
 declare(strict_types=1);
 
-namespace ActiveCollab\Retro\Command\Retro;
+namespace ActiveCollab\Retro\Command\Retro\Migration;
 
 use ActiveCollab\DatabaseMigrations\Command\Create as CreateMigrationsHelper;
 use ActiveCollab\DatabaseMigrations\MigrationsInterface;
-use ActiveCollab\Retro\Integrate\Migration\MigrationsHeaderCommentResolverInterface;
-use ActiveCollab\Retro\Integrate\Migration\MigrationsNamespaceResolverInterface;
+use ActiveCollab\Retro\Command\Retro\RetroCommand;
 use RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 
-class CreateMigrationCommand extends RetroCommand
+class CreateMigrationCommand extends MigrationCommand
 {
     use CreateMigrationsHelper;
 
@@ -47,20 +46,6 @@ class CreateMigrationCommand extends RetroCommand
             );
     }
 
-    protected function getHeaderComment(): string
-    {
-        return $this->getContainer()
-            ->get(MigrationsHeaderCommentResolverInterface::class)
-                ->getMigrationsHeaderComment();
-    }
-
-    protected function getNamespace(): string
-    {
-        return $this->getContainer()
-            ->get(MigrationsNamespaceResolverInterface::class)
-                ->getMigrationsNamespace();
-    }
-
     public function getMigrationName(InputInterface $input): string
     {
         return trim($input->getArgument('migration_name'));
@@ -75,16 +60,5 @@ class CreateMigrationCommand extends RetroCommand
         }
 
         return $result;
-    }
-
-    protected function getMigrations(): MigrationsInterface
-    {
-        $migrations = $this->getContainer()->get(MigrationsInterface::class);
-
-        if ($migrations instanceof MigrationsInterface) {
-            return $migrations;
-        }
-
-        throw new RuntimeException('Failed to get migrations utility from DI container');
     }
 }
