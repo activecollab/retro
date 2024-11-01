@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\Command\Retro\Migration;
 
 use ActiveCollab\DatabaseMigrations\Command\Create as CreateMigrationsHelper;
+use ActiveCollab\Retro\Integrate\Migration\MigrationsHeaderCommentResolverInterface;
+use ActiveCollab\Retro\Integrate\Migration\MigrationsNamespaceResolverInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -41,6 +43,20 @@ class CreateCommand extends MigrationCommand
                 InputOption::VALUE_NONE,
                 "Example what you'll do, without creating an actual file"
             );
+    }
+
+    protected function getHeaderComment(): string
+    {
+        return $this->getContainer()
+            ->get(MigrationsHeaderCommentResolverInterface::class)
+                ->getMigrationsHeaderComment();
+    }
+
+    protected function getNamespace(): string
+    {
+        return $this->getContainer()
+            ->get(MigrationsNamespaceResolverInterface::class)
+                ->getMigrationsNamespace();
     }
 
     public function getMigrationName(InputInterface $input): string
