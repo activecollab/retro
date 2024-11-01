@@ -11,14 +11,11 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\Command\Retro\Migration;
 
 use ActiveCollab\DatabaseMigrations\Command\Create as CreateMigrationsHelper;
-use ActiveCollab\DatabaseMigrations\MigrationsInterface;
-use ActiveCollab\Retro\Command\Retro\RetroCommand;
-use RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 
-class CreateMigrationCommand extends MigrationCommand
+class CreateCommand extends MigrationCommand
 {
     use CreateMigrationsHelper;
 
