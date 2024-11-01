@@ -20,7 +20,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 
-class CreateTag extends RetroCommand
+class CreateTagCommand extends RetroCommand
 {
     use FileManagementTrait;
     use BundleAwareTrait;
