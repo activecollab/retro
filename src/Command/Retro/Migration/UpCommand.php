@@ -10,16 +10,16 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\Command\Retro\Migration;
 
-use ActiveCollab\DatabaseMigrations\Command\All as AllMigrationsHelper;
+use ActiveCollab\DatabaseMigrations\Command\Up as UpMigrationsHelper;
 
-class ListCommand extends MigrationCommand
+class UpCommand extends MigrationCommand
 {
-    use AllMigrationsHelper;
+    use UpMigrationsHelper;
 
     protected function configure()
     {
         parent::configure();
 
-        $this->setDescription('List all migrations');
+        $this->setDescription('Run all migrations that are not executed');
     }
 }
