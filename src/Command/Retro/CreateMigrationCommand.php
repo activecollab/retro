@@ -12,8 +12,8 @@ namespace ActiveCollab\Retro\Command\Retro;
 
 use ActiveCollab\DatabaseMigrations\Command\Create as CreateMigrationsHelper;
 use ActiveCollab\DatabaseMigrations\MigrationsInterface;
-use ActiveCollab\Retro\Integrate\MigrationsHeaderCommentResolverInterface;
-use ActiveCollab\Retro\Integrate\MigrationsNamespaceResolverInterface;
+use ActiveCollab\Retro\Integrate\Migration\MigrationsHeaderCommentResolverInterface;
+use ActiveCollab\Retro\Integrate\Migration\MigrationsNamespaceResolverInterface;
 use RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace ActiveCollab\Retro\Integrate;
+namespace ActiveCollab\Retro\Integrate\Migration;
 
 interface MigrationsHeaderCommentResolverInterface
 {
