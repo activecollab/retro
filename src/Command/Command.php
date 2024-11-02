@@ -157,7 +157,7 @@ abstract class Command extends BaseCommand implements CommandInterface
      * @param class-string<TClassName> $id
      * @return TClassName
      */
-    public function get(string $id): mixed
+    protected function get(string $id): mixed
     {
         return $this->getContainer()?->get($id);
     }
