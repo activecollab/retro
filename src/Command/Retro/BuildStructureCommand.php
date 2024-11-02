@@ -100,7 +100,7 @@ class BuildStructureCommand extends RetroCommand
 
             return 0;
         } catch (Exception $e) {
-            return $this->abortDueToException($e);
+            return $this->abortDueToException($e, $input, $output);
         }
     }
 
