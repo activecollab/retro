@@ -12,18 +12,19 @@ namespace ActiveCollab\Retro\CommandTrait;
 
 use ActiveCollab\DatabaseStructure\StructureInterface;
 use ActiveCollab\DatabaseStructure\TypeInterface;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 
 trait ModelAwareTrait
 {
     protected function mustGetModel(InputInterface $input): TypeInterface
     {
-        /** @var StructureInterface $structure */
-        $structure = $this->getContainer()->get(StructureInterface::class);
-
-        return $structure->getType(trim($input->getArgument('model')));
+        return $this->get(StructureInterface::class)->getType(trim($input->getArgument('model')));
     }
 
-    abstract public function &getContainer() : ? ContainerInterface;
+    /**
+     * @template TClassName
+     * @param class-string<TClassName> $id
+     * @return TClassName
+     */
+    abstract protected function get(string $id): mixed;
 }

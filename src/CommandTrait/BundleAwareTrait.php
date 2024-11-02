@@ -12,18 +12,19 @@ namespace ActiveCollab\Retro\CommandTrait;
 
 use ActiveCollab\Retro\Bootstrapper\Bundle\BundleInterface;
 use ActiveCollab\Retro\Bootstrapper\Bundle\Manager\BundleManagerInterface;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 
 trait BundleAwareTrait
 {
     protected function mustGetBundle(InputInterface $input): BundleInterface
     {
-        /** @var BundleManagerInterface $bundleManager */
-        $bundleManager = $this->getContainer()->get(BundleManagerInterface::class);
-
-        return $bundleManager->getByName(trim($input->getArgument('bundle')));
+        return $this->get(BundleManagerInterface::class)->getByName(trim($input->getArgument('bundle')));
     }
 
-    abstract public function &getContainer(): ?ContainerInterface;
+    /**
+     * @template TClassName
+     * @param class-string<TClassName> $id
+     * @return TClassName
+     */
+    abstract protected function get(string $id): mixed;
 }
