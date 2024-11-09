@@ -25,9 +25,10 @@ class FormFieldBlock extends WrapContentBlock
     public function render(
         string $fieldName,
         string $content,
-        string $id = null,
+        ?string $label = null,
+        ?string $id = null,
         bool $required = false,
-        FormDataInterface $formData = null,
+        ?FormDataInterface $formData = null,
     ): string
     {
         $id = $id ?? $this->componentIdResolver->getUniqueId($fieldName);
@@ -38,7 +39,7 @@ class FormFieldBlock extends WrapContentBlock
             $fieldName,
             str_replace(
                 'x-inject-form-field-attributes=""',
-                $this->injectFormFieldAttributes($id, $required),
+                $this->injectFormFieldAttributes($id, $label, $required),
                 $content,
             ),
             $this->renderFieldErrors($fieldName, $id, $formData),
@@ -63,12 +64,17 @@ class FormFieldBlock extends WrapContentBlock
 
     private function injectFormFieldAttributes(
         string $fieldId,
+        ?string $label,
         bool $required,
     ): string
     {
         $attributes = [
             sprintf('id="%s"', $fieldId),
         ];
+
+        if ($label) {
+            $attributes[] = sprintf('label="%s"', $this->sanitizeForHtml($label));
+        }
 
         if ($required) {
             $attributes[] = 'required';
