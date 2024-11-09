@@ -16,6 +16,6 @@ class WrapButtonsBlock extends WrapContentBlock
 {
     public function render(string $content): string
     {
-        return sprintf('<div class="mt-1">%s</div>', $content);
+        return sprintf('<div style="margin-top: 0.25rem;">%s</div>', $content);
     }
 }
