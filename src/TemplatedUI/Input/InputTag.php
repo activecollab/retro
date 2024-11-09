@@ -38,16 +38,12 @@ abstract class InputTag extends FormFieldTag
             ],
         );
 
-        if (!empty($attributes['x-model'])) {
-            $attributes['x-model'] = sprintf('formData.%s', $attributes['x-model']);
-        }
-
         if ($placeholder) {
             $attributes['placeholder'] = $placeholder;
         }
 
         return $this->wrapFormControl(
-            $this->openHtmlTag('input', $attributes),
+            $this->openHtmlTag('sl-input', $attributes),
         );
     }
 
