@@ -38,7 +38,7 @@ class ButtonLinkBlock extends WrapContentBlock
             'type' => 'button',
             'variant' => $variant
                 ? $variant->toAttributeValue()
-                : ButtonVariant::PRIMARY->toAttributeValue(),
+                : ButtonVariant::DEFAULT->toAttributeValue(),
         ];
 
         if ($size) {
