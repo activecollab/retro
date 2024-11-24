@@ -50,7 +50,7 @@ class ButtonBlock extends WrapContentBlock implements ButtonBlockInterface
             '%s%s%s',
             $this->openHtmlTag('sl-button', $attributes),
             $content,
-            $this->closeHtmlTag('button'),
+            $this->closeHtmlTag('sl-button'),
         );
     }
 
