@@ -19,26 +19,60 @@ use Slim\Interfaces\RouteInterface;
 
 trait EntityAwareNodeMiddleware
 {
+    /**
+     * @template TClassName
+     * @param class-string<TClassName> $entityType
+     * @return TClassName|null
+     */
     protected function getEntityFromRequest(
         ServerRequestInterface $request,
         string $entityType,
-        string $routeArgumentName = null
+        string $routeArgumentName = null,
     ): ?EntityInterface
     {
-        $entityId = (int) $this
-            ->getRoute($request)
-            ->getArgument(
-                $routeArgumentName ?? $this->getIdArgumentNameFromEntityType($entityType)
-            );
+        return $this->getEntityFromId(
+            $entityType,
+            (int) $this
+                ->getRoute($request)
+                ->getArgument(
+                    $routeArgumentName ?? $this->getIdArgumentNameFromEntityType($entityType)
+                ),
+        );
+    }
 
-        if ($entityId) {
-            $entity = $this->getContainer()
-                ->get(PoolInterface::class)
-                ->getById($entityType, $entityId);
+    /**
+     * @template TClassName
+     * @param class-string<TClassName> $entityType
+     * @return TClassName|null
+     */
+    protected function getEntityFromQuery(
+        ServerRequestInterface $request,
+        string $entityType,
+        string $queryArgumentName = null,
+    ): ?EntityInterface
+    {
+        if ($queryArgumentName === null) {
+            $queryArgumentName = $this->getIdArgumentNameFromEntityType($entityType);
+        }
 
-            if ($entity instanceof $entityType) {
-                return $entity;
-            }
+        return $this->getEntityFromId(
+            $entityType,
+            (int) ($request->getQueryParams()[$queryArgumentName] ?? 0),
+        );
+    }
+
+    private function getEntityFromId(string $entityType, int $entityId): ?EntityInterface
+    {
+        if (empty($entityId)) {
+            return null;
+        }
+
+        $entity = $this->getContainer()
+            ->get(PoolInterface::class)
+            ->getById($entityType, $entityId);
+
+        if ($entity instanceof $entityType) {
+            return $entity;
         }
 
         return null;
