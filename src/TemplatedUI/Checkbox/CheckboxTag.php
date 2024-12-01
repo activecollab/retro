@@ -49,6 +49,6 @@ class CheckboxTag extends Tag
             ),
             $this->sanitizeForHtml($label),
             $this->closeHtmlTag('sl-checkbox'),
-        )
+        );
     }
 }
