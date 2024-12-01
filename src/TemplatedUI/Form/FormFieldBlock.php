@@ -27,6 +27,7 @@ class FormFieldBlock extends WrapContentBlock
         string $content,
         ?string $label = null,
         ?string $id = null,
+        ?string $class = null,
         bool $required = false,
         ?FormDataInterface $formData = null,
     ): string
@@ -35,7 +36,7 @@ class FormFieldBlock extends WrapContentBlock
 
         return sprintf(
             '<div class="%s" data-form-field="%s">%s%s</div>',
-            implode(' ', $this->getWrapperClasses($fieldName, $formData)),
+            implode(' ', $this->getWrapperClasses($fieldName, $class, $formData)),
             $fieldName,
             str_replace(
                 'x-inject-form-field-attributes=""',
@@ -48,12 +49,16 @@ class FormFieldBlock extends WrapContentBlock
 
     private function getWrapperClasses(
         string $fieldName,
-        ?FormDataInterface $formData
+        ?string $class,
+        ?FormDataInterface $formData,
     ): array
     {
-        $result = [
-            'form-field',
-        ];
+        $result = array_merge(
+            explode(' ', $class ?? ''),
+            [
+                'form-field',
+            ],
+        );
 
         if ($formData?->hasFieldErrors($fieldName)) {
             $result[] = 'with-errors';
