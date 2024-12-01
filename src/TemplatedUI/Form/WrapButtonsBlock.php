@@ -14,8 +14,21 @@ use ActiveCollab\TemplatedUI\WrapContentBlock\WrapContentBlock;
 
 class WrapButtonsBlock extends WrapContentBlock
 {
-    public function render(string $content): string
+    public function render(
+        string $content,
+        ?string $class = null,
+    ): string
     {
-        return sprintf('<div style="margin-top: 0.25rem;">%s</div>', $content);
+        return sprintf(
+            '%s%s%s',
+            $this->openHtmlTag(
+                'div',
+                [
+                    'class' => $class ?? '',
+                ],
+            ),
+            $content,
+            $this->closeHtmlTag('div'),
+        );
     }
 }
