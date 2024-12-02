@@ -135,7 +135,9 @@ class FormData implements FormDataInterface
         string $fieldName,
     ): bool
     {
-        return !empty($request->getParsedBody()[$fieldName]);
+        $this->fieldValues[$fieldName] = !empty($request->getParsedBody()[$fieldName]);
+
+        return $this->fieldValues[$fieldName];
     }
 
     public function extractArrayFromRequest(
