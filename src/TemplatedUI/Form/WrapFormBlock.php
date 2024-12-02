@@ -14,12 +14,26 @@ use ActiveCollab\TemplatedUI\WrapContentBlock\WrapContentBlock;
 
 class WrapFormBlock extends WrapContentBlock
 {
-    public function render(string $content, string $id): string
+    public function render(
+        string $content,
+        string $id,
+        ?string $class = null,
+    ): string
     {
+        $attributes = [
+            'id' => $id,
+            'hx-ext' => 'response-targets',
+        ];
+
+        if ($class) {
+            $attributes['class'] = $class;
+        }
+
         return sprintf(
-            '<div id="%s" hx-ext="response-targets">%s</div>',
-            $this->sanitizeForHtml($id),
+            '%s%s%s',
+            $this->openHtmlTag('div', $attributes),
             $content,
+            $this->closeHtmlTag('div'),
         );
     }
 }
