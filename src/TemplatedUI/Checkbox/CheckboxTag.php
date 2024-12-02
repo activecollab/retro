@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\TemplatedUI\Checkbox;
 
+use ActiveCollab\Retro\FormData\FormDataInterface;
 use ActiveCollab\Retro\TemplatedUI\Property\Size;
 use ActiveCollab\TemplatedUI\Tag\Tag;
 
@@ -22,11 +23,13 @@ class CheckboxTag extends Tag
         mixed $value = '1',
         ?string $helpText = null,
         ?Size $size = null,
+        ?FormDataInterface $formData = null,
     ): string
     {
         $attributes = [
             'name' => $name,
             'value' => $value,
+            'checked' => $checked || !empty($formData?->getFieldValue($name)),
         ];
 
         if ($checked) {
