@@ -12,16 +12,6 @@
     ],
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "/Users/ilijastuden/Projects/Components/sitemap"
-        },
-        {
-            "type": "vcs",
-            "url": "/Users/ilijastuden/Projects/Components/templatedui"
-        }
-    ],
     "require": {
         "php": ">=8.2",
         "activecollab/authentication": "dev-master",
