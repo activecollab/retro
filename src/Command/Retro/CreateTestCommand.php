@@ -37,7 +37,7 @@ class CreateTestCommand extends RetroCommand
         parent::configure();
 
         $this
-            ->setDescription('Create a test class')
+            ->setDescription('Create a test class.')
             ->addArgument('name', InputArgument::REQUIRED, 'Test name')
             ->addOption(
                 'type',

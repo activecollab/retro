@@ -20,6 +20,6 @@ class ListCommand extends MigrationCommand
     {
         parent::configure();
 
-        $this->setDescription('List all migrations');
+        $this->setDescription('List all migrations.');
     }
 }

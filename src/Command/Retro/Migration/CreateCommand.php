@@ -26,7 +26,7 @@ class CreateCommand extends MigrationCommand
         parent::configure();
 
         $this
-            ->setDescription('Create a new migration')
+            ->setDescription('Create a new migration.')
             ->addArgument(
                 'migration_name',
                 InputArgument::REQUIRED,

@@ -20,6 +20,6 @@ class UpCommand extends MigrationCommand
     {
         parent::configure();
 
-        $this->setDescription('Run all migrations that are not executed');
+        $this->setDescription('Run all migrations that are not executed.');
     }
 }

@@ -26,7 +26,7 @@ class BuildStructureCommand extends RetroCommand
         parent::configure();
 
         $this->setDescription(
-            'Build PHP classes and database structure from model definition',
+            'Build PHP classes and database structure from model definition.',
         );
     }
 
