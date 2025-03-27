@@ -8,11 +8,11 @@
 
 declare(strict_types=1);
 
-namespace ActiveCollab\Retro\Integrate\Generators;
+namespace ActiveCollab\Retro\Integrate\Creator;
 
 use ActiveCollab\Retro\Bootstrapper\Bundle\BundleInterface;
 
-interface GeneratorsInterface
+interface CreatorInterface
 {
     public function getModelNamespace(): string;
     public function getBundlesNamespace(): string;

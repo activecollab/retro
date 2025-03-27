@@ -15,7 +15,7 @@ use ActiveCollab\Retro\Bootstrapper\Bundle\BundleInterface;
 use ActiveCollab\Retro\CommandTrait\BundleAwareTrait;
 use ActiveCollab\Retro\CommandTrait\FileManagementTrait;
 use ActiveCollab\Retro\CommandTrait\ModelAwareTrait;
-use ActiveCollab\Retro\Integrate\Generators\GeneratorsInterface;
+use ActiveCollab\Retro\Integrate\Creator\CreatorInterface;
 use ActiveCollab\Retro\Service\Result\InvalidFormData\InvalidFormData;
 use ActiveCollab\Retro\Sitemap\Controller\CrudController;
 use ActiveCollab\Retro\Sitemap\Trait\EntityAwareNodeMiddleware;
@@ -81,14 +81,14 @@ class CreateCrudController extends RetroCommand
 
             $modelServicesNamespace = sprintf(
                 '%s\\Service\\%s',
-                $this->get(GeneratorsInterface::class)->getBundleNamespace($bundle),
+                $this->get(CreatorInterface::class)->getBundleNamespace($bundle),
                 $model->getEntityClassName(),
             );
 
             $formComponentClassName = sprintf('%sFormTag', $model->getEntityClassName());
             $formComponentFqn = sprintf(
                 '%s\\TemplateExtension\\%s\\%s',
-                $this->get(GeneratorsInterface::class)->getBundleNamespace($bundle),
+                $this->get(CreatorInterface::class)->getBundleNamespace($bundle),
                 sprintf('%sForm', $model->getEntityClassName()),
                 $formComponentClassName,
             );
@@ -425,7 +425,7 @@ class CreateCrudController extends RetroCommand
     {
         return sprintf(
             '\\' . ltrim('%s\\Controller', '\\'),
-            $this->get(GeneratorsInterface::class)->getBundleNamespace($bundle),
+            $this->get(CreatorInterface::class)->getBundleNamespace($bundle),
         );
     }
 
@@ -433,7 +433,7 @@ class CreateCrudController extends RetroCommand
     {
         return sprintf(
             '\\' . ltrim('%s\\%s', '\\'),
-            $this->get(GeneratorsInterface::class)->getModelNamespace(),
+            $this->get(CreatorInterface::class)->getModelNamespace(),
             $element,
         );
     }

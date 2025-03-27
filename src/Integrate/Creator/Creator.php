@@ -8,11 +8,12 @@
 
 declare(strict_types=1);
 
-namespace ActiveCollab\Retro\Integrate\Generators;
+namespace ActiveCollab\Retro\Integrate\Creator;
 
 use ActiveCollab\Retro\Bootstrapper\Bundle\BundleInterface;
+use ActiveCollab\Retro\Integrate\Creator\CreatorInterface;
 
-class Generators implements GeneratorsInterface
+class Creator implements CreatorInterface
 {
     public function __construct(
         private string $modelNamespace,
