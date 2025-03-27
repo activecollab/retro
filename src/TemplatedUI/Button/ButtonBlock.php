@@ -46,6 +46,10 @@ class ButtonBlock extends WrapContentBlock implements ButtonBlockInterface
             $attributes[$style->toAttributeName()] = true;
         }
 
+        if ($catchAllParameters && $catchAllParameters->hasParameter('href')) {
+            $attributes['href'] = $catchAllParameters->getParameter('href');
+        }
+
         return sprintf(
             '%s%s%s',
             $this->openHtmlTag('sl-button', $attributes),
