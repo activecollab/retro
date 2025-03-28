@@ -14,6 +14,7 @@ use ActiveCollab\DatabaseConnection\ConnectionInterface;
 use ActiveCollab\DatabaseObject\Exception\ValidationException;
 use ActiveCollab\DatabaseObject\PoolInterface;
 use ActiveCollab\Retro\FormData\FormDataInterface;
+use ActiveCollab\Retro\Service\Result\Factory\ServiceResultFactoryInterface;
 use Exception;
 use ActiveCollab\Retro\Service\Result\InvalidFormData\InvalidFormData;
 use ActiveCollab\Retro\Service\Result\InvalidFormData\InvalidFormDataInterface;
@@ -29,6 +30,7 @@ abstract class Service implements ServiceInterface
         protected ConnectionInterface $connection,
         protected PoolInterface $pool,
         protected LoggerInterface $logger,
+        protected ServiceResultFactoryInterface $serviceResultFactory,
     )
     {
     }
