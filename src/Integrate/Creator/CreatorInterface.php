@@ -17,4 +17,5 @@ interface CreatorInterface
     public function getModelNamespace(): string;
     public function getBundlesNamespace(): string;
     public function getBundleNamespace(BundleInterface $bundle): string;
+    public function getBaseService(bool $interface = false): string;
 }
