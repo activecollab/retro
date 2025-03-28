@@ -13,7 +13,7 @@ namespace ActiveCollab\Retro\Integrate\Creator;
 use ActiveCollab\Retro\Bootstrapper\Bundle\BundleInterface;
 use ActiveCollab\Retro\Integrate\Creator\CreatorInterface;
 
-class Creator implements CreatorInterface
+abstract class Creator implements CreatorInterface
 {
     public function __construct(
         private string $modelNamespace,
