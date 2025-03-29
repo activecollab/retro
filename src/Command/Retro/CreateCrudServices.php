@@ -70,7 +70,7 @@ class CreateCrudServices extends RetroCommand
             ->addOption(
                 'skip-autowire',
                 mode: InputOption::VALUE_NONE,
-                description: 'Autowire services.',
+                description: 'Autowire services in DI container.',
             );
     }
 
@@ -586,7 +586,7 @@ class CreateCrudServices extends RetroCommand
             $interfaceUseStatements[] = sprintf(
                 '%s\\%s',
                 ltrim($this->get(CreatorInterface::class)->getModelNamespace(), '\\'),
-                $context->getEntityClassName()
+                $context->getEntityInterfaceName(),
             );
         }
 
@@ -679,10 +679,25 @@ class CreateCrudServices extends RetroCommand
         /** @var Inflector $inflector */
         $inflector = $this->getContainer()->get(Inflector::class);
 
+        $transactionCallbackImports = array_filter(
+            array_merge(
+                [
+                    '$request',
+                    '$formData',
+                ],
+                [
+                    $context ? sprintf('$%s', $this->getContextVariableName($context)) : '',
+                ],
+                [
+                    '$authenticatedUser',
+                ],
+            ),
+        );
+
         $processRequestBody = array_merge(
             [
                 'return $this->withinTransaction(',
-                '    function () use ($request, $formData, $account, $authenticatedUser) {',
+                sprintf('    function () use (%s) {', implode(', ', $transactionCallbackImports)),
             ],
             $this->getMustGetDetailsCallLines($detailsGetterName, $entityTypeVarName, $model),
             [
@@ -829,7 +844,7 @@ class CreateCrudServices extends RetroCommand
             $interfaceUseStatements[] = sprintf(
                 '%s\\%s',
                 ltrim($this->get(CreatorInterface::class)->getModelNamespace(), '\\'),
-                $context->getEntityClassName()
+                $context->getEntityInterfaceName(),
             );
         }
 
@@ -917,10 +932,26 @@ class CreateCrudServices extends RetroCommand
         /** @var Inflector $inflector */
         $inflector = $this->getContainer()->get(Inflector::class);
 
+        $transactionCallbackImports = array_filter(
+            array_merge(
+                [
+                    '$request',
+                    '$formData',
+                ],
+                [
+                    $context ? sprintf('$%s', $this->getContextVariableName($context)) : '',
+                ],
+                [
+                    sprintf('$%s', $entityVarName),
+                    '$authenticatedUser',
+                ],
+            ),
+        );
+
         $processRequestBody = array_merge(
             [
                 'return $this->withinTransaction(',
-                sprintf('    function () use ($request, $formData, $account, $%s, $authenticatedUser) {', $entityVarName),
+                sprintf('    function () use (%s) {', implode(', ', $transactionCallbackImports)),
             ],
             $this->getMustGetDetailsCallLines($detailsGetterName, $entityTypeVarName, $model),
             [
@@ -1047,7 +1078,7 @@ class CreateCrudServices extends RetroCommand
             $interfaceUseStatements[] = sprintf(
                 '%s\\%s',
                 ltrim($this->get(CreatorInterface::class)->getModelNamespace(), '\\'),
-                $context->getEntityClassName()
+                $context->getEntityInterfaceName(),
             );
         }
 
@@ -1130,9 +1161,21 @@ class CreateCrudServices extends RetroCommand
         /** @var Inflector $inflector */
         $inflector = $this->getContainer()->get(Inflector::class);
 
+        $transactionCallbackImports = array_filter(
+            array_merge(
+                [
+                    $context ? sprintf('$%s', $this->getContextVariableName($context)) : '',
+                ],
+                [
+                    sprintf('$%s', $entityVarName),
+                    '$authenticatedUser',
+                ],
+            ),
+        );
+
         $processRequestBody = [
             'return $this->withinTransaction(',
-            sprintf('    function () use ($account, $%s, $authenticatedUser) {', $entityVarName),
+            sprintf('    function () use (%s) {', implode(', ', $transactionCallbackImports)),
             sprintf('        $%s = $%s->getId();', $idVarName, $entityVarName),
             '',
             sprintf('        $%s->delete();', $entityVarName),
