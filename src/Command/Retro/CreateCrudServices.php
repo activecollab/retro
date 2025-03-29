@@ -272,7 +272,7 @@ class CreateCrudServices extends RetroCommand
             sprintf('%s/%s.php', $modelServicesPath, $baseServiceClassName),
             $modelServicesNamespace,
             [
-                $this->get(CreatorInterface::class)->getBaseService(true),
+                $this->get(CreatorInterface::class)->getBaseService(),
                 ServerRequestInterface::class,
                 FormDataInterface::class,
             ],
