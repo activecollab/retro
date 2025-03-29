@@ -10,19 +10,18 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\Command\Retro;
 
-use ActiveCollab\DatabaseStructure\StructureInterface;
 use ActiveCollab\DatabaseStructure\TypeInterface;
 use ActiveCollab\Retro\CommandTrait\BundleAwareTrait;
 use ActiveCollab\Retro\CommandTrait\DependenciesManagementTrait;
 use ActiveCollab\Retro\CommandTrait\FileManagementTrait;
 use ActiveCollab\Retro\CommandTrait\ModelAwareTrait;
+use ActiveCollab\Retro\CommandTrait\ServiceContextAwareTrait;
 use ActiveCollab\Retro\FormData\FormDataInterface;
 use ActiveCollab\Retro\Integrate\Creator\CreatorInterface;
 use ActiveCollab\Retro\Service\Result\InvalidFormData\InvalidFormData;
 use ActiveCollab\Retro\Service\Result\ServiceResultInterface;
 use Doctrine\Inflector\Inflector;
 use Exception;
-use InvalidArgumentException;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\InterfaceType;
 use Nette\PhpGenerator\Method;
@@ -39,6 +38,7 @@ class CreateCrudServices extends RetroCommand
     use ModelAwareTrait;
     use BundleAwareTrait;
     use DependenciesManagementTrait;
+    use ServiceContextAwareTrait;
 
     protected function configure()
     {
@@ -57,16 +57,8 @@ class CreateCrudServices extends RetroCommand
                 'Name of the bundle where services should be created at.',
                 'Main',
             )
-            ->addOption(
-                'within-context',
-                mode: InputOption::VALUE_REQUIRED,
-                description: 'Name of the context where services should execute within.',
-            )
-            ->addOption(
-                'without-context',
-                mode: InputOption::VALUE_NONE,
-                description: 'Create service without a context. This option overrides within-context option.',
-            )
+            ->addOption(...$this->getWithinContextOptionSettings())
+            ->addOption(...$this->getWithoutContextOptionSettings())
             ->addOption(
                 'skip-autowire',
                 mode: InputOption::VALUE_NONE,
@@ -79,7 +71,7 @@ class CreateCrudServices extends RetroCommand
         try {
             $model = $this->mustGetModel($input);
             $bundle = $this->mustGetBundle($input);
-            $context = $this->getContext($input);
+            $serviceContext = $this->getServiceContext($input);
 
             $output->writeln(
                 sprintf(
@@ -156,7 +148,7 @@ class CreateCrudServices extends RetroCommand
                 $entityTypeVarName,
                 $entityAddedClassName,
                 sprintf('\\%s\\%s', $serviceResultsNamespace, $entityAddedClassName),
-                $context,
+                $serviceContext,
                 $model,
                 $output,
             );
@@ -174,7 +166,7 @@ class CreateCrudServices extends RetroCommand
                 $entityTypeVarName,
                 $entityEditedClassName,
                 sprintf('\\%s\\%s', $serviceResultsNamespace, $entityEditedClassName),
-                $context,
+                $serviceContext,
                 $model,
                 $output,
             );
@@ -190,7 +182,7 @@ class CreateCrudServices extends RetroCommand
                 $modelInterfaceFqn,
                 $entityDeletedClassName,
                 sprintf('\\%s\\%s', $serviceResultsNamespace, $entityDeletedClassName),
-                $context,
+                $serviceContext,
                 $model,
                 $output,
             );
@@ -220,29 +212,6 @@ class CreateCrudServices extends RetroCommand
         } catch (Throwable $e) {
             return $this->abortDueToException($e, $input, $output);
         }
-    }
-
-    private function getContext(InputInterface $input): ?TypeInterface
-    {
-        if ($input->getOption('without-context')) {
-            return null;
-        }
-
-        $context = $input->getOption('within-context');
-
-        if (empty($context)) {
-            $context = $this->get(CreatorInterface::class)->getDefaultServiceContext();
-        }
-
-        if (empty($context)) {
-            return null;
-        }
-
-        if (!preg_match('/^\w+$/', $context)) {
-            throw new InvalidArgumentException('Context name can contain only letters, numbers and underscores.');
-        }
-
-        return $this->get(StructureInterface::class)->getType($context);
     }
 
     private function createBaseService(
@@ -569,7 +538,7 @@ class CreateCrudServices extends RetroCommand
         string $entityTypeVarName,
         string $entityAddedClassName,
         string $entityAddedFqn,
-        ?TypeInterface $context,
+        ?TypeInterface $serviceContext,
         TypeInterface $model,
         OutputInterface $output,
     ): array
@@ -586,11 +555,11 @@ class CreateCrudServices extends RetroCommand
             ServiceResultInterface::class,
         ];
 
-        if ($context) {
+        if ($serviceContext) {
             $interfaceUseStatements[] = sprintf(
                 '%s\\%s',
                 ltrim($this->get(CreatorInterface::class)->getModelNamespace(), '\\'),
-                $context->getEntityInterfaceName(),
+                $serviceContext->getEntityInterfaceName(),
             );
         }
 
@@ -601,7 +570,7 @@ class CreateCrudServices extends RetroCommand
             $this->createAddEntityServiceInterface(
                 $addEntityServiceInterface,
                 $baseServiceInterfaceName,
-                $context,
+                $serviceContext,
             ),
             $output,
         );
@@ -634,7 +603,7 @@ class CreateCrudServices extends RetroCommand
                 $detailsGetterName,
                 $entityTypeVarName,
                 $entityAddedClassName,
-                $context,
+                $serviceContext,
                 $model,
             ),
             $output,
@@ -649,7 +618,7 @@ class CreateCrudServices extends RetroCommand
     private function createAddEntityServiceInterface(
         string $interfaceName,
         string $baseServiceInterface,
-        ?TypeInterface $context,
+        ?TypeInterface $serviceContext,
     ): string
     {
         $interface = new InterfaceType($interfaceName);
@@ -657,7 +626,7 @@ class CreateCrudServices extends RetroCommand
 
         $this->appendProcessRequestMethodForAddService(
             $interface,
-            $context,
+            $serviceContext,
         );
 
         return (string) $interface;
@@ -670,7 +639,7 @@ class CreateCrudServices extends RetroCommand
         string $detailsGetterName,
         string $entityTypeVarName,
         string $entityAddedClassName,
-        ?TypeInterface $context,
+        ?TypeInterface $serviceContext,
         TypeInterface $model,
     ): string
     {
@@ -690,7 +659,7 @@ class CreateCrudServices extends RetroCommand
                     '$formData',
                 ],
                 [
-                    $context ? sprintf('$%s', $this->getContextVariableName($context)) : '',
+                    $serviceContext ? sprintf('$%s', $this->getContextVariableName($serviceContext)) : '',
                 ],
                 [
                     '$authenticatedUser',
@@ -720,7 +689,7 @@ class CreateCrudServices extends RetroCommand
             [
                 '            );',
                 '',
-                sprintf('            return $this->serviceResultFactory->%s->record(', $this->getRecorderFactoryCall($context)),
+                sprintf('            return $this->serviceResultFactory->%s->record(', $this->getRecorderFactoryCall($serviceContext)),
                 sprintf('                %s::class,', $entityAddedClassName),
                 '                $authenticatedUser,',
                 '                [',
@@ -738,7 +707,7 @@ class CreateCrudServices extends RetroCommand
 
         $this->appendProcessRequestMethodForAddService(
             $class,
-            $context,
+            $serviceContext,
             implode("\n", $processRequestBody),
         );
 
@@ -789,7 +758,7 @@ class CreateCrudServices extends RetroCommand
 
     private function appendProcessRequestMethodForAddService(
         ClassType|InterfaceType $appendTo,
-        ?TypeInterface $context,
+        ?TypeInterface $serviceContext,
         string $body = null,
     ): void
     {
@@ -800,8 +769,8 @@ class CreateCrudServices extends RetroCommand
         $processMethod->addParameter('request')->setType('ServerRequestInterface');
         $processMethod->addParameter('formData')->setType('FormDataInterface');
 
-        if ($context) {
-            $this->appendContextArgument($processMethod, $context);
+        if ($serviceContext) {
+            $this->appendContextArgument($processMethod, $serviceContext);
         }
         $processMethod->addParameter('authenticatedUser')->setType('UserInterface');
 
@@ -824,7 +793,7 @@ class CreateCrudServices extends RetroCommand
         string $entityTypeVarName,
         string $entityEditedClassName,
         string $entityEditedFqn,
-        ?TypeInterface $context,
+        ?TypeInterface $serviceContext,
         TypeInterface $model,
         OutputInterface $output,
     ): array
@@ -842,11 +811,11 @@ class CreateCrudServices extends RetroCommand
             ltrim($modelInterfaceFqn, '\\'),
         ];
 
-        if ($context) {
+        if ($serviceContext) {
             $interfaceUseStatements[] = sprintf(
                 '%s\\%s',
                 ltrim($this->get(CreatorInterface::class)->getModelNamespace(), '\\'),
-                $context->getEntityInterfaceName(),
+                $serviceContext->getEntityInterfaceName(),
             );
         }
 
@@ -857,7 +826,7 @@ class CreateCrudServices extends RetroCommand
             $this->createEditEntityServiceInterface(
                 $editEntityServiceInterface,
                 $baseServiceInterfaceName,
-                $context,
+                $serviceContext,
                 $model,
             ),
             $output,
@@ -883,7 +852,7 @@ class CreateCrudServices extends RetroCommand
                 $detailsGetterName,
                 $entityTypeVarName,
                 $entityEditedClassName,
-                $context,
+                $serviceContext,
                 $model,
             ),
             $output,
@@ -898,7 +867,7 @@ class CreateCrudServices extends RetroCommand
     private function createEditEntityServiceInterface(
         string $interfaceName,
         string $baseServiceInterface,
-        ?TypeInterface $context,
+        ?TypeInterface $serviceContext,
         TypeInterface $model,
     ): string
     {
@@ -907,7 +876,7 @@ class CreateCrudServices extends RetroCommand
 
         $this->appendProcessRequestMethodForEditService(
             $interface,
-            $context,
+            $serviceContext,
             $model,
         );
 
@@ -921,7 +890,7 @@ class CreateCrudServices extends RetroCommand
         string $detailsGetterName,
         string $entityTypeVarName,
         string $entityEditedClassName,
-        ?TypeInterface $context,
+        ?TypeInterface $serviceContext,
         TypeInterface $model,
     ): string
     {
@@ -941,7 +910,7 @@ class CreateCrudServices extends RetroCommand
                     '$formData',
                 ],
                 [
-                    $context ? sprintf('$%s', $this->getContextVariableName($context)) : '',
+                    $serviceContext ? sprintf('$%s', $this->getContextVariableName($serviceContext)) : '',
                 ],
                 [
                     sprintf('$%s', $entityVarName),
@@ -970,7 +939,7 @@ class CreateCrudServices extends RetroCommand
             [
                 '            );',
                 '',
-                sprintf('            return $this->%s->record(', $this->getRecorderFactoryCall($context)),
+                sprintf('            return $this->%s->record(', $this->getRecorderFactoryCall($serviceContext)),
                 sprintf('                %s::class,', $entityEditedClassName),
                 '                $authenticatedUser,',
                 '                [',
@@ -988,7 +957,7 @@ class CreateCrudServices extends RetroCommand
 
         $this->appendProcessRequestMethodForEditService(
             $class,
-            $context,
+            $serviceContext,
             $model,
             implode("\n", $processRequestBody),
         );
@@ -1020,7 +989,7 @@ class CreateCrudServices extends RetroCommand
 
     private function appendProcessRequestMethodForEditService(
         ClassType|InterfaceType $appendTo,
-        ?TypeInterface $context,
+        ?TypeInterface $serviceContext,
         TypeInterface $model,
         string $body = null,
     ): void
@@ -1032,8 +1001,8 @@ class CreateCrudServices extends RetroCommand
         $processMethod->addParameter('request')->setType('ServerRequestInterface');
         $processMethod->addParameter('formData')->setType('FormDataInterface');
 
-        if ($context) {
-            $this->appendContextArgument($processMethod, $context);
+        if ($serviceContext) {
+            $this->appendContextArgument($processMethod, $serviceContext);
         }
 
         $processMethod->addParameter(lcfirst($model->getEntityClassName()))->setType($model->getEntityInterfaceName());
@@ -1056,7 +1025,7 @@ class CreateCrudServices extends RetroCommand
         string $modelInterfaceFqn,
         string $entityDeletedClassName,
         string $entityDeletedFqn,
-        ?TypeInterface $context,
+        ?TypeInterface $serviceContext,
         TypeInterface $model,
         OutputInterface $output,
     ): array
@@ -1074,11 +1043,11 @@ class CreateCrudServices extends RetroCommand
             ltrim($modelInterfaceFqn, '\\'),
         ];
 
-        if ($context) {
+        if ($serviceContext) {
             $interfaceUseStatements[] = sprintf(
                 '%s\\%s',
                 ltrim($this->get(CreatorInterface::class)->getModelNamespace(), '\\'),
-                $context->getEntityInterfaceName(),
+                $serviceContext->getEntityInterfaceName(),
             );
         }
 
@@ -1089,7 +1058,7 @@ class CreateCrudServices extends RetroCommand
             $this->createDeleteEntityServiceInterface(
                 $deleteEntityServiceInterface,
                 $baseServiceInterfaceName,
-                $context,
+                $serviceContext,
                 $model,
             ),
             $output,
@@ -1111,7 +1080,7 @@ class CreateCrudServices extends RetroCommand
                 $deleteEntityServiceInterface,
                 $baseServiceClassName,
                 $entityDeletedClassName,
-                $context,
+                $serviceContext,
                 $model,
             ),
             $output,
@@ -1126,7 +1095,7 @@ class CreateCrudServices extends RetroCommand
     private function createDeleteEntityServiceInterface(
         string $interfaceName,
         string $baseServiceInterface,
-        ?TypeInterface $context,
+        ?TypeInterface $serviceContext,
         TypeInterface $model,
     ): string
     {
@@ -1135,7 +1104,7 @@ class CreateCrudServices extends RetroCommand
 
         $this->appendProcessRequestMethodForDeleteService(
             $interface,
-            $context,
+            $serviceContext,
             $model,
         );
 
@@ -1147,7 +1116,7 @@ class CreateCrudServices extends RetroCommand
         string $interfaceName,
         string $baseServiceClassName,
         string $entityDeletedClassName,
-        ?TypeInterface $context,
+        ?TypeInterface $serviceContext,
         TypeInterface $model,
     ): string
     {
@@ -1164,7 +1133,7 @@ class CreateCrudServices extends RetroCommand
         $transactionCallbackImports = array_filter(
             array_merge(
                 [
-                    $context ? sprintf('$%s', $this->getContextVariableName($context)) : '',
+                    $serviceContext ? sprintf('$%s', $this->getContextVariableName($serviceContext)) : '',
                 ],
                 [
                     sprintf('$%s', $entityVarName),
@@ -1180,7 +1149,7 @@ class CreateCrudServices extends RetroCommand
             '',
             sprintf('        $%s->delete();', $entityVarName),
             '',
-            sprintf('            return $this->%s->record(', $this->getRecorderFactoryCall($context)),
+            sprintf('            return $this->%s->record(', $this->getRecorderFactoryCall($serviceContext)),
             sprintf('            %s::class,', $entityDeletedClassName),
             '            $authenticatedUser,',
             '            [',
@@ -1194,7 +1163,7 @@ class CreateCrudServices extends RetroCommand
 
         $this->appendProcessRequestMethodForDeleteService(
             $class,
-            $context,
+            $serviceContext,
             $model,
             implode("\n", $processRequestBody),
         );
@@ -1204,7 +1173,7 @@ class CreateCrudServices extends RetroCommand
 
     private function appendProcessRequestMethodForDeleteService(
         ClassType|InterfaceType $appendTo,
-        ?TypeInterface $context,
+        ?TypeInterface $serviceContext,
         TypeInterface $model,
         string $body = null,
     ): void
@@ -1216,8 +1185,8 @@ class CreateCrudServices extends RetroCommand
         $processMethod->addParameter('request')->setType('ServerRequestInterface');
         $processMethod->addParameter('formData')->setType('FormDataInterface');
 
-        if ($context) {
-            $this->appendContextArgument($processMethod, $context);
+        if ($serviceContext) {
+            $this->appendContextArgument($processMethod, $serviceContext);
         }
 
         $processMethod->addParameter(lcfirst($model->getEntityClassName()))->setType($model->getEntityInterfaceName());
@@ -1230,26 +1199,26 @@ class CreateCrudServices extends RetroCommand
 
     private ?string $contextVariableName = null;
 
-    private function getContextVariableName(TypeInterface $context): string
+    private function getContextVariableName(TypeInterface $serviceContext): string
     {
         if ($this->contextVariableName === null) {
-            $this->contextVariableName = lcfirst($context->getEntityClassName());
+            $this->contextVariableName = lcfirst($serviceContext->getEntityClassName());
         }
 
         return $this->contextVariableName;
     }
 
-    private function appendContextArgument(Method $method, TypeInterface $context): void
+    private function appendContextArgument(Method $method, TypeInterface $serviceContext): void
     {
-        $method->addParameter($this->getContextVariableName($context))->setType($context->getEntityInterfaceName());
+        $method->addParameter($this->getContextVariableName($serviceContext))->setType($serviceContext->getEntityInterfaceName());
     }
 
-    private function getRecorderFactoryCall(?TypeInterface $context): string
+    private function getRecorderFactoryCall(?TypeInterface $serviceContext): string
     {
-        if (empty($context)) {
+        if (empty($serviceContext)) {
             return 'withoutContext()';
         }
 
-        return sprintf('withinContext($%s)', $this->getContextVariableName($context));
+        return sprintf('withinContext($%s)', $this->getContextVariableName($serviceContext));
     }
 }

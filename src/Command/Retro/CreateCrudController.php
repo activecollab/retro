@@ -15,6 +15,7 @@ use ActiveCollab\Retro\Bootstrapper\Bundle\BundleInterface;
 use ActiveCollab\Retro\CommandTrait\BundleAwareTrait;
 use ActiveCollab\Retro\CommandTrait\FileManagementTrait;
 use ActiveCollab\Retro\CommandTrait\ModelAwareTrait;
+use ActiveCollab\Retro\CommandTrait\ServiceContextAwareTrait;
 use ActiveCollab\Retro\Integrate\Creator\CreatorInterface;
 use ActiveCollab\Retro\Service\Result\InvalidFormData\InvalidFormData;
 use ActiveCollab\Retro\Sitemap\Controller\CrudController;
@@ -33,6 +34,7 @@ class CreateCrudController extends RetroCommand
     use FileManagementTrait;
     use ModelAwareTrait;
     use BundleAwareTrait;
+    use ServiceContextAwareTrait;
 
     protected function configure()
     {
@@ -50,7 +52,10 @@ class CreateCrudController extends RetroCommand
                 InputArgument::OPTIONAL,
                 'Name of the bundle where controllers should be created at.',
                 'Main',
-            );
+            )
+            ->addOption(...$this->getWithinContextOptionSettings())
+            ->addOption(...$this->getWithoutContextOptionSettings())
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -58,6 +63,7 @@ class CreateCrudController extends RetroCommand
         try {
             $model = $this->mustGetModel($input);
             $bundle = $this->mustGetBundle($input);
+            $serviceContext = $this->getServiceContext($input);
 
             $output->writeln(
                 sprintf(
