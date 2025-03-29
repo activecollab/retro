@@ -8,9 +8,10 @@
 
 declare(strict_types=1);
 
-namespace ActiveCollab\Retro\Service\Result\Factory;
+namespace ActiveCollab\Retro\Integrate\ServiceResultFactory;
 
 use ActiveCollab\Retro\FormData\FormDataInterface;
+use ActiveCollab\Retro\Service\Result\Factory\ServiceResultFactoryInterface;
 use ActiveCollab\Retro\Service\Result\InvalidFormData\InvalidFormData;
 use ActiveCollab\Retro\Service\Result\InvalidFormData\InvalidFormDataInterface;
 use ActiveCollab\Retro\Service\Result\RequestProcessingFailed\RequestProcessingFailed;
