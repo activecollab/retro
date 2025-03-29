@@ -224,14 +224,14 @@ class CreateCrudServices extends RetroCommand
 
     private function getContext(InputInterface $input): ?TypeInterface
     {
-        if (!$input->getOption('without-context')) {
+        if ($input->getOption('without-context')) {
             return null;
         }
 
         $context = $input->getOption('within-context');
 
         if (empty($context)) {
-            $context = $this->get(CreatorInterface::class)->getDefaultContext();
+            $context = $this->get(CreatorInterface::class)->getDefaultServiceContext();
         }
 
         if (empty($context)) {
