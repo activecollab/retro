@@ -60,7 +60,6 @@ class CreateCrudServices extends RetroCommand
                 'within-context',
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Name of the context where services should execute within.',
-                default: $this->get(CreatorInterface::class)->getDefaultServiceContext() ?? '',
             )
             ->addOption(
                 'without-context',
@@ -229,6 +228,10 @@ class CreateCrudServices extends RetroCommand
         }
 
         $context = $input->getOption('within-context');
+
+        if (empty($context)) {
+            $context = $this->get(CreatorInterface::class)->getDefaultContext();
+        }
 
         if (empty($context)) {
             return null;
