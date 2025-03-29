@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\Integrate\Creator;
 
 use ActiveCollab\Retro\Bootstrapper\Bundle\BundleInterface;
+use ActiveCollab\Retro\Middleware\AuthenticationAwareMiddlewareTrait;
 use ActiveCollab\Retro\Service\Service;
 use ActiveCollab\Retro\Service\ServiceInterface;
 
@@ -58,5 +59,10 @@ abstract class Creator implements CreatorInterface
     public function getDefaultServiceContext(): ?string
     {
         return null;
+    }
+
+    public function getAuthenticationAwareMiddlewareTrait(): string
+    {
+        return AuthenticationAwareMiddlewareTrait::class;
     }
 }

@@ -22,4 +22,5 @@ interface CreatorInterface
     public function getBaseServiceEvent(bool $interface = false): string;
     public function getDefaultServiceContext(): ?string;
     public function getBaseUser(bool $interface): string;
+    public function getAuthenticationAwareMiddlewareTrait(): string;
 }
