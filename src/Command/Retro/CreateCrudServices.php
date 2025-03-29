@@ -707,7 +707,6 @@ class CreateCrudServices extends RetroCommand
                 '        }',
                 '',
                 '        try {',
-                sprintf('            /** @var %s $%s */', $model->getEntityInterfaceName(), $producedEntityVarName),
                 sprintf('            $%s = $this->pool->produce(', $producedEntityVarName),
                 $model->getPolymorph()
                     ? sprintf('                $%s,', $entityTypeVarName)
@@ -717,10 +716,9 @@ class CreateCrudServices extends RetroCommand
             [
                 '            );',
                 '',
-                '            return $this->historyEventsFactory->createHistoryEvent(',
+                sprintf('            return $this->serviceResultFactory->%s->record(', $this->getRecorderFactoryCall($context)),
                 sprintf('                %s::class,', $entityAddedHistoryEventClassName),
                 '                $authenticatedUser,',
-                '                $account,',
                 '                [',
                 sprintf('                    \'%s_id\' => $%s->getId(),', $inflector->tableize($model->getEntityClassName()), $producedEntityVarName),
                 '                ],',
@@ -961,7 +959,6 @@ class CreateCrudServices extends RetroCommand
                 '        }',
                 '',
                 '        try {',
-                sprintf('            /** @var %s $%s */', $model->getEntityInterfaceName(), $entityVarName),
                 sprintf('            $%s = $this->pool->modify(', $entityVarName),
                 sprintf('                $%s,', $entityVarName),
             ],
@@ -969,10 +966,9 @@ class CreateCrudServices extends RetroCommand
             [
                 '            );',
                 '',
-                '            return $this->historyEventsFactory->createHistoryEvent(',
+                sprintf('            return $this->%s->record(', $this->getRecorderFactoryCall($context)),
                 sprintf('                %s::class,', $entityEditedHistoryEventClassName),
                 '                $authenticatedUser,',
-                '                $account,',
                 '                [',
                 sprintf('                    \'%s_id\' => $%s->getId(),', $inflector->tableize($model->getEntityClassName()), $entityVarName),
                 '                ],',
@@ -1180,10 +1176,9 @@ class CreateCrudServices extends RetroCommand
             '',
             sprintf('        $%s->delete();', $entityVarName),
             '',
-            '        return $this->historyEventsFactory->createHistoryEvent(',
+            sprintf('            return $this->%s->record(', $this->getRecorderFactoryCall($context)),
             sprintf('            %s::class,', $entityDeletedHistoryEventClassName),
             '            $authenticatedUser,',
-            '            $account,',
             '            [',
             sprintf('                \'%s_id\' => $%s,', $inflector->tableize($model->getEntityClassName()), $idVarName),
             '            ],',
@@ -1243,5 +1238,14 @@ class CreateCrudServices extends RetroCommand
     private function appendContextArgument(Method $method, TypeInterface $context): void
     {
         $method->addParameter($this->getContextVariableName($context))->setType($context->getEntityInterfaceName());
+    }
+
+    private function getRecorderFactoryCall(?TypeInterface $context): string
+    {
+        if (empty($context)) {
+            return 'withoutContext()';
+        }
+
+        return sprintf('withinContext($%s)', $this->getContextVariableName($context));
     }
 }
