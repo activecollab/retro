@@ -18,4 +18,7 @@ interface CreatorInterface
     public function getBundlesNamespace(): string;
     public function getBundleNamespace(BundleInterface $bundle): string;
     public function getBaseService(bool $interface = false): string;
+    public function getServiceNamespace(BundleInterface $bundle): string;
+    public function getDefaultServiceContext(): ?string;
+    public function getBaseUser(bool $interface): string;
 }

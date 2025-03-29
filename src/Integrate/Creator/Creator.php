@@ -46,4 +46,19 @@ abstract class Creator implements CreatorInterface
     {
         return $interface ? ServiceInterface::class : Service::class;
     }
+
+    public function getServiceNamespace(BundleInterface $bundle): string
+    {
+        return sprintf(
+            '%s\\Service',
+            $this->getBundleNamespace($bundle),
+        );
+    }
+
+    public function getDefaultServiceContext(): ?string
+    {
+        return null;
+    }
+
+    abstract public function getBaseUser(bool $interface): string;
 }
