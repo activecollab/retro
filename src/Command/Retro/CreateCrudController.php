@@ -258,7 +258,7 @@ class CreateCrudController extends RetroCommand
                 CrudController::class,
                 EntityAwareNodeMiddleware::class,
                 AccountAwareMiddlewareTrait::class,
-                AuthenticationAwareMiddlewareTrait::class,
+                $this->get(CreatorInterface::class)->getAuthenticationAwareMiddlewareTrait(),
                 ServerRequestInterface::class,
                 ResponseInterface::class,
                 InvalidFormData::class,
@@ -293,10 +293,12 @@ class CreateCrudController extends RetroCommand
         string $formComponentClassName,
     ): string
     {
+        $authenticationAwareMiddlewareTrait = explode('\\', $this->get(CreatorInterface::class)->getAuthenticationAwareMiddlewareTrait());
+
         $class = new ClassType($className);
         $class->setExtends('CrudController');
         $class->addTrait('AccountAwareMiddlewareTrait');
-        $class->addTrait('AuthenticationAwareMiddlewareTrait');
+        $class->addTrait(end($authenticationAwareMiddlewareTrait));
         $class->addTrait('EntityAwareNodeMiddleware');
 
         $entityInstancePropertyName = lcfirst($model->getEntityClassName());
