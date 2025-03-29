@@ -25,6 +25,7 @@ use Exception;
 use InvalidArgumentException;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\InterfaceType;
+use Nette\PhpGenerator\Method;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -101,7 +102,7 @@ class CreateCrudServices extends RetroCommand
             );
 
             $modelServicesNamespace = sprintf(
-                '\\%s\\Service\\%s',
+                '\\%s\\%s',
                 ltrim($this->get(CreatorInterface::class)->getServiceNamespace($bundle), '\\'),
                 $model->getEntityClassName(),
             );
@@ -781,7 +782,10 @@ class CreateCrudServices extends RetroCommand
 
         $processMethod->addParameter('request')->setType('ServerRequestInterface');
         $processMethod->addParameter('formData')->setType('FormDataInterface');
-        $processMethod->addParameter('account')->setType('AccountInterface');
+
+        if ($context) {
+            $this->appendContextArgument($processMethod, $context);
+        }
         $processMethod->addParameter('authenticatedUser')->setType('UserInterface');
 
         if ($body) {
@@ -836,6 +840,7 @@ class CreateCrudServices extends RetroCommand
             $this->createEditEntityServiceInterface(
                 $editEntityServiceInterface,
                 $baseServiceInterfaceName,
+                $context,
                 $model,
             ),
             $output,
@@ -861,6 +866,7 @@ class CreateCrudServices extends RetroCommand
                 $detailsGetterName,
                 $entityTypeVarName,
                 $entityEditedHistoryEventClassName,
+                $context,
                 $model,
             ),
             $output,
@@ -875,13 +881,18 @@ class CreateCrudServices extends RetroCommand
     private function createEditEntityServiceInterface(
         string $interfaceName,
         string $baseServiceInterface,
+        ?TypeInterface $context,
         TypeInterface $model,
     ): string
     {
         $interface = new InterfaceType($interfaceName);
         $interface->addExtend($baseServiceInterface);
 
-        $this->appendProcessRequestMethodForEditService($interface, $model);
+        $this->appendProcessRequestMethodForEditService(
+            $interface,
+            $context,
+            $model,
+        );
 
         return (string) $interface;
     }
@@ -893,6 +904,7 @@ class CreateCrudServices extends RetroCommand
         string $detailsGetterName,
         string $entityTypeVarName,
         string $entityEditedHistoryEventClassName,
+        ?TypeInterface $context,
         TypeInterface $model,
     ): string
     {
@@ -945,6 +957,7 @@ class CreateCrudServices extends RetroCommand
 
         $this->appendProcessRequestMethodForEditService(
             $class,
+            $context,
             $model,
             implode("\n", $processRequestBody),
         );
@@ -976,6 +989,7 @@ class CreateCrudServices extends RetroCommand
 
     private function appendProcessRequestMethodForEditService(
         ClassType|InterfaceType $appendTo,
+        ?TypeInterface $context,
         TypeInterface $model,
         string $body = null,
     ): void
@@ -986,7 +1000,11 @@ class CreateCrudServices extends RetroCommand
 
         $processMethod->addParameter('request')->setType('ServerRequestInterface');
         $processMethod->addParameter('formData')->setType('FormDataInterface');
-        $processMethod->addParameter('account')->setType('AccountInterface');
+
+        if ($context) {
+            $this->appendContextArgument($processMethod, $context);
+        }
+
         $processMethod->addParameter(lcfirst($model->getEntityClassName()))->setType($model->getEntityInterfaceName());
         $processMethod->addParameter('authenticatedUser')->setType('UserInterface');
 
@@ -1155,12 +1173,21 @@ class CreateCrudServices extends RetroCommand
 
         $processMethod->addParameter('request')->setType('ServerRequestInterface');
         $processMethod->addParameter('formData')->setType('FormDataInterface');
-        $processMethod->addParameter('account')->setType('AccountInterface');
+
+        if ($context) {
+            $this->appendContextArgument($processMethod, $body);
+        }
+
         $processMethod->addParameter(lcfirst($model->getEntityClassName()))->setType($model->getEntityInterfaceName());
         $processMethod->addParameter('authenticatedUser')->setType('UserInterface');
 
         if ($body) {
             $processMethod->setBody($body);
         }
+    }
+
+    private function appendContextArgument(Method $method, TypeInterface $context): void
+    {
+        $method->addParameter($context->getName())->setType($context->getEntityInterfaceName());
     }
 }
