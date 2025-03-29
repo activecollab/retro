@@ -19,7 +19,7 @@ use ActiveCollab\Retro\Service\Result\Success\Success;
 use ActiveCollab\Retro\Service\Result\Success\SuccessInterface;
 use Exception;
 
-class ServiceResultFactory implements ServiceResultFactoryInterface
+abstract class ServiceResultFactory implements ServiceResultFactoryInterface
 {
     public function success(): SuccessInterface
     {

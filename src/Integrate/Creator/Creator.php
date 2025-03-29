@@ -59,6 +59,4 @@ abstract class Creator implements CreatorInterface
     {
         return null;
     }
-
-    abstract public function getBaseUser(bool $interface): string;
 }

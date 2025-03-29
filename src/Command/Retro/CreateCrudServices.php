@@ -364,13 +364,13 @@ class CreateCrudServices extends RetroCommand
 
         $serviceResultsNamespace = sprintf('%s\\Result', $modelServicesNamespace);
 
-        $baseServiceEventInterface = sprintf('%sHistoryEventInterface', $model->getEntityClassName());
+        $baseServiceEventInterface = sprintf('%sServiceEventInterface', $model->getEntityClassName());
 
         $this->mustCreatePhpFile(
             sprintf('%s/%s.php', $serviceResultsPath, $baseServiceEventInterface),
             $serviceResultsNamespace,
             [
-                HistoryEventInterface::class,
+                $this->get(CreatorInterface::class)->getbaseServiceEvent(true),
                 ltrim($modelInterfaceFqn, '\\'),
             ],
             $this->createBaseServiceEventInterface(
@@ -380,13 +380,13 @@ class CreateCrudServices extends RetroCommand
             $output,
         );
 
-        $baseServiceEventClassName = sprintf('%sHistoryEvent', $model->getEntityClassName());
+        $baseServiceEventClassName = sprintf('%sServiceEvent', $model->getEntityClassName());
 
         $this->mustCreatePhpFile(
             sprintf('%s/%s.php', $serviceResultsPath, $baseServiceEventClassName),
             $serviceResultsNamespace,
             [
-                HistoryEvent::class,
+                $this->get(CreatorInterface::class)->getBaseServiceEvent(),
                 ltrim($modelInterfaceFqn, '\\'),
                 ltrim($modelFqn, '\\'),
             ],
@@ -434,7 +434,7 @@ class CreateCrudServices extends RetroCommand
     ): array
     {
         $serviceEventInterface = sprintf(
-            '%s%sHistoryEventInterface',
+            '%s%sServiceEventInterface',
             $model->getEntityClassName(),
             $event,
         );
@@ -451,7 +451,7 @@ class CreateCrudServices extends RetroCommand
         );
 
         $serviceEventClassName = sprintf(
-            '%s%sHistoryEvent',
+            '%s%sServiceEvent',
             $model->getEntityClassName(),
             $event,
         );
@@ -479,8 +479,10 @@ class CreateCrudServices extends RetroCommand
         TypeInterface $model,
     ): string
     {
+        $bits = explode('\\', $this->get(CreatorInterface::class)->getBaseServiceEvent(true));
+
         $interface = new InterfaceType($interfaceName);
-        $interface->addExtend('HistoryEventInterface');
+        $interface->addExtend(end($bits));
 
         $this->appendContextGetterMethod($model, $interface);
 
@@ -493,9 +495,11 @@ class CreateCrudServices extends RetroCommand
         TypeInterface $model,
     ): string
     {
+        $bits = explode('\\', $this->get(CreatorInterface::class)->getBaseServiceEvent());
+
         $class = new ClassType($className);
         $class->setAbstract();
-        $class->setExtends('HistoryEvent');
+        $class->setExtends(end($bits));
         $class->addImplement($interfaceName);
 
         $this->appendContextGetterMethod(
