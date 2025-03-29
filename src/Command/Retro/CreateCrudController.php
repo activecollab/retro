@@ -105,6 +105,7 @@ class CreateCrudController extends RetroCommand
                 $modelServicesNamespace,
                 $formComponentClassName,
                 $formComponentFqn,
+                $serviceContext,
                 $model,
                 $output,
             );
@@ -117,6 +118,7 @@ class CreateCrudController extends RetroCommand
                 $modelServicesNamespace,
                 $formComponentClassName,
                 $formComponentFqn,
+                $serviceContext,
                 $model,
                 $output,
             );
@@ -133,6 +135,7 @@ class CreateCrudController extends RetroCommand
         string $servicesNamespace,
         string $formComponentClassName,
         string $formComponentFqn,
+        ?TypeInterface $serviceContext,
         TypeInterface $model,
         OutputInterface $output,
     ): void
@@ -140,7 +143,7 @@ class CreateCrudController extends RetroCommand
         $entitiesControllerClassName = sprintf('%sController', $model->getManagerClassName());
 
         $addEntityServiceInterface = sprintf('Add%sServiceInterface', $model->getEntityClassName());
-        $entityAddedHistoryEventInterface = sprintf('%sAddedHistoryEventInterface', $model->getEntityClassName());
+        $entityAddedInterface = sprintf('%sAddedServiceEventInterface', $model->getEntityClassName());
 
         $this->mustCreatePhpFile(
             sprintf('%s/%s.php', $controllersPath, $entitiesControllerClassName),
@@ -153,14 +156,15 @@ class CreateCrudController extends RetroCommand
                 ServerRequestInterface::class,
                 ResponseInterface::class,
                 sprintf('%s\\%s', $servicesNamespace, $addEntityServiceInterface),
-                sprintf('%s\\Result\\%s', $servicesNamespace, $entityAddedHistoryEventInterface),
+                sprintf('%s\\Result\\%s', $servicesNamespace, $entityAddedInterface),
                 $formComponentFqn,
             ],
             $this->createEntitiesControllerClass(
                 $entitiesControllerClassName,
                 $addEntityServiceInterface,
-                $entityAddedHistoryEventInterface,
+                $entityAddedInterface,
                 $formComponentClassName,
+                $serviceContext,
                 $model,
             ),
             $output,
@@ -170,8 +174,9 @@ class CreateCrudController extends RetroCommand
     private function createEntitiesControllerClass(
         string $className,
         string $addEntityServiceInterface,
-        string $entityAddedHistoryEventInterface,
+        string $entityAddedInterface,
         string $formComponentClassName,
+        ?TypeInterface $serviceContext,
         TypeInterface $model,
     ): string
     {
@@ -203,7 +208,7 @@ class CreateCrudController extends RetroCommand
                     '        $this->getAuthenticatedUser($request),',
                     '    );',
                     '',
-                    sprintf('    if ($result instanceof %s) {', $entityAddedHistoryEventInterface),
+                    sprintf('    if ($result instanceof %s) {', $entityAddedInterface),
                     '        # @TODO: Consider providing a better return URL after entity is added.',
                     '        return $this->redirect($request, $result->extendWithSignature($account->getUrl()));',
                     '    }',
@@ -238,6 +243,7 @@ class CreateCrudController extends RetroCommand
         string $servicesNamespace,
         string $formComponentClassName,
         string $formComponentFqn,
+        ?TypeInterface $serviceContext,
         TypeInterface $model,
         OutputInterface $output,
     ): void
@@ -245,9 +251,9 @@ class CreateCrudController extends RetroCommand
         $entityControllerClassName = sprintf('%sController', $model->getEntityClassName());
 
         $editEntityServiceInterface = sprintf('Edit%sServiceInterface', $model->getEntityClassName());
-        $entityEditedHistoryEventInterface = sprintf('%sEditedHistoryEventInterface', $model->getEntityClassName());
+        $entityEditedInterface = sprintf('%sEditedServiceEventInterface', $model->getEntityClassName());
         $deleteEntityServiceInterface = sprintf('Delete%sServiceInterface', $model->getEntityClassName());
-        $entityDeletedHistoryEventInterface = sprintf('%sDeletedHistoryEventInterface', $model->getEntityClassName());
+        $entityDeletedInterface = sprintf('%sDeletedServiceEventInterface', $model->getEntityClassName());
 
         $trimmedServiceNamespace = ltrim($servicesNamespace, '\\');
 
@@ -265,18 +271,19 @@ class CreateCrudController extends RetroCommand
                 ltrim($modelInterfaceFqn, '\\'),
                 ltrim($modelFqn, '\\'),
                 sprintf('%s\\%s', $trimmedServiceNamespace, $editEntityServiceInterface),
-                sprintf('%s\\Result\\%s', $trimmedServiceNamespace, $entityEditedHistoryEventInterface),
+                sprintf('%s\\Result\\%s', $trimmedServiceNamespace, $entityEditedInterface),
                 sprintf('%s\\%s', $trimmedServiceNamespace, $deleteEntityServiceInterface),
-                sprintf('%s\\Result\\%s', $trimmedServiceNamespace, $entityDeletedHistoryEventInterface),
+                sprintf('%s\\Result\\%s', $trimmedServiceNamespace, $entityDeletedInterface),
                 ltrim($formComponentFqn, '\\'),
             ],
             $this->createEntityControllerClass(
                 $entityControllerClassName,
+                $serviceContext,
                 $model,
                 $editEntityServiceInterface,
-                $entityEditedHistoryEventInterface,
+                $entityEditedInterface,
                 $deleteEntityServiceInterface,
-                $entityDeletedHistoryEventInterface,
+                $entityDeletedInterface,
                 $formComponentClassName,
             ),
             $output,
@@ -285,11 +292,12 @@ class CreateCrudController extends RetroCommand
 
     private function createEntityControllerClass(
         string $className,
+        ?TypeInterface $serviceContext,
         TypeInterface $model,
         string $editEntityServiceInterface,
-        string $entityEditedHistoryEventInterface,
+        string $entityEditedInterface,
         string $deleteEntityServiceInterface,
-        string $entityDeletedHistoryEventInterface,
+        string $entityDeletedInterface,
         string $formComponentClassName,
     ): string
     {
@@ -354,7 +362,7 @@ class CreateCrudController extends RetroCommand
                     '        $this->getAuthenticatedUser($request),',
                     '    );',
                     '',
-                    sprintf('    if ($result instanceof %s) {', $entityEditedHistoryEventInterface),
+                    sprintf('    if ($result instanceof %s) {', $entityEditedInterface),
                     sprintf('        return $this->redirect($request, $result->extendWithSignature($this->%s->getUrl()));', $entityInstancePropertyName),
                     '    }',
                     '',
@@ -392,7 +400,7 @@ class CreateCrudController extends RetroCommand
                     '        $this->getAuthenticatedUser($request),',
                     '    );',
                     '',
-                    sprintf('    if ($result instanceof %s) {', $entityDeletedHistoryEventInterface),
+                    sprintf('    if ($result instanceof %s) {', $entityDeletedInterface),
                     '        # @TODO: Consider providing a better return URL after delete action.',
                     '        return $this->redirect($request, $result->extendWithSignature($account->getUrl()));',
                     '    } elseif ($result instanceof InvalidFormData) {',
