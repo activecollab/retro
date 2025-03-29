@@ -62,6 +62,17 @@ trait ServiceContextAwareTrait
         return $this->get(StructureInterface::class)->getType($context);
     }
 
+    private ?string $serviceContextVariableName = null;
+
+    private function getServiceContextVariableName(TypeInterface $serviceContext): string
+    {
+        if ($this->serviceContextVariableName === null) {
+            $this->serviceContextVariableName = lcfirst($serviceContext->getEntityClassName());
+        }
+
+        return $this->serviceContextVariableName;
+    }
+
     /**
      * @template TClassName
      * @param class-string<TClassName> $id

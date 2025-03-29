@@ -150,7 +150,7 @@ class CreateCrudController extends RetroCommand
             $controllersNamespace,
             [
                 CrudController::class,
-                AccountAwareMiddlewareTrait::class,
+                $this->get(CreatorInterface::class)->getServiceContextAwareMiddlewareTrait($serviceContext),
                 $this->get(CreatorInterface::class)->getAuthenticationAwareMiddlewareTrait(),
                 EntityAwareNodeMiddleware::class,
                 ServerRequestInterface::class,
@@ -181,10 +181,11 @@ class CreateCrudController extends RetroCommand
     ): string
     {
         $authenticationAwareMiddlewareTrait = explode('\\', $this->get(CreatorInterface::class)->getAuthenticationAwareMiddlewareTrait());
+        $serviceContextAwareMiddlewareTrait = explode('\\', $this->get(CreatorInterface::class)->getServiceContextAwareMiddlewareTrait($serviceContext));
 
         $class = new ClassType($className);
         $class->setExtends('CrudController');
-        $class->addTrait('AccountAwareMiddlewareTrait');
+        $class->addTrait(end($serviceContextAwareMiddlewareTrait));
         $class->addTrait(end($authenticationAwareMiddlewareTrait));
 
         $this->addAction($class, 'indexAction', 'return $this->proceedToNode($request);');
@@ -194,7 +195,7 @@ class CreateCrudController extends RetroCommand
             implode(
                 "\n",
                 [
-                    '$account = $this->mustGetAccount($request);',
+                    sprintf('$%s = $this->%s($request);', $this->getServiceContextVariableName($serviceContext), $this->getServiceContextAccessor($serviceContext)),
                     '',
                     '$formData = $this->getFormDataFactory()->createFormData();',
                     '',
@@ -204,13 +205,13 @@ class CreateCrudController extends RetroCommand
                     sprintf('    $result = $this->get(%s::class)->processRequest(', $addEntityServiceInterface),
                     '        $request,',
                     '        $formData,',
-                    '        $account,',
+                    sprintf('        $%s,', $this->getServiceContextVariableName($serviceContext)),
                     '        $this->getAuthenticatedUser($request),',
                     '    );',
                     '',
                     sprintf('    if ($result instanceof %s) {', $entityAddedInterface),
                     '        # @TODO: Consider providing a better return URL after entity is added.',
-                    '        return $this->redirect($request, $result->extendWithSignature($account->getUrl()));',
+                    sprintf('        return $this->redirect($request, $result->extendWithSignature($%s->getUrl()));', $this->getServiceContextVariableName($serviceContext)),
                     '    }',
                     '',
                     '    # @TODO: Fix add form URL, as well as return URL.',
@@ -218,10 +219,10 @@ class CreateCrudController extends RetroCommand
                     sprintf('        $this->getExtension(%s::class)->render(', $formComponentClassName),
                     '            $result,',
                     '            $formData,',
-                    '            $account,',
-                    '            $account->getUrl(),',
+                    sprintf('            $%s,', $this->getServiceContextVariableName($serviceContext)),
+                    sprintf('            $%s->getUrl(),', $this->getServiceContextVariableName($serviceContext)),
                     sprintf('            "Add %s",', $this->getVerboseEntityName($model->getEntityClassName())),
-                    '            $account->getUrl(),',
+                    sprintf('            $%s->getUrl(),', $this->getServiceContextVariableName($serviceContext)),
                     sprintf('            "#%s",', $this->getFormName('add', $model->getEntityClassName())),
                     '        ),',
                     '        429,',
@@ -263,7 +264,7 @@ class CreateCrudController extends RetroCommand
             [
                 CrudController::class,
                 EntityAwareNodeMiddleware::class,
-                AccountAwareMiddlewareTrait::class,
+                $this->get(CreatorInterface::class)->getServiceContextAwareMiddlewareTrait($serviceContext),
                 $this->get(CreatorInterface::class)->getAuthenticationAwareMiddlewareTrait(),
                 ServerRequestInterface::class,
                 ResponseInterface::class,
@@ -302,10 +303,11 @@ class CreateCrudController extends RetroCommand
     ): string
     {
         $authenticationAwareMiddlewareTrait = explode('\\', $this->get(CreatorInterface::class)->getAuthenticationAwareMiddlewareTrait());
+        $serviceContextAwareMiddlewareTrait = explode('\\', $this->get(CreatorInterface::class)->getServiceContextAwareMiddlewareTrait($serviceContext));
 
         $class = new ClassType($className);
         $class->setExtends('CrudController');
-        $class->addTrait('AccountAwareMiddlewareTrait');
+        $class->addTrait(end($serviceContextAwareMiddlewareTrait));
         $class->addTrait(end($authenticationAwareMiddlewareTrait));
         $class->addTrait('EntityAwareNodeMiddleware');
 
@@ -343,7 +345,7 @@ class CreateCrudController extends RetroCommand
             implode(
                 "\n",
                 [
-                    '$account = $this->mustGetAccount($request);',
+                    sprintf('$%s = $this->%s($request);', $this->getServiceContextVariableName($serviceContext), $this->getServiceContextAccessor($serviceContext)),
                     '',
                     '$formData = $this->getFormDataFactory()->createFormData(',
                     '    [',
@@ -357,7 +359,7 @@ class CreateCrudController extends RetroCommand
                     sprintf('    $result = $this->get(%s::class)->processRequest(', $editEntityServiceInterface),
                     '        $request,',
                     '        $formData,',
-                    '        $account,',
+                    sprintf('        $%s,', $this->getServiceContextVariableName($serviceContext)),
                     sprintf('        $this->%s,', $entityInstancePropertyName),
                     '        $this->getAuthenticatedUser($request),',
                     '    );',
@@ -370,7 +372,7 @@ class CreateCrudController extends RetroCommand
                     sprintf('        $this->getExtension(%s::class)->render(', $formComponentClassName),
                     '            $result,',
                     '            $formData,',
-                    '            $account,',
+                    sprintf('            $%s,', $this->getServiceContextVariableName($serviceContext)),
                     sprintf('            $this->%s->getUrl("edit"),', $entityInstancePropertyName),
                     sprintf('            "Edit %s",', $this->getVerboseEntityName($model->getEntityClassName())),
                     sprintf('            $this->%s->getUrl(),', $entityInstancePropertyName),
@@ -390,19 +392,19 @@ class CreateCrudController extends RetroCommand
                 "\n",
                 [
                     'if ($this->isPost($request)) {',
-                    '    $account = $this->getAccount($request);',
+                    sprintf('    $%s = $this->%s($request);', $this->getServiceContextVariableName($serviceContext), $this->getServiceContextAccessor($serviceContext)),
                     '',
                     sprintf('    $result = $this->get(%s::class)->processRequest(', $deleteEntityServiceInterface),
                     '        $request,',
                     '        $this->getFormDataFactory()->createFormData(),',
-                    '        $account,',
+                    sprintf('        $%s,', $this->getServiceContextVariableName($serviceContext)),
                     sprintf('        $this->%s,', $entityInstancePropertyName),
                     '        $this->getAuthenticatedUser($request),',
                     '    );',
                     '',
                     sprintf('    if ($result instanceof %s) {', $entityDeletedInterface),
                     '        # @TODO: Consider providing a better return URL after delete action.',
-                    '        return $this->redirect($request, $result->extendWithSignature($account->getUrl()));',
+                    sprintf('        return $this->redirect($request, $result->extendWithSignature($%s->getUrl()));', $this->getServiceContextVariableName($serviceContext)),
                     '    } elseif ($result instanceof InvalidFormData) {',
                     '        $request = $request->withAttribute("formData", $result->getFormData());',
                     '    }',
@@ -455,5 +457,10 @@ class CreateCrudController extends RetroCommand
             $this->get(CreatorInterface::class)->getModelNamespace(),
             $element,
         );
+    }
+
+    private function getServiceContextAccessor(TypeInterface $serviceContext): string
+    {
+        return sprintf('mustGet%s', $serviceContext->getEntityClassName());
     }
 }

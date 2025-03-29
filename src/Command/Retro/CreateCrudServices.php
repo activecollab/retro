@@ -659,7 +659,7 @@ class CreateCrudServices extends RetroCommand
                     '$formData',
                 ],
                 [
-                    $serviceContext ? sprintf('$%s', $this->getContextVariableName($serviceContext)) : '',
+                    $serviceContext ? sprintf('$%s', $this->getServiceContextVariableName($serviceContext)) : '',
                 ],
                 [
                     '$authenticatedUser',
@@ -770,7 +770,7 @@ class CreateCrudServices extends RetroCommand
         $processMethod->addParameter('formData')->setType('FormDataInterface');
 
         if ($serviceContext) {
-            $this->appendContextArgument($processMethod, $serviceContext);
+            $this->appendServiceContextArgument($processMethod, $serviceContext);
         }
         $processMethod->addParameter('authenticatedUser')->setType('UserInterface');
 
@@ -910,7 +910,7 @@ class CreateCrudServices extends RetroCommand
                     '$formData',
                 ],
                 [
-                    $serviceContext ? sprintf('$%s', $this->getContextVariableName($serviceContext)) : '',
+                    $serviceContext ? sprintf('$%s', $this->getServiceContextVariableName($serviceContext)) : '',
                 ],
                 [
                     sprintf('$%s', $entityVarName),
@@ -1002,7 +1002,7 @@ class CreateCrudServices extends RetroCommand
         $processMethod->addParameter('formData')->setType('FormDataInterface');
 
         if ($serviceContext) {
-            $this->appendContextArgument($processMethod, $serviceContext);
+            $this->appendServiceContextArgument($processMethod, $serviceContext);
         }
 
         $processMethod->addParameter(lcfirst($model->getEntityClassName()))->setType($model->getEntityInterfaceName());
@@ -1133,7 +1133,7 @@ class CreateCrudServices extends RetroCommand
         $transactionCallbackImports = array_filter(
             array_merge(
                 [
-                    $serviceContext ? sprintf('$%s', $this->getContextVariableName($serviceContext)) : '',
+                    $serviceContext ? sprintf('$%s', $this->getServiceContextVariableName($serviceContext)) : '',
                 ],
                 [
                     sprintf('$%s', $entityVarName),
@@ -1186,7 +1186,7 @@ class CreateCrudServices extends RetroCommand
         $processMethod->addParameter('formData')->setType('FormDataInterface');
 
         if ($serviceContext) {
-            $this->appendContextArgument($processMethod, $serviceContext);
+            $this->appendServiceContextArgument($processMethod, $serviceContext);
         }
 
         $processMethod->addParameter(lcfirst($model->getEntityClassName()))->setType($model->getEntityInterfaceName());
@@ -1197,20 +1197,9 @@ class CreateCrudServices extends RetroCommand
         }
     }
 
-    private ?string $contextVariableName = null;
-
-    private function getContextVariableName(TypeInterface $serviceContext): string
+    private function appendServiceContextArgument(Method $method, TypeInterface $serviceContext): void
     {
-        if ($this->contextVariableName === null) {
-            $this->contextVariableName = lcfirst($serviceContext->getEntityClassName());
-        }
-
-        return $this->contextVariableName;
-    }
-
-    private function appendContextArgument(Method $method, TypeInterface $serviceContext): void
-    {
-        $method->addParameter($this->getContextVariableName($serviceContext))->setType($serviceContext->getEntityInterfaceName());
+        $method->addParameter($this->getServiceContextVariableName($serviceContext))->setType($serviceContext->getEntityInterfaceName());
     }
 
     private function getRecorderFactoryCall(?TypeInterface $serviceContext): string
@@ -1219,6 +1208,6 @@ class CreateCrudServices extends RetroCommand
             return 'withoutContext()';
         }
 
-        return sprintf('withinContext($%s)', $this->getContextVariableName($serviceContext));
+        return sprintf('withinContext($%s)', $this->getServiceContextVariableName($serviceContext));
     }
 }
