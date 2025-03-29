@@ -11,7 +11,8 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\Integrate\Creator;
 
 use ActiveCollab\Retro\Bootstrapper\Bundle\BundleInterface;
-use ActiveCollab\Retro\Integrate\Creator\CreatorInterface;
+use ActiveCollab\Retro\Service\Service;
+use ActiveCollab\Retro\Service\ServiceInterface;
 
 abstract class Creator implements CreatorInterface
 {
@@ -39,5 +40,10 @@ abstract class Creator implements CreatorInterface
             $this->getBundlesNamespace(),
             $bundle->getName(),
         );
+    }
+
+    public function getBaseService(bool $interface = false): string
+    {
+        return $interface ? ServiceInterface::class : Service::class;
     }
 }
