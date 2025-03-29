@@ -127,12 +127,12 @@ class CreateCrudServices extends RetroCommand
 
             [
                 $serviceResultsNamespace,
-                $entityAddedHistoryEventInterface,
-                $entityAddedHistoryEventClassName,
-                $entityEditedHistoryEventInterface,
-                $entityEditedHistoryEventClassName,
-                $entityDeletedHistoryEventInterface,
-                $entityDeletedHistoryEventClassName,
+                $entityAddedInterface,
+                $entityAddedClassName,
+                $entityEditedInterface,
+                $entityEditedClassName,
+                $entityDeletedInterface,
+                $entityDeletedClassName,
             ] = $this->createResults(
                 $modelServicesPath,
                 $modelServicesNamespace,
@@ -154,8 +154,8 @@ class CreateCrudServices extends RetroCommand
                 $modelFqn,
                 $detailsGetterName,
                 $entityTypeVarName,
-                $entityAddedHistoryEventClassName,
-                sprintf('\\%s\\%s', $serviceResultsNamespace, $entityAddedHistoryEventClassName),
+                $entityAddedClassName,
+                sprintf('\\%s\\%s', $serviceResultsNamespace, $entityAddedClassName),
                 $context,
                 $model,
                 $output,
@@ -172,8 +172,8 @@ class CreateCrudServices extends RetroCommand
                 $modelInterfaceFqn,
                 $detailsGetterName,
                 $entityTypeVarName,
-                $entityEditedHistoryEventClassName,
-                sprintf('\\%s\\%s', $serviceResultsNamespace, $entityEditedHistoryEventClassName),
+                $entityEditedClassName,
+                sprintf('\\%s\\%s', $serviceResultsNamespace, $entityEditedClassName),
                 $context,
                 $model,
                 $output,
@@ -188,8 +188,8 @@ class CreateCrudServices extends RetroCommand
                 $baseServiceInterfaceName,
                 $baseServiceClassName,
                 $modelInterfaceFqn,
-                $entityDeletedHistoryEventClassName,
-                sprintf('\\%s\\%s', $serviceResultsNamespace, $entityDeletedHistoryEventClassName),
+                $entityDeletedClassName,
+                sprintf('\\%s\\%s', $serviceResultsNamespace, $entityDeletedClassName),
                 $context,
                 $model,
                 $output,
@@ -364,35 +364,35 @@ class CreateCrudServices extends RetroCommand
 
         $serviceResultsNamespace = sprintf('%s\\Result', $modelServicesNamespace);
 
-        $baseHistoryEventInterface = sprintf('%sHistoryEventInterface', $model->getEntityClassName());
+        $baseServiceEventInterface = sprintf('%sHistoryEventInterface', $model->getEntityClassName());
 
         $this->mustCreatePhpFile(
-            sprintf('%s/%s.php', $serviceResultsPath, $baseHistoryEventInterface),
+            sprintf('%s/%s.php', $serviceResultsPath, $baseServiceEventInterface),
             $serviceResultsNamespace,
             [
                 HistoryEventInterface::class,
                 ltrim($modelInterfaceFqn, '\\'),
             ],
-            $this->createBaseHistoryEventInterface(
-                $baseHistoryEventInterface,
+            $this->createBaseServiceEventInterface(
+                $baseServiceEventInterface,
                 $model,
             ),
             $output,
         );
 
-        $baseHistoryEventClassName = sprintf('%sHistoryEvent', $model->getEntityClassName());
+        $baseServiceEventClassName = sprintf('%sHistoryEvent', $model->getEntityClassName());
 
         $this->mustCreatePhpFile(
-            sprintf('%s/%s.php', $serviceResultsPath, $baseHistoryEventClassName),
+            sprintf('%s/%s.php', $serviceResultsPath, $baseServiceEventClassName),
             $serviceResultsNamespace,
             [
                 HistoryEvent::class,
                 ltrim($modelInterfaceFqn, '\\'),
                 ltrim($modelFqn, '\\'),
             ],
-            $this->createBaseHistoryEventClass(
-                $baseHistoryEventClassName,
-                $baseHistoryEventInterface,
+            $this->createBaseServiceEventClass(
+                $baseServiceEventClassName,
+                $baseServiceEventInterface,
                 $model,
             ),
             $output,
@@ -407,8 +407,8 @@ class CreateCrudServices extends RetroCommand
                     $event,
                     $serviceResultsPath,
                     $serviceResultsNamespace,
-                    $baseHistoryEventInterface,
-                    $baseHistoryEventClassName,
+                    $baseServiceEventInterface,
+                    $baseServiceEventClassName,
                     $model,
                     $output,
                 ),
@@ -427,54 +427,54 @@ class CreateCrudServices extends RetroCommand
         string $event,
         string $serviceResultsPath,
         string $serviceResultsNamespace,
-        string $baseHistoryEventInterface,
-        string $baseHistoryEventClassName,
+        string $baseServiceEventInterface,
+        string $baseServiceEventClassName,
         TypeInterface $model,
         OutputInterface $output,
     ): array
     {
-        $entityEventHistoryEventInterface = sprintf(
+        $serviceEventInterface = sprintf(
             '%s%sHistoryEventInterface',
             $model->getEntityClassName(),
             $event,
         );
 
         $this->mustCreatePhpFile(
-            sprintf('%s/%s.php', $serviceResultsPath, $entityEventHistoryEventInterface),
+            sprintf('%s/%s.php', $serviceResultsPath, $serviceEventInterface),
             $serviceResultsNamespace,
             [],
-            $this->createEntityServiceHistoryEventInterface(
-                $entityEventHistoryEventInterface,
-                $baseHistoryEventInterface,
+            $this->createServiceEventInterface(
+                $serviceEventInterface,
+                $baseServiceEventInterface,
             ),
             $output,
         );
 
-        $entityEventHistoryEventClassName = sprintf(
+        $serviceEventClassName = sprintf(
             '%s%sHistoryEvent',
             $model->getEntityClassName(),
             $event,
         );
 
         $this->mustCreatePhpFile(
-            sprintf('%s/%s.php', $serviceResultsPath, $entityEventHistoryEventClassName),
+            sprintf('%s/%s.php', $serviceResultsPath, $serviceEventClassName),
             $serviceResultsNamespace,
             [],
-            $this->createEntityServiceHistoryEventClass(
-                $entityEventHistoryEventClassName,
-                $entityEventHistoryEventInterface,
-                $baseHistoryEventClassName,
+            $this->createServiceEventClass(
+                $serviceEventClassName,
+                $serviceEventInterface,
+                $baseServiceEventClassName,
             ),
             $output,
         );
 
         return [
-            $entityEventHistoryEventInterface,
-            $entityEventHistoryEventClassName,
+            $serviceEventInterface,
+            $serviceEventClassName,
         ];
     }
 
-    private function createBaseHistoryEventInterface(
+    private function createBaseServiceEventInterface(
         string $interfaceName,
         TypeInterface $model,
     ): string
@@ -487,7 +487,7 @@ class CreateCrudServices extends RetroCommand
         return (string) $interface;
     }
 
-    private function createBaseHistoryEventClass(
+    private function createBaseServiceEventClass(
         string $className,
         string $interfaceName,
         TypeInterface $model,
@@ -526,25 +526,25 @@ class CreateCrudServices extends RetroCommand
         }
     }
 
-    private function createEntityServiceHistoryEventInterface(
+    private function createServiceEventInterface(
         string $interfaceName,
-        string $baseHistoryEventInterface,
+        string $baseServiceEventInterface,
     ): string
     {
         $interface = new InterfaceType($interfaceName);
-        $interface->addExtend($baseHistoryEventInterface);
+        $interface->addExtend($baseServiceEventInterface);
 
         return (string) $interface;
     }
 
-    private function createEntityServiceHistoryEventClass(
+    private function createServiceEventClass(
         string $className,
         string $interfaceName,
-        string $baseHistoryClassName,
+        string $baseServiceEventClassName,
     ): string
     {
         $class = new ClassType($className);
-        $class->setExtends($baseHistoryClassName);
+        $class->setExtends($baseServiceEventClassName);
         $class->addImplement($interfaceName);
 
         return (string) $class;
@@ -563,8 +563,8 @@ class CreateCrudServices extends RetroCommand
         string $modelFqn,
         string $detailsGetterName,
         string $entityTypeVarName,
-        string $entityAddedHistoryEventClassName,
-        string $entityAddedHistoryEventFqn,
+        string $entityAddedClassName,
+        string $entityAddedFqn,
         ?TypeInterface $context,
         TypeInterface $model,
         OutputInterface $output,
@@ -611,7 +611,7 @@ class CreateCrudServices extends RetroCommand
                 $interfaceUseStatements,
                 array_merge(
                     [
-                        ltrim($entityAddedHistoryEventFqn, '\\'),
+                        ltrim($entityAddedFqn, '\\'),
                         ltrim($modelInterfaceFqn, '\\'),
                         InvalidFormData::class,
                         Exception::class,
@@ -629,7 +629,7 @@ class CreateCrudServices extends RetroCommand
                 $baseServiceClassName,
                 $detailsGetterName,
                 $entityTypeVarName,
-                $entityAddedHistoryEventClassName,
+                $entityAddedClassName,
                 $context,
                 $model,
             ),
@@ -665,7 +665,7 @@ class CreateCrudServices extends RetroCommand
         string $baseServiceClassName,
         string $detailsGetterName,
         string $entityTypeVarName,
-        string $entityAddedHistoryEventClassName,
+        string $entityAddedClassName,
         ?TypeInterface $context,
         TypeInterface $model,
     ): string
@@ -717,7 +717,7 @@ class CreateCrudServices extends RetroCommand
                 '            );',
                 '',
                 sprintf('            return $this->serviceResultFactory->%s->record(', $this->getRecorderFactoryCall($context)),
-                sprintf('                %s::class,', $entityAddedHistoryEventClassName),
+                sprintf('                %s::class,', $entityAddedClassName),
                 '                $authenticatedUser,',
                 '                [',
                 sprintf('                    \'%s_id\' => $%s->getId(),', $inflector->tableize($model->getEntityClassName()), $producedEntityVarName),
@@ -818,8 +818,8 @@ class CreateCrudServices extends RetroCommand
         string $modelInterfaceFqn,
         string $detailsGetterName,
         string $entityTypeVarName,
-        string $entityEditedHistoryEventClassName,
-        string $entityEditedHistoryEventFqn,
+        string $entityEditedClassName,
+        string $entityEditedFqn,
         ?TypeInterface $context,
         TypeInterface $model,
         OutputInterface $output,
@@ -867,7 +867,7 @@ class CreateCrudServices extends RetroCommand
             array_merge(
                 $interfaceUseStatements,
                 [
-                    ltrim($entityEditedHistoryEventFqn, '\\'),
+                    ltrim($entityEditedFqn, '\\'),
                     InvalidFormData::class,
                     Exception::class,
                 ],
@@ -878,7 +878,7 @@ class CreateCrudServices extends RetroCommand
                 $baseServiceClassName,
                 $detailsGetterName,
                 $entityTypeVarName,
-                $entityEditedHistoryEventClassName,
+                $entityEditedClassName,
                 $context,
                 $model,
             ),
@@ -916,7 +916,7 @@ class CreateCrudServices extends RetroCommand
         string $baseServiceClassName,
         string $detailsGetterName,
         string $entityTypeVarName,
-        string $entityEditedHistoryEventClassName,
+        string $entityEditedClassName,
         ?TypeInterface $context,
         TypeInterface $model,
     ): string
@@ -967,7 +967,7 @@ class CreateCrudServices extends RetroCommand
                 '            );',
                 '',
                 sprintf('            return $this->%s->record(', $this->getRecorderFactoryCall($context)),
-                sprintf('                %s::class,', $entityEditedHistoryEventClassName),
+                sprintf('                %s::class,', $entityEditedClassName),
                 '                $authenticatedUser,',
                 '                [',
                 sprintf('                    \'%s_id\' => $%s->getId(),', $inflector->tableize($model->getEntityClassName()), $entityVarName),
@@ -1050,8 +1050,8 @@ class CreateCrudServices extends RetroCommand
         string $baseServiceInterfaceName,
         string $baseServiceClassName,
         string $modelInterfaceFqn,
-        string $entityDeletedHistoryEventClassName,
-        string $entityDeletedHistoryEventFqn,
+        string $entityDeletedClassName,
+        string $entityDeletedFqn,
         ?TypeInterface $context,
         TypeInterface $model,
         OutputInterface $output,
@@ -1099,14 +1099,14 @@ class CreateCrudServices extends RetroCommand
             array_merge(
                 $interfaceUseStatements,
                 [
-                    ltrim($entityDeletedHistoryEventFqn, '\\'),
+                    ltrim($entityDeletedFqn, '\\'),
                 ],
             ),
             $this->createDeleteEntityServiceClass(
                 $deleteEntityServiceClass,
                 $deleteEntityServiceInterface,
                 $baseServiceClassName,
-                $entityDeletedHistoryEventClassName,
+                $entityDeletedClassName,
                 $context,
                 $model,
             ),
@@ -1142,7 +1142,7 @@ class CreateCrudServices extends RetroCommand
         string $className,
         string $interfaceName,
         string $baseServiceClassName,
-        string $entityDeletedHistoryEventClassName,
+        string $entityDeletedClassName,
         ?TypeInterface $context,
         TypeInterface $model,
     ): string
@@ -1177,7 +1177,7 @@ class CreateCrudServices extends RetroCommand
             sprintf('        $%s->delete();', $entityVarName),
             '',
             sprintf('            return $this->%s->record(', $this->getRecorderFactoryCall($context)),
-            sprintf('            %s::class,', $entityDeletedHistoryEventClassName),
+            sprintf('            %s::class,', $entityDeletedClassName),
             '            $authenticatedUser,',
             '            [',
             sprintf('                \'%s_id\' => $%s,', $inflector->tableize($model->getEntityClassName()), $idVarName),
