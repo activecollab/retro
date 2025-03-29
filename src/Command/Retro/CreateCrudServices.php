@@ -1175,7 +1175,7 @@ class CreateCrudServices extends RetroCommand
         $processMethod->addParameter('formData')->setType('FormDataInterface');
 
         if ($context) {
-            $this->appendContextArgument($processMethod, $body);
+            $this->appendContextArgument($processMethod, $context);
         }
 
         $processMethod->addParameter(lcfirst($model->getEntityClassName()))->setType($model->getEntityInterfaceName());
@@ -1186,8 +1186,19 @@ class CreateCrudServices extends RetroCommand
         }
     }
 
+    private ?string $contextVariableName = null;
+
+    private function getContextVariableName(TypeInterface $context): string
+    {
+        if ($this->contextVariableName === null) {
+            $this->contextVariableName = lcfirst($context->getEntityClassName());
+        }
+
+        return $this->contextVariableName;
+    }
+
     private function appendContextArgument(Method $method, TypeInterface $context): void
     {
-        $method->addParameter($context->getName())->setType($context->getEntityInterfaceName());
+        $method->addParameter($this->getContextVariableName($context))->setType($context->getEntityInterfaceName());
     }
 }
