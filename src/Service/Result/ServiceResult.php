@@ -12,4 +12,8 @@ namespace ActiveCollab\Retro\Service\Result;
 
 abstract class ServiceResult implements ServiceResultInterface
 {
+    public function decorateUrl(string $url): string
+    {
+        return $url;
+    }
 }

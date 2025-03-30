@@ -13,4 +13,5 @@ namespace ActiveCollab\Retro\Service\Result;
 interface ServiceResultInterface
 {
     public function isSuccess(): bool;
+    public function decorateUrl(string $url): string;
 }

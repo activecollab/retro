@@ -29,7 +29,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 
-class CreateCrudController extends RetroCommand
+class CreateCrudControllerCommand extends RetroCommand
 {
     use FileManagementTrait;
     use ModelAwareTrait;
@@ -211,7 +211,7 @@ class CreateCrudController extends RetroCommand
                     '',
                     sprintf('    if ($result instanceof %s) {', $entityAddedInterface),
                     '        # @TODO: Consider providing a better return URL after entity is added.',
-                    sprintf('        return $this->redirect($request, $result->extendWithSignature($%s->getUrl()));', $this->getServiceContextVariableName($serviceContext)),
+                    sprintf('        return $this->redirect($request, $result->decorateUrl($%s->getUrl()));', $this->getServiceContextVariableName($serviceContext)),
                     '    }',
                     '',
                     '    # @TODO: Fix add form URL, as well as return URL.',
@@ -365,7 +365,7 @@ class CreateCrudController extends RetroCommand
                     '    );',
                     '',
                     sprintf('    if ($result instanceof %s) {', $entityEditedInterface),
-                    sprintf('        return $this->redirect($request, $result->extendWithSignature($this->%s->getUrl()));', $entityInstancePropertyName),
+                    sprintf('        return $this->redirect($request, $result->decorateUrl($this->%s->getUrl()));', $entityInstancePropertyName),
                     '    }',
                     '',
                     '    return $this->renderContent(',
@@ -404,7 +404,7 @@ class CreateCrudController extends RetroCommand
                     '',
                     sprintf('    if ($result instanceof %s) {', $entityDeletedInterface),
                     '        # @TODO: Consider providing a better return URL after delete action.',
-                    sprintf('        return $this->redirect($request, $result->extendWithSignature($%s->getUrl()));', $this->getServiceContextVariableName($serviceContext)),
+                    sprintf('        return $this->redirect($request, $result->decorateUrl($%s->getUrl()));', $this->getServiceContextVariableName($serviceContext)),
                     '    } elseif ($result instanceof InvalidFormData) {',
                     '        $request = $request->withAttribute("formData", $result->getFormData());',
                     '    }',

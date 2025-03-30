@@ -12,6 +12,7 @@ namespace ActiveCollab\Retro\Command\Retro;
 
 use ActiveCollab\Retro\CommandTrait\BundleAwareTrait;
 use ActiveCollab\Retro\CommandTrait\FileManagementTrait;
+use ActiveCollab\Retro\Integrate\Creator\CreatorInterface;
 use ActiveCollab\TemplatedUI\Tag\Tag;
 use Nette\PhpGenerator\ClassType;
 use Symfony\Component\Console\Input\InputArgument;
@@ -70,9 +71,8 @@ class CreateTagCommand extends RetroCommand
             $buildPath = $templateExtensionsPath;
 
             $templateExtensionsNamespace = sprintf(
-                '\\%s\\Bundles\\%s\\TemplateExtension',
-                $this->getAppNamespace(),
-                $bundle->getName(),
+                '\\%s\\TemplateExtension',
+                ltrim($this->get(CreatorInterface::class)->getBundleNamespace($bundle), '\\'),
             );
 
             if ($withTemplate) {

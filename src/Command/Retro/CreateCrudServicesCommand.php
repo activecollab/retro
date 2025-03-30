@@ -32,7 +32,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 
-class CreateCrudServices extends RetroCommand
+class CreateCrudServicesCommand extends RetroCommand
 {
     use FileManagementTrait;
     use ModelAwareTrait;

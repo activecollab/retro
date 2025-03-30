@@ -41,13 +41,19 @@ To be continued…
 To easily generate boilerplate code for entities, run following command in this sequence:
 
 ```bash
-php app/current/bin/console.php retro:create_crud_service entity_name BundleName
+php app/current/bin/console.php retro:create_crud_service plural_entity_name BundleName
 ```
 
 This command creates add, edit and delete services, as well as supporting result classes that can be recorded in service execution history.
 
 ```bash
-php app/current/bin/console.php retro:create_crud_controller entity_name BundleName
+php app/current/bin/console.php retro:create_tag EntityNameForm BundleName
+```
+
+This is not a requirement step, but it follows the naming convention that `create_crud_controller` command will pick up and use automatically.
+
+```bash
+php app/current/bin/console.php retro:create_crud_controller plural_entity_name BundleName
 ```
 
 This command creates a set of controllers, one for working with collections of entities, and one for working with individual entities.
