@@ -47,7 +47,7 @@ php app/current/bin/console.php retro:create_crud_service plural_entity_name Bun
 This command creates add, edit and delete services, as well as supporting result classes that can be recorded in service execution history.
 
 ```bash
-php app/current/bin/console.php retro:create_tag EntityNameForm BundleName
+php app/current/bin/console.php retro:create_crud_form plural_entity_name BundleName
 ```
 
 This is not a requirement step, but it follows the naming convention that `create_crud_controller` command will pick up and use automatically.
