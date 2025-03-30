@@ -939,7 +939,7 @@ class CreateCrudServicesCommand extends RetroCommand
             [
                 '            );',
                 '',
-                sprintf('            return $this->%s->record(', $this->getRecorderFactoryCall($serviceContext)),
+                sprintf('            return $this->serviceResultFactory->%s->record(', $this->getRecorderFactoryCall($serviceContext)),
                 sprintf('                %s::class,', $entityEditedClassName),
                 '                $authenticatedUser,',
                 '                [',
@@ -1149,7 +1149,7 @@ class CreateCrudServicesCommand extends RetroCommand
             '',
             sprintf('        $%s->delete();', $entityVarName),
             '',
-            sprintf('            return $this->%s->record(', $this->getRecorderFactoryCall($serviceContext)),
+            sprintf('            return $this->serviceResultFactory->%s->record(', $this->getRecorderFactoryCall($serviceContext)),
             sprintf('            %s::class,', $entityDeletedClassName),
             '            $authenticatedUser,',
             '            [',
