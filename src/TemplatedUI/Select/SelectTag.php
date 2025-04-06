@@ -34,11 +34,6 @@ abstract class SelectTag extends FormFieldTag
         );
     }
 
-    protected function closeSelectTag(): string
-    {
-        return '</sl-select>';
-    }
-
     protected function openOptionalSelectTag(
         string $name,
         ?FormDataInterface $formData = null,
@@ -51,6 +46,11 @@ abstract class SelectTag extends FormFieldTag
             $this->renderOption('None', '', empty($formData?->getFieldValue($name))),
             $this->renderOption(''),
         );
+    }
+
+    protected function closeSelectTag(): string
+    {
+        return '</sl-select>';
     }
 
     protected function renderOptionGroup(string $label): string
