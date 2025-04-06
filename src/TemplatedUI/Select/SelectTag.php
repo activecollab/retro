@@ -24,7 +24,7 @@ abstract class SelectTag extends FormFieldTag
         $classes = [];
 
         return $this->openHtmlTag(
-            'select',
+            'sl-select',
             $this->withInjectPlaceholder(
                 [
                     'name' => $name,
@@ -34,16 +34,20 @@ abstract class SelectTag extends FormFieldTag
         );
     }
 
+    protected function closeSelectTag(): string
+    {
+        return '</sl-select>';
+    }
+
     protected function openOptionalSelectTag(
         string $name,
         ?FormDataInterface $formData = null,
         string $class = '',
-        string $width = FormFieldInterface::WIDTH_FULL,
     ): string
     {
         return sprintf(
             '%s%s%s',
-            $this->openSelectTag($name, $class, $width),
+            $this->openSelectTag($name, $class),
             $this->renderOption('None', '', empty($formData?->getFieldValue($name))),
             $this->renderOption(''),
         );
@@ -73,7 +77,7 @@ abstract class SelectTag extends FormFieldTag
         return sprintf(
             '%s%s%s',
             $this->openHtmlTag(
-                'option',
+                'sl-option',
                 [
                     'value' => (string) $value,
                     'selected' => $isSelected,
