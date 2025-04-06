@@ -84,7 +84,7 @@ abstract class SelectTag extends FormFieldTag
                 ],
             ),
             $this->sanitizeForHtml($text),
-            $this->closeHtmlTag('option'),
+            $this->closeHtmlTag('sl-option'),
         );
     }
 }
