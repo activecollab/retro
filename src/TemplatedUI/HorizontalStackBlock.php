@@ -14,8 +14,15 @@ use ActiveCollab\TemplatedUI\WrapContentBlock\WrapContentBlock;
 
 class HorizontalStackBlock extends WrapContentBlock
 {
-    public function render(string $content): string
+    public function render(
+        string $content,
+        string $alignItems = 'center',
+    ): string
     {
-        return sprintf('<div style="display: flex; justify-content: center; align-items: center;width: fit-content; gap: 24px;">%s</div>', $content);
+        return sprintf(
+            '<div style="display: flex; justify-content: center; align-items: %s; width: fit-content; gap: 24px;">%s</div>',
+            $alignItems,
+            $content,
+        );
     }
 }
