@@ -40,9 +40,9 @@ abstract class SelectTag extends FormFieldTag
         );
     }
 
-    protected function closeSelectTag(): string
+    protected function closeSelectTag(string $body = ''): string
     {
-        return '</sl-select>';
+        return sprintf('%s</sl-select>', $body);
     }
 
     protected function closeOptionGroup(): string
