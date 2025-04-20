@@ -10,15 +10,18 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\TemplatedUI\Input;
 
-use ActiveCollab\TemplatedUI\WrapContentBlock\WrapContentBlock;
+use ActiveCollab\Retro\FormData\FormDataInterface;
+use ActiveCollab\Retro\TemplatedUI\Form\FormField\FormFieldTag;
 
-class TextareaBlock extends WrapContentBlock
+class TextareaTag extends FormFieldTag
 {
     public function render(
-        string $content,
+        string $name,
+        string $value = null,
         string $placeholder = null,
         string $helpText = null,
         string $resize = 'auto',
+        ?FormDataInterface $formData = null,
     ): string
     {
         $attributes = [];
@@ -38,7 +41,7 @@ class TextareaBlock extends WrapContentBlock
         return sprintf(
             '%s%s%s',
             $this->openHtmlTag('sl-textarea', $attributes),
-            $content,
+            $value ?? $formData?->getFieldValue($name),
             $this->closeHtmlTag('sl-textarea'),
         );
     }
