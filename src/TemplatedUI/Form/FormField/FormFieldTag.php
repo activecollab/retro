@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\TemplatedUI\Form\FormField;
 
 use ActiveCollab\Retro\TemplatedUI\ComponentIdResolver\ComponentIdResolverInterface;
+use ActiveCollab\TemplatedUI\MethodInvoker\CatchAllParameters\CatchAllParametersInterface;
 use ActiveCollab\TemplatedUI\Tag\Tag;
 
 abstract class FormFieldTag extends Tag implements FormFieldInterface
@@ -51,5 +52,12 @@ abstract class FormFieldTag extends Tag implements FormFieldInterface
             $controlHtml,
             $this->closeHtmlTag('div'),
         );
+    }
+
+    protected function catchAllClasses(?CatchAllParametersInterface $catchAllParameters): array
+    {
+        return $catchAllParameters && $catchAllParameters->getParameter('class')
+            ? explode(' ', $catchAllParameters->getParameter('class'))
+            : [];
     }
 }

@@ -33,7 +33,7 @@ abstract class InputTag extends FormFieldTag
             [
                 'type' => $type,
                 'name' => $name,
-                'class' => implode(' ', $this->getInputClasses($catchAllParameters)),
+                'class' => implode(' ', $this->catchAllClasses($catchAllParameters)),
                 'value' => $value ?? $formData?->getFieldValue($name),
             ],
         );
@@ -49,13 +49,6 @@ abstract class InputTag extends FormFieldTag
                 $this->closeHtmlTag('sl-input'),
             )
         );
-    }
-
-    private function getInputClasses(?CatchAllParametersInterface $catchAllParameters): array
-    {
-        return $catchAllParameters && $catchAllParameters->getParameter('class')
-            ? explode(' ', $catchAllParameters->getParameter('class'))
-            : [];
     }
 
     protected function getInputAttributes(): array
