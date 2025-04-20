@@ -37,7 +37,7 @@ class CheckboxTag extends Tag
         }
 
         if ($helpText) {
-            $attributes['helpText'] = $helpText;
+            $attributes['help-text'] = $helpText;
         }
 
         if ($size) {
