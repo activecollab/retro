@@ -39,11 +39,12 @@ class FormBlock extends WrapContentBlock
         string $content,
         string $id = null,
         string $target = null,
+        string $swap = null,
+        bool $autocomplete = false,
+        bool $pushUrl = true,
         ServiceResultInterface $serviceProcessingResult = null,
         FormDataInterface $formData = null,
         CatchAllParametersInterface $catchAllParameters = null,
-        bool $autocomplete = false,
-        bool $pushUrl = true,
     ): string
     {
         $formId = $id ?? $this->componentIdResolver->getUniqueId('form');
@@ -62,6 +63,10 @@ class FormBlock extends WrapContentBlock
         if ($target) {
             $formAttributes['hx-target'] = $target;
             $formAttributes['hx-target-4xx'] = $target;
+        }
+
+        if ($swap) {
+            $formAttributes['hx-swap'] = $swap;
         }
 
         if (!$pushUrl) {
