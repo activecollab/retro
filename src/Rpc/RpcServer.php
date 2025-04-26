@@ -12,6 +12,7 @@ namespace ActiveCollab\Retro\Rpc;
 
 use ActiveCollab\Retro\Bootstrapper\Bundle\BundleInterface;
 use ActiveCollab\Retro\Service\ServiceInterface;
+use ActiveCollab\TemplatedUI\MethodInvoker\MethodInvoker;
 use InvalidArgumentException;
 use LogicException;
 use ReflectionClass;
@@ -22,6 +23,7 @@ class RpcServer
     private array $services = [];
 
     public function __construct(
+        private ServiceResolverInterface $serviceResolver,
         private string $separator = '.',
     )
     {
@@ -41,7 +43,7 @@ class RpcServer
             throw new RuntimeException('Invalid JSON payload.');
         }
 
-        if (empty($decodedPayload['jsonrpc']) || $decodedPayload['jsonrpc'] !== '2.0' || empty($decodedPayload['method']) || !is_string($decodedPayload['method'])) {
+        if (!$this->isValidJsonRpc($decodedPayload)) {
             throw new RuntimeException('Invalid JSON-RPC request.');
         }
 
@@ -66,6 +68,38 @@ class RpcServer
         if (!$this->hasMethod($bundleClass, $serviceClass, $methodName)) {
             throw new RuntimeException('Unknown method.');
         }
+
+        $service = $this->serviceResolver->getService($bundleClass, $serviceClass);
+
+        if (empty($service)) {
+            throw new RuntimeException(
+                sprintf(
+                    'Service "%s" not found in bundle "%s".',
+                    $serviceName,
+                    $bundleName,
+                ),
+            );
+        }
+
+        (new MethodInvoker($service))->invokeMethod($methodName, $decodedPayload['params'] ?? []);
+    }
+
+    private function isValidJsonRpc(array $decodedPayload): bool
+    {
+        return !empty($decodedPayload['jsonrpc']) &&
+            $decodedPayload['jsonrpc'] === '2.0' &&
+            !empty($decodedPayload['method']) &&
+            is_string($decodedPayload['method']) &&
+            $this->isValidJsonRpcParams($decodedPayload);
+    }
+
+    private function isValidJsonRpcParams(array $decodedPayload): bool
+    {
+        if (!array_key_exists('params', $decodedPayload)) {
+            return true;
+        }
+
+        return is_array($decodedPayload['params']);
     }
 
     private function parseMethod(string $methodString): array
