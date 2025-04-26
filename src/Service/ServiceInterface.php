@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\Service;
 
-interface ServiceInterface
+use ActiveCollab\TemplatedUI\MethodInvoker\InvocableMethodContextInterface;
+
+interface ServiceInterface extends InvocableMethodContextInterface
 {
 }

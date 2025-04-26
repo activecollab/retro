@@ -32,7 +32,7 @@ class RpcServer
         }
     }
 
-    public function json(string $payload): void
+    public function json(string $payload): mixed
     {
         if (empty($payload)) {
             throw new RuntimeException('Payload cannot be empty.');
@@ -81,7 +81,7 @@ class RpcServer
             );
         }
 
-        (new MethodInvoker($service))->invokeMethod($methodName, $decodedPayload['params'] ?? []);
+        return (new MethodInvoker($service))->invokeMethod($methodName, $decodedPayload['params'] ?? []);
     }
 
     private function isValidJsonRpc(array $decodedPayload): bool
