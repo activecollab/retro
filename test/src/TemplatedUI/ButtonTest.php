@@ -20,7 +20,7 @@ class ButtonTest extends TestCase
     public function testWillRenderButton(): void
     {
         $this->assertSame(
-            '<sl-button type="button" variant="primary">Save</button>',
+            '<sl-button type="button" variant="primary">Save</sl-button>',
             (new ButtonBlock())->render(
                 'Save',
             ),
@@ -30,7 +30,7 @@ class ButtonTest extends TestCase
     public function testWillRenderSize(): void
     {
         $this->assertSame(
-            '<sl-button type="button" variant="primary" size="large">Save</button>',
+            '<sl-button type="button" variant="primary" size="large">Save</sl-button>',
             (new ButtonBlock())->render(
                 'Save',
                 size: Size::LARGE,
@@ -48,7 +48,7 @@ class ButtonTest extends TestCase
     {
         $this->assertSame(
             sprintf(
-                '<sl-button type="button" variant="primary" %s>Save</button>',
+                '<sl-button type="button" variant="primary" %s>Save</sl-button>',
                 $expectedAttribute,
             ),
             (new ButtonBlock())->render(
