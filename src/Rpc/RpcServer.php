@@ -51,7 +51,21 @@ class RpcServer
             $methodName,
         ] = $this->parseMethod($decodedPayload['method']);
 
-        var_dump($bundleName, $serviceName, $methodName);
+        $bundleClass = $this->bundleNameToBundleClass($bundleName);
+
+        if (empty($bundleClass)) {
+            throw new RuntimeException('Unknown bundle.');
+        }
+
+        $serviceClass = $this->serviceNameToServiceClass($bundleClass, $serviceName);
+
+        if (empty($serviceClass)) {
+            throw new RuntimeException('Unknown service.');
+        }
+
+        if (!$this->hasMethod($bundleClass, $serviceClass, $methodName)) {
+            throw new RuntimeException('Unknown method.');
+        }
     }
 
     private function parseMethod(string $methodString): array
@@ -100,7 +114,7 @@ class RpcServer
     public function hasMethod(string $bundleClass, string $serviceClass, string $methodName): bool
     {
         $bundleName = $this->bundleClassToBundleName($bundleClass);
-        $serviceName = $this->getServiceNameFromServiceClass($bundleClass, $serviceClass);
+        $serviceName = $this->serviceClassToServiceName($bundleClass, $serviceClass);
 
         return !empty($this->services[$bundleName][$serviceName])
             && in_array($methodName, $this->services[$bundleName][$serviceName]);
@@ -134,7 +148,7 @@ class RpcServer
         }
 
         return [
-            $this->getServiceNameFromServiceClass($bundleClass, $serviceClass),
+            $this->serviceClassToServiceName($bundleClass, $serviceClass),
             $methodNames,
         ];
     }
@@ -163,9 +177,14 @@ class RpcServer
         return $this->bundleClassToNameMap[$bundleClass];
     }
 
+    private function bundleNameToBundleClass(string $bundleName): ?string
+    {
+        return array_search($bundleName, $this->bundleClassToNameMap) ?: null;
+    }
+
     private array $serviceClassToNameMap = [];
 
-    private function getServiceNameFromServiceClass(
+    private function serviceClassToServiceName(
         string $bundleClass,
         string $serviceClass,
     ): string
@@ -186,5 +205,17 @@ class RpcServer
         }
 
         return $this->serviceClassToNameMap[$bundleClass][$serviceClass];
+    }
+
+    private function serviceNameToServiceClass(
+        string $bundleClass,
+        string $serviceName,
+    ): ?string
+    {
+        if (empty($this->serviceClassToNameMap[$bundleClass])) {
+            return null;
+        }
+
+        return array_search($serviceName, $this->serviceClassToNameMap[$bundleClass]) ?: null;
     }
 }

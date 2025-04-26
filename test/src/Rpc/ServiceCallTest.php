@@ -66,6 +66,8 @@ class ServiceCallTest extends TestCase
         $this->expectExceptionMessage($expectedExceptionMessage, 'Invalid JSON-RPC request.');
 
         $server = new RpcServer('.');
+        $server->registerService(TestBundle::class, DoStuffService::class);
+
         $server->json($invalidJson);
     }
 
@@ -82,6 +84,9 @@ class ServiceCallTest extends TestCase
             ['{"jsonrpc": "2.0", "method":"noseparator"}', 'Invalid JSON-RPC method name.'],
             ['{"jsonrpc": "2.0", "method":"missing.element"}', 'Invalid JSON-RPC method name.'],
             ['{"jsonrpc": "2.0", "method":"123.456.789"}', 'Invalid JSON-RPC method name.'],
+            ['{"jsonrpc": "2.0", "method":"Unknown.DoStuff.sumTwoNumbers"}', 'Unknown bundle.'],
+            ['{"jsonrpc": "2.0", "method":"Test.Unknown.sumTwoNumbers"}', 'Unknown service.'],
+            ['{"jsonrpc": "2.0", "method":"Test.DoStuff.unknown"}', 'Unknown method.'],
         ];
     }
 
