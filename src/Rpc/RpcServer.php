@@ -12,12 +12,68 @@ namespace ActiveCollab\Retro\Rpc;
 
 use ActiveCollab\Retro\Bootstrapper\Bundle\BundleInterface;
 use ActiveCollab\Retro\Service\ServiceInterface;
+use InvalidArgumentException;
 use LogicException;
 use ReflectionClass;
+use RuntimeException;
 
 class RpcServer
 {
     private array $services = [];
+
+    public function __construct(
+        private string $separator = '.',
+    )
+    {
+        if (empty($separator)) {
+            throw new InvalidArgumentException('Separator cannot be empty.');
+        }
+    }
+
+    public function json(string $payload): void
+    {
+        if (empty($payload)) {
+            throw new RuntimeException('Payload cannot be empty.');
+        }
+
+        $decodedPayload = json_decode($payload, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new RuntimeException('Invalid JSON payload.');
+        }
+
+        if (empty($decodedPayload['jsonrpc']) || $decodedPayload['jsonrpc'] !== '2.0' || empty($decodedPayload['method']) || !is_string($decodedPayload['method'])) {
+            throw new RuntimeException('Invalid JSON-RPC request.');
+        }
+
+        [
+            $bundleName,
+            $serviceName,
+            $methodName,
+        ] = $this->parseMethod($decodedPayload['method']);
+
+        var_dump($bundleName, $serviceName, $methodName);
+    }
+
+    private function parseMethod(string $methodString): array
+    {
+        if (!str_contains($methodString, $this->separator)) {
+            throw new RuntimeException('Invalid JSON-RPC method name.');
+        }
+
+        $bits = explode($this->separator, $methodString);
+
+        if (count($bits) !== 3) {
+            throw new RuntimeException('Invalid JSON-RPC method name.');
+        }
+
+        foreach ($bits as $bit) {
+            if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $bit)) {
+                throw new RuntimeException('Invalid JSON-RPC method name.');
+            }
+        }
+
+        return $bits;
+    }
 
     public function registerService(string $bundleClass, string ...$serviceClasses): void
     {
@@ -35,7 +91,7 @@ class RpcServer
             [
                 $serviceName,
                 $serviceMethods,
-            ] = $this->getMethodsFromServiceClass($serviceClass);
+            ] = $this->getMethodsFromServiceClass($bundleClass, $serviceClass);
 
             $this->services[$bundleName][$serviceName] = $serviceMethods;
         }
@@ -44,13 +100,16 @@ class RpcServer
     public function hasMethod(string $bundleClass, string $serviceClass, string $methodName): bool
     {
         $bundleName = $this->bundleClassToBundleName($bundleClass);
-        $serviceName = $this->getServiceNameFromServiceClass($serviceClass);
+        $serviceName = $this->getServiceNameFromServiceClass($bundleClass, $serviceClass);
 
         return !empty($this->services[$bundleName][$serviceName])
             && in_array($methodName, $this->services[$bundleName][$serviceName]);
     }
 
-    private function getMethodsFromServiceClass(string $serviceClass): array
+    private function getMethodsFromServiceClass(
+        string $bundleClass,
+        string $serviceClass,
+    ): array
     {
         $reflection = new ReflectionClass($serviceClass);
 
@@ -75,7 +134,7 @@ class RpcServer
         }
 
         return [
-            $this->getServiceNameFromServiceClass($serviceClass),
+            $this->getServiceNameFromServiceClass($bundleClass, $serviceClass),
             $methodNames,
         ];
     }
@@ -106,9 +165,16 @@ class RpcServer
 
     private array $serviceClassToNameMap = [];
 
-    private function getServiceNameFromServiceClass(string $serviceClass): string
+    private function getServiceNameFromServiceClass(
+        string $bundleClass,
+        string $serviceClass,
+    ): string
     {
-        if (empty($this->serviceClassToNameMap[$serviceClass])) {
+        if (empty($this->serviceClassToNameMap[$bundleClass])) {
+            $this->serviceClassToNameMap[$bundleClass] = [];
+        }
+
+        if (empty($this->serviceClassToNameMap[$bundleClass][$serviceClass])) {
             $bits = explode('\\', $serviceClass);
             $serviceName = array_pop($bits);
 
@@ -116,9 +182,9 @@ class RpcServer
                 $serviceName = substr($serviceName, 0, strlen($serviceName) - 7);
             }
 
-            $this->serviceClassToNameMap[$serviceClass] = $serviceName;
+            $this->serviceClassToNameMap[$bundleClass][$serviceClass] = $serviceName;
         }
 
-        return $this->serviceClassToNameMap[$serviceClass];
+        return $this->serviceClassToNameMap[$bundleClass][$serviceClass];
     }
 }

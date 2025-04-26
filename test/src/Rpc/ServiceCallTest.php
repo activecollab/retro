@@ -16,6 +16,7 @@ use ActiveCollab\Retro\Test\Fixtures\TestBundle\Service\DoStuffService;
 use ActiveCollab\Retro\Test\Fixtures\TestBundle\TestBundle;
 use ActiveCollab\Sitemap\Nodes\Node;
 use LogicException;
+use RuntimeException;
 
 class ServiceCallTest extends TestCase
 {
@@ -53,9 +54,40 @@ class ServiceCallTest extends TestCase
         $this->assertFalse($server->hasMethod(TestBundle::class, DoStuffService::class, 'notAnRpcMethod'));
     }
 
+    /**
+     * @dataProvider provideInvalidJsonRpc
+     */
+    public function testWillRejectInvalidJsonRpc(
+        string $invalidJson,
+        string $expectedExceptionMessage,
+    ): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage($expectedExceptionMessage, 'Invalid JSON-RPC request.');
+
+        $server = new RpcServer('.');
+        $server->json($invalidJson);
+    }
+
+    public function provideInvalidJsonRpc(): array
+    {
+        return [
+            ['', 'Payload cannot be empty.'],
+            ['not-valid-json', 'Invalid JSON payload.'],
+            ['{}', 'Invalid JSON-RPC request.'],
+            ['{"jsonrpc": "xyz"}', 'Invalid JSON-RPC request.'],
+            ['{"jsonrpc": "2.0"}', 'Invalid JSON-RPC request.'],
+            ['{"jsonrpc": "2.0", "method":""}', 'Invalid JSON-RPC request.'],
+            ['{"jsonrpc": "2.0", "method":123}', 'Invalid JSON-RPC request.'],
+            ['{"jsonrpc": "2.0", "method":"noseparator"}', 'Invalid JSON-RPC method name.'],
+            ['{"jsonrpc": "2.0", "method":"missing.element"}', 'Invalid JSON-RPC method name.'],
+            ['{"jsonrpc": "2.0", "method":"123.456.789"}', 'Invalid JSON-RPC method name.'],
+        ];
+    }
+
     public function testWillCallService(): void
     {
-        $server = new RpcServer();
+        $server = new RpcServer('.');
         $server->registerService(TestBundle::class, DoStuffService::class);
 
         $result = $server->json('
