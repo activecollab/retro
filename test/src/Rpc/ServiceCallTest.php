@@ -113,12 +113,8 @@ class ServiceCallTest extends TestCase
         $serviceResolver
             ->expects($this->once())
             ->method('getService')
-            ->with(
-                TestBundle::class,
-                DoStuffService::class,
-            )->willReturn(
-                $service,
-            );
+            ->with(TestBundle::class, DoStuffService::class)
+            ->willReturn($service);
 
         $server = new RpcServer($serviceResolver, '.');
         $server->registerService(TestBundle::class, DoStuffService::class);
