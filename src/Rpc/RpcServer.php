@@ -18,7 +18,7 @@ use LogicException;
 use ReflectionClass;
 use RuntimeException;
 
-class RpcServer
+class RpcServer implements RpcServerInterface
 {
     private array $services = [];
 
@@ -145,7 +145,11 @@ class RpcServer
         }
     }
 
-    public function hasMethod(string $bundleClass, string $serviceClass, string $methodName): bool
+    public function hasMethod(
+        string $bundleClass,
+        string $serviceClass,
+        string $methodName,
+    ): bool
     {
         $bundleName = $this->bundleClassToBundleName($bundleClass);
         $serviceName = $this->serviceClassToServiceName($bundleClass, $serviceClass);
