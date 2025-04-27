@@ -752,12 +752,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/activecollab/templatedui.git",
-                "reference": "4946649ad6039087553ebfdfbfcdcf29ba146a3c"
+                "reference": "26ba0eadeb0e1370fbc41abd18b1acf2af44cfcf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/activecollab/templatedui/zipball/4946649ad6039087553ebfdfbfcdcf29ba146a3c",
-                "reference": "4946649ad6039087553ebfdfbfcdcf29ba146a3c",
+                "url": "https://api.github.com/repos/activecollab/templatedui/zipball/26ba0eadeb0e1370fbc41abd18b1acf2af44cfcf",
+                "reference": "26ba0eadeb0e1370fbc41abd18b1acf2af44cfcf",
                 "shasum": ""
             },
             "require": {
@@ -797,7 +797,7 @@
             "support": {
                 "source": "https://github.com/activecollab/templatedui/tree/master"
             },
-            "time": "2025-04-10T04:31:57+00:00"
+            "time": "2025-04-26T19:09:37+00:00"
         },
         {
             "name": "activecollab/templateengine",
