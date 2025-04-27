@@ -13,7 +13,7 @@ namespace ActiveCollab\Retro\Rpc;
 use ActiveCollab\Retro\Bootstrapper\Bundle\BundleInterface;
 use ActiveCollab\Retro\Rpc\Attribute\RpcMethod;
 use ActiveCollab\Retro\Rpc\Result\Failure;
-use ActiveCollab\Retro\Rpc\Result\Json\JsonResult;
+use ActiveCollab\Retro\Rpc\Result\Json\JsonRpcResult;
 use ActiveCollab\Retro\Rpc\Result\ResultInterface;
 use ActiveCollab\Retro\Rpc\Result\Success;
 use ActiveCollab\Retro\Service\ServiceInterface;
@@ -103,7 +103,7 @@ class RpcServer implements RpcServerInterface
             $methodName,
         ] = $this->parseMethod($decodedPayload['method']);
 
-        return new JsonResult(
+        return new JsonRpcResult(
             $this->run(
                 $bundleName,
                 $serviceName,

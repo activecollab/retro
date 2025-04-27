@@ -14,7 +14,7 @@ use ActiveCollab\Retro\Rpc\Result\FailureInterface;
 use ActiveCollab\Retro\Rpc\Result\ResultInterface;
 use ActiveCollab\Retro\Rpc\Result\SuccessInterface;
 
-class JsonResult implements JsonResultInterface
+class JsonRpcResult implements JsonRpcResultInterface
 {
     public function __construct(
         private ResultInterface $serviceCallResult,

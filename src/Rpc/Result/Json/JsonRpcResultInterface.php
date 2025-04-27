@@ -13,7 +13,7 @@ namespace ActiveCollab\Retro\Rpc\Result\Json;
 use ActiveCollab\Retro\Rpc\Result\ResultInterface;
 use JsonSerializable;
 
-interface JsonResultInterface extends ResultInterface, JsonSerializable
+interface JsonRpcResultInterface extends ResultInterface, JsonSerializable
 {
     public function isSuccess(): bool;
     public function getResult(): mixed;
