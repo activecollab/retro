@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\Test\Fixtures\TestBundle\Service;
 
-use ActiveCollab\Retro\Rpc\RpcMethod;
+use ActiveCollab\Retro\Rpc\Attribute\RpcMethod;
 use ActiveCollab\Retro\Service\Service;
 
 class DoStuffService extends Service

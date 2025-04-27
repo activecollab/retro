@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace ActiveCollab\Retro\Rpc;
+namespace ActiveCollab\Retro\Rpc\Attribute;
 
 use Attribute;
 

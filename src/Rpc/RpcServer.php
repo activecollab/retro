@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\Rpc;
 
 use ActiveCollab\Retro\Bootstrapper\Bundle\BundleInterface;
+use ActiveCollab\Retro\Rpc\Attribute\RpcMethod;
 use ActiveCollab\Retro\Rpc\Result\Failure;
 use ActiveCollab\Retro\Rpc\Result\ResultInterface;
 use ActiveCollab\Retro\Rpc\Result\Success;
@@ -201,7 +202,7 @@ class RpcServer implements RpcServerInterface
                 continue;
             }
 
-            $attributes = $method->getAttributes();
+            $attributes = $method->getAttributes(RpcMethod::class);
 
             if (empty($attributes)) {
                 continue;
