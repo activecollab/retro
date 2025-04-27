@@ -10,8 +10,6 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\Rpc\Result;
 
-use Throwable;
-
 interface ResultInterface
 {
     public function isSuccess(): bool;
