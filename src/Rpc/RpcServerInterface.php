@@ -12,6 +12,12 @@ namespace ActiveCollab\Retro\Rpc;
 
 interface RpcServerInterface
 {
+    public function run(
+        string $bundleName,
+        string $serviceName,
+        string $methodName,
+        array $params = [],
+    ): mixed;
     public function json(string $payload): mixed;
     public function registerService(string $bundleClass, string ...$serviceClasses): void;
     public function hasMethod(

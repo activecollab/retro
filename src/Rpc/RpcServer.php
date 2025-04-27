@@ -32,27 +32,13 @@ class RpcServer implements RpcServerInterface
         }
     }
 
-    public function json(string $payload): mixed
+    public function run(
+        string $bundleName,
+        string $serviceName,
+        string $methodName,
+        array $params = [],
+    ): mixed
     {
-        if (empty($payload)) {
-            throw new RuntimeException('Payload cannot be empty.');
-        }
-
-        $decodedPayload = json_decode($payload, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new RuntimeException('Invalid JSON payload.');
-        }
-
-        if (!$this->isValidJsonRpc($decodedPayload)) {
-            throw new RuntimeException('Invalid JSON-RPC request.');
-        }
-
-        [
-            $bundleName,
-            $serviceName,
-            $methodName,
-        ] = $this->parseMethod($decodedPayload['method']);
-
         $bundleClass = $this->bundleNameToBundleClass($bundleName);
 
         if (empty($bundleClass)) {
@@ -75,13 +61,42 @@ class RpcServer implements RpcServerInterface
             throw new RuntimeException(
                 sprintf(
                     'Service "%s" not found in bundle "%s".',
-                    $serviceName,
-                    $bundleName,
+                    $this->serviceClassToServiceName($bundleClass, $serviceClass),
+                    $this->bundleNameToBundleClass($bundleClass),
                 ),
             );
         }
 
-        return (new MethodInvoker($service))->invokeMethod($methodName, $decodedPayload['params'] ?? []);
+        return (new MethodInvoker($service))->invokeMethod($methodName, $params);
+    }
+
+    public function json(string $payload): mixed
+    {
+        if (empty($payload)) {
+            throw new RuntimeException('Payload cannot be empty.');
+        }
+
+        $decodedPayload = json_decode($payload, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new RuntimeException('Invalid JSON payload.');
+        }
+
+        if (!$this->isValidJsonRpc($decodedPayload)) {
+            throw new RuntimeException('Invalid JSON-RPC request.');
+        }
+
+        [
+            $bundleName,
+            $serviceName,
+            $methodName,
+        ] = $this->parseMethod($decodedPayload['method']);
+
+        return $this->run(
+            $bundleName,
+            $serviceName,
+            $methodName,
+            $decodedPayload['params'] ?? [],
+        );
     }
 
     private function isValidJsonRpc(array $decodedPayload): bool
