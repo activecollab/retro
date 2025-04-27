@@ -18,7 +18,7 @@ class JsonRpcResult implements JsonRpcResultInterface
 {
     public function __construct(
         private ResultInterface $serviceCallResult,
-        private string|int|float|null $serviceCallId,
+        private string|int|float|null $serviceCallId = null,
     )
     {
     }
