@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\Rpc;
 
+use ActiveCollab\Retro\Rpc\Result\ResultInterface;
+
 interface RpcServerInterface
 {
     public function run(
@@ -17,7 +19,7 @@ interface RpcServerInterface
         string $serviceName,
         string $methodName,
         array $params = [],
-    ): mixed;
+    ): ResultInterface;
     public function json(string $payload): mixed;
     public function registerService(string $bundleClass, string ...$serviceClasses): void;
     public function hasMethod(

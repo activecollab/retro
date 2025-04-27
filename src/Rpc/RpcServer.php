@@ -11,12 +11,16 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\Rpc;
 
 use ActiveCollab\Retro\Bootstrapper\Bundle\BundleInterface;
+use ActiveCollab\Retro\Rpc\Result\Failure;
+use ActiveCollab\Retro\Rpc\Result\ResultInterface;
+use ActiveCollab\Retro\Rpc\Result\Success;
 use ActiveCollab\Retro\Service\ServiceInterface;
 use ActiveCollab\TemplatedUI\MethodInvoker\MethodInvoker;
 use InvalidArgumentException;
 use LogicException;
 use ReflectionClass;
 use RuntimeException;
+use Throwable;
 
 class RpcServer implements RpcServerInterface
 {
@@ -37,7 +41,7 @@ class RpcServer implements RpcServerInterface
         string $serviceName,
         string $methodName,
         array $params = [],
-    ): mixed
+    ): ResultInterface
     {
         $bundleClass = $this->bundleNameToBundleClass($bundleName);
 
@@ -67,7 +71,13 @@ class RpcServer implements RpcServerInterface
             );
         }
 
-        return (new MethodInvoker($service))->invokeMethod($methodName, $params);
+        try {
+            return new Success(
+                (new MethodInvoker($service))->invokeMethod($methodName, $params)
+            );
+        } catch (Throwable $e) {
+            return new Failure($e);
+        }
     }
 
     public function json(string $payload): mixed

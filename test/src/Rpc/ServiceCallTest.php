@@ -12,6 +12,7 @@ namespace ActiveCollab\Retro\Test\Rpc;
 
 use ActiveCollab\DatabaseConnection\ConnectionInterface;
 use ActiveCollab\DatabaseObject\PoolInterface;
+use ActiveCollab\Retro\Rpc\Result\SuccessInterface;
 use ActiveCollab\Retro\Rpc\RpcServer;
 use ActiveCollab\Retro\Rpc\ServiceResolverInterface;
 use ActiveCollab\Retro\Service\Result\Factory\ServiceResultFactoryInterface;
@@ -100,7 +101,40 @@ class ServiceCallTest extends TestCase
         ];
     }
 
-    public function testWillCallService(): void
+    public function testWilLRunService(): void
+    {
+        $service = new DoStuffService(
+            $this->createMock(ConnectionInterface::class),
+            $this->createMock(PoolInterface::class),
+            $this->createMock(LoggerInterface::class),
+            $this->createMock(ServiceResultFactoryInterface::class),
+        );
+
+        $serviceResolver = $this->createMock(ServiceResolverInterface::class);
+        $serviceResolver
+            ->expects($this->once())
+            ->method('getService')
+            ->with(TestBundle::class, DoStuffService::class)
+            ->willReturn($service);
+
+        $server = new RpcServer($serviceResolver, '.');
+        $server->registerService(TestBundle::class, DoStuffService::class);
+
+        $result = $server->run(
+            'Test',
+            'DoStuff',
+            'sumTwoNumbers',
+            [
+                'first' => 1,
+                'second' => 2,
+            ],
+        );
+
+        $this->assertInstanceOf(SuccessInterface::class, $result);
+        $this->assertSame(3, $result->getResult());
+    }
+
+    public function testWillParseJsonRpcAndRunService(): void
     {
         $service = new DoStuffService(
             $this->createMock(ConnectionInterface::class),
@@ -128,7 +162,8 @@ class ServiceCallTest extends TestCase
             }
         ');
 
-        $this->assertSame(3, $result);
+        $this->assertInstanceOf(SuccessInterface::class, $result);
+        $this->assertSame(3, $result->getResult());
 //        $this->assertSame( 'call-signature', $result->getMessage());
 //        $this->assertSame( 303, $result->getCallId());
     }
