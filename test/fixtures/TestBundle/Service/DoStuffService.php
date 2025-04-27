@@ -12,6 +12,7 @@ namespace ActiveCollab\Retro\Test\Fixtures\TestBundle\Service;
 
 use ActiveCollab\Retro\Rpc\Attribute\RpcMethod;
 use ActiveCollab\Retro\Service\Service;
+use RuntimeException;
 
 class DoStuffService extends Service
 {
@@ -19,6 +20,12 @@ class DoStuffService extends Service
     public function sumTwoNumbers(int $first, int $second): int
     {
         return $first + $second;
+    }
+
+    #[RpcMethod]
+    public function fail(): void
+    {
+        throw new RuntimeException('Failed');
     }
 
     #[RpcMethod]
