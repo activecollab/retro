@@ -16,4 +16,5 @@ interface BundleInterface
     const DEPENDENCIES = __DIR__ . '/dependencies.php';
 
     public function getName(): string;
+    public function getRpcServices(): array;
 }

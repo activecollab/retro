@@ -25,6 +25,11 @@ abstract class Bundle implements BundleInterface
         return $this->name;
     }
 
+    public function getRpcServices(): array
+    {
+        return [];
+    }
+
     private function removeBundleSuffix(string $bundleName): string
     {
         if (str_ends_with($bundleName, 'Bundle')) {
