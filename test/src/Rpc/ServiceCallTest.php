@@ -13,6 +13,7 @@ namespace ActiveCollab\Retro\Test\Rpc;
 use ActiveCollab\DatabaseConnection\ConnectionInterface;
 use ActiveCollab\DatabaseObject\PoolInterface;
 use ActiveCollab\Retro\Rpc\Result\FailureInterface;
+use ActiveCollab\Retro\Rpc\Result\Json\JsonResultInterface;
 use ActiveCollab\Retro\Rpc\Result\SuccessInterface;
 use ActiveCollab\Retro\Rpc\RpcServer;
 use ActiveCollab\Retro\Rpc\ServiceResolverInterface;
@@ -178,10 +179,10 @@ class ServiceCallTest extends TestCase
             }
         ');
 
-        $this->assertInstanceOf(SuccessInterface::class, $result);
+        $this->assertInstanceOf(JsonResultInterface::class, $result);
+        $this->assertTrue($result->isSuccess());
         $this->assertSame(3, $result->getResult());
-//        $this->assertSame( 'call-signature', $result->getMessage());
-//        $this->assertSame( 303, $result->getCallId());
+        $this->assertSame(303, $result->getServiceCallId());
     }
 
     private function createMockService(): ServiceInterface|MockObject
