@@ -22,6 +22,7 @@ interface RpcServerInterface
         array $params = [],
     ): ResultInterface;
     public function json(string $payload): JsonRpcResultInterface;
+    public function decodedJson(array $decodedPayload): JsonRpcResultInterface;
     public function registerService(string $bundleClass, string ...$serviceClasses): void;
     public function hasMethod(
         string $bundleClass,

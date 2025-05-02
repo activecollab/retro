@@ -94,6 +94,11 @@ class RpcServer implements RpcServerInterface
             throw new RuntimeException('Invalid JSON payload.');
         }
 
+        return $this->decodedJson($decodedPayload);
+    }
+
+    public function decodedJson(array $decodedPayload): JsonRpcResultInterface
+    {
         if (!$this->isValidJsonRpc($decodedPayload)) {
             throw new RuntimeException('Invalid JSON-RPC request.');
         }
