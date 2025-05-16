@@ -50,8 +50,9 @@ abstract class InputTag extends FormFieldTag
 
         return $this->wrapFormControl(
             sprintf(
-                '%s%s',
+                '%s%s%s',
                 $this->openHtmlTag('sl-input', $attributes),
+                $this->getInputContent(),
                 $this->closeHtmlTag('sl-input'),
             )
         );
@@ -60,5 +61,10 @@ abstract class InputTag extends FormFieldTag
     protected function getInputAttributes(): array
     {
         return [];
+    }
+
+    protected function getInputContent(): string
+    {
+        return '';
     }
 }
