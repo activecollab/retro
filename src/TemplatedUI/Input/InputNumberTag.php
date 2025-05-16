@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\TemplatedUI\Input;
 
 use ActiveCollab\Retro\FormData\FormDataInterface;
+use ActiveCollab\Retro\TemplatedUI\Input\Type\InputType;
 use ActiveCollab\Retro\TemplatedUI\Property\Size;
 use ActiveCollab\TemplatedUI\MethodInvoker\CatchAllParameters\CatchAllParametersInterface;
 
@@ -26,7 +27,7 @@ class InputNumberTag extends InputTag
     ): string
     {
         return $this->renderInput(
-            'number',
+            new InputType('number'),
             $name,
             null,
             $placeholder,

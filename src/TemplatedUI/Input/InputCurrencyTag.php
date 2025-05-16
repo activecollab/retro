@@ -14,12 +14,13 @@ use ActiveCollab\Retro\FormData\FormDataInterface;
 use ActiveCollab\Retro\TemplatedUI\Input\Type\InputType;
 use ActiveCollab\Retro\TemplatedUI\Property\Size;
 use ActiveCollab\TemplatedUI\MethodInvoker\CatchAllParameters\CatchAllParametersInterface;
-use Google\Service\Transcoder\Input;
 
-class InputTextTag extends InputTag
+class InputCurrencyTag extends InputTag
 {
     public function render(
         string $name,
+        string $currency,
+        int $decimals = 2,
         string $placeholder = null,
         string $helpText = null,
         ?Size $size = null,
@@ -28,7 +29,7 @@ class InputTextTag extends InputTag
     ): string
     {
         return $this->renderInput(
-            new InputType('text'),
+            new InputType('number'),
             $name,
             null,
             $placeholder,
