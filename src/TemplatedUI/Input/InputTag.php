@@ -22,6 +22,7 @@ abstract class InputTag extends FormFieldTag
         string $name,
         ?string $value,
         ?string $placeholder,
+        ?string $helpText = null,
         ?Size $size = null,
         ?CatchAllParametersInterface $catchAllParameters = null,
         ?FormDataInterface $formData = null,

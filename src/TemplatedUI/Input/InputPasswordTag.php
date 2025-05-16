@@ -19,6 +19,7 @@ class InputPasswordTag extends InputTag
     public function render(
         string $name,
         string $placeholder = null,
+        string $helpText = null,
         ?Size $size = null,
         ?FormDataInterface $formData = null,
         ?CatchAllParametersInterface $catchAllParameters = null,
@@ -29,6 +30,7 @@ class InputPasswordTag extends InputTag
             $name,
             null,
             $placeholder,
+            $helpText,
             $size,
             $catchAllParameters,
             $formData,
