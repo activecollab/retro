@@ -43,6 +43,10 @@ abstract class InputTag extends FormFieldTag
             $attributes['placeholder'] = $placeholder;
         }
 
+        if ($helpText) {
+            $attributes['help-text'] = $helpText;
+        }
+
         return $this->wrapFormControl(
             sprintf(
                 '%s%s',
