@@ -17,6 +17,8 @@ use ActiveCollab\TemplatedUI\MethodInvoker\CatchAllParameters\CatchAllParameters
 
 class InputCurrencyTag extends InputTag
 {
+    private string $step = '0.01';
+
     public function render(
         string $name,
         string $currency,
@@ -28,6 +30,8 @@ class InputCurrencyTag extends InputTag
         ?CatchAllParametersInterface $catchAllParameters = null,
     ): string
     {
+        $this->step = $this->decimalsToStep($decimals);
+
         return $this->renderInput(
             new InputType('number'),
             $name,
@@ -38,5 +42,24 @@ class InputCurrencyTag extends InputTag
             $catchAllParameters,
             $formData,
         );
+    }
+
+    protected function getInputAttributes(): array
+    {
+        return array_merge(
+            parent::getInputAttributes(),
+            [
+                'step' => $this->step,
+            ],
+        );
+    }
+
+    private function decimalsToStep(int $decimals): string
+    {
+        if ($decimals <= 0) {
+            return '1';
+        }
+
+        return '0.' . str_repeat('0', $decimals - 1) . '1';
     }
 }

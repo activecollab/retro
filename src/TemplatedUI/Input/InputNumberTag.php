@@ -17,8 +17,11 @@ use ActiveCollab\TemplatedUI\MethodInvoker\CatchAllParameters\CatchAllParameters
 
 class InputNumberTag extends InputTag
 {
+    private int|float $step = 1;
+
     public function render(
         string $name,
+        int|float $step = 1,
         string $placeholder = null,
         string $helpText = null,
         ?Size $size = null,
@@ -26,6 +29,8 @@ class InputNumberTag extends InputTag
         ?CatchAllParametersInterface $catchAllParameters = null,
     ): string
     {
+        $this->step = $step;
+
         return $this->renderInput(
             new InputType('number'),
             $name,
@@ -35,6 +40,16 @@ class InputNumberTag extends InputTag
             $size,
             $catchAllParameters,
             $formData,
+        );
+    }
+
+    protected function getInputAttributes(): array
+    {
+        return array_merge(
+            parent::getInputAttributes(),
+            [
+                'step' => $this->step,
+            ],
         );
     }
 }
