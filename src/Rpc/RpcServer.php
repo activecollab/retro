@@ -51,27 +51,50 @@ class RpcServer implements RpcServerInterface
         $bundleClass = $this->bundleNameToBundleClass($bundleName);
 
         if (empty($bundleClass)) {
+            $this->logger->error('Bundle name not provided.');
+
             throw new RuntimeException('Unknown bundle.');
         }
 
         $serviceClass = $this->serviceNameToServiceClass($bundleClass, $serviceName);
 
         if (empty($serviceClass)) {
+            $this->logger->error('Service class not provided.');
+
             throw new RuntimeException('Unknown service.');
         }
 
         if (!$this->hasMethod($bundleClass, $serviceClass, $methodName)) {
+            $this->logger->error(
+                'Method "{method}" not found in service "{service}" of bundle "{bundle}".',
+                [
+                    'bundle' => $this->bundleClassToBundleName($bundleClass),
+                    'service' => $this->serviceClassToServiceName($bundleClass, $serviceClass),
+                    'method' => $methodName,
+                ],
+            );
+
             throw new RuntimeException('Unknown method.');
         }
 
         $service = $this->serviceResolver->getService($bundleClass, $serviceClass);
 
         if (empty($service)) {
+            $this->logger->error(
+                'Service "{service}}" not found in bundle "{bundle}".',
+                [
+                    [
+                        'bundle' => $this->bundleClassToBundleName($bundleClass),
+                        'service' => $this->serviceClassToServiceName($bundleClass, $serviceClass),
+                    ],
+                ],
+            );
+
             throw new RuntimeException(
                 sprintf(
                     'Service "%s" not found in bundle "%s".',
                     $this->serviceClassToServiceName($bundleClass, $serviceClass),
-                    $this->bundleNameToBundleClass($bundleClass),
+                    $this->bundleClassToBundleName($bundleClass),
                 ),
             );
         }
@@ -81,6 +104,16 @@ class RpcServer implements RpcServerInterface
                 (new MethodInvoker($service))->invokeMethod($methodName, $params)
             );
         } catch (Throwable $e) {
+            $this->logger->error(
+                'Error while running "{method}" from "{service}" of "{bundle}" bundle.',
+                [
+                    'bundle' => $this->bundleClassToBundleName($bundleClass),
+                    'service' => $this->serviceClassToServiceName($bundleClass, $serviceClass),
+                    'method' => $methodName,
+                    'exception' => $e,
+                ],
+            );
+
             return new Failure($e);
         }
     }
