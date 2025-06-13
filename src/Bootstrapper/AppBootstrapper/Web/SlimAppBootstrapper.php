@@ -16,6 +16,9 @@ use ActiveCollab\Retro\Bootstrapper\AppBootstrapper\AppBootstrapper;
 use ActiveCollab\Retro\Bootstrapper\AppBootstrapper\AppBootstrapperInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Log\LoggerInterface;
 use Slim\App as SlimApp;
 
 abstract class SlimAppBootstrapper extends AppBootstrapper implements WebAppBootstrapperInterface
@@ -39,6 +42,32 @@ abstract class SlimAppBootstrapper extends AppBootstrapper implements WebAppBoot
 
         $this->app = Bridge::create($this->getContainer());
         $this->app->addRoutingMiddleware();
+        $this->app->add(
+            new class ($this->logger) implements MiddlewareInterface {
+                public function __construct(
+                    private LoggerInterface $logger,
+                )
+                {
+                }
+
+                public function process(
+                    ServerRequestInterface $request,
+                    RequestHandlerInterface $handler,
+                ): ResponseInterface
+                {
+                    $this->logger->info(
+                        'Handling {method} request to {uri}.',
+                        [
+                            'method' => $request->getMethod(),
+                            'uri' => (string) $request->getUri(),
+                            'headers' => array_keys($request->getHeaders()),
+                        ],
+                    );
+
+                    return $handler->handle($request);
+                }
+            },
+        );
 
         $this->afterAppConstruction();
 
