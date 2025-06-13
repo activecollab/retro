@@ -197,17 +197,38 @@ class RpcServer implements RpcServerInterface
     private function parseMethod(string $methodString): array
     {
         if (!str_contains($methodString, $this->separator)) {
+            $this->logger->error(
+                'Method value "{method}" is not valid JSON-RPC method name.',
+                [
+                    'method' => $methodString,
+                ],
+            );
+
             throw new RuntimeException('Invalid JSON-RPC method name.');
         }
 
         $bits = explode($this->separator, $methodString);
 
         if (count($bits) !== 3) {
+            $this->logger->error(
+                'Method value "{method}" is not valid JSON-RPC method name.',
+                [
+                    'method' => $methodString,
+                ],
+            );
+
             throw new RuntimeException('Invalid JSON-RPC method name.');
         }
 
         foreach ($bits as $bit) {
             if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $bit)) {
+                $this->logger->error(
+                    'Method value "{method}" is not valid JSON-RPC method name.',
+                    [
+                        'method' => $methodString,
+                    ],
+                );
+
                 throw new RuntimeException('Invalid JSON-RPC method name.');
             }
         }

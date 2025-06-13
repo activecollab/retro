@@ -336,12 +336,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/activecollab/databasestructure.git",
-                "reference": "1f45453cecf268c7cfc22b9e58596bd6a59dde1b"
+                "reference": "1a211fc3fe73e6cf76ba8d6d6f01e9e63fdf2b32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/activecollab/databasestructure/zipball/1f45453cecf268c7cfc22b9e58596bd6a59dde1b",
-                "reference": "1f45453cecf268c7cfc22b9e58596bd6a59dde1b",
+                "url": "https://api.github.com/repos/activecollab/databasestructure/zipball/1a211fc3fe73e6cf76ba8d6d6f01e9e63fdf2b32",
+                "reference": "1a211fc3fe73e6cf76ba8d6d6f01e9e63fdf2b32",
                 "shasum": ""
             },
             "require": {
@@ -385,7 +385,7 @@
                 "issues": "https://github.com/activecollab/databasestructure/issues",
                 "source": "https://github.com/activecollab/databasestructure/tree/master"
             },
-            "time": "2025-06-09T06:15:59+00:00"
+            "time": "2025-06-09T06:26:26+00:00"
         },
         {
             "name": "activecollab/datevalue",
