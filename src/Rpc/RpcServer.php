@@ -21,6 +21,7 @@ use ActiveCollab\Retro\Service\ServiceInterface;
 use ActiveCollab\TemplatedUI\MethodInvoker\MethodInvoker;
 use InvalidArgumentException;
 use LogicException;
+use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use RuntimeException;
 use Throwable;
@@ -31,6 +32,7 @@ class RpcServer implements RpcServerInterface
 
     public function __construct(
         private ServiceResolverInterface $serviceResolver,
+        private LoggerInterface $logger,
         private string $separator = '.',
     )
     {

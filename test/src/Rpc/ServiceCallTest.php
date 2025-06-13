@@ -35,8 +35,10 @@ class ServiceCallTest extends TestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Please provide service classes.');
 
-        (new RpcServer($this->createMock(ServiceResolverInterface::class)))
-            ->registerService(TestBundle::class);
+        (new RpcServer(
+            $this->createMock(ServiceResolverInterface::class),
+            $this->createMock(LoggerInterface::class),
+        ))->registerService(TestBundle::class);
     }
 
     public function testWillRejectNonBundles(): void
@@ -44,8 +46,10 @@ class ServiceCallTest extends TestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Bundle class must implement BundleInterface.');
 
-        (new RpcServer($this->createMock(ServiceResolverInterface::class)))
-            ->registerService(Node::class, DoStuffService::class);
+        (new RpcServer(
+            $this->createMock(ServiceResolverInterface::class),
+            $this->createMock(LoggerInterface::class),
+        ))->registerService(Node::class, DoStuffService::class);
     }
 
     public function testWillRejectNonServices(): void
@@ -53,13 +57,18 @@ class ServiceCallTest extends TestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Service class must implement ServiceInterface.');
 
-        (new RpcServer($this->createMock(ServiceResolverInterface::class)))
-            ->registerService(TestBundle::class, Node::class);
+        (new RpcServer(
+            $this->createMock(ServiceResolverInterface::class),
+            $this->createMock(LoggerInterface::class),
+        ))->registerService(TestBundle::class, Node::class);
     }
 
     public function testWillRegisterServiceMethods(): void
     {
-        $server = new RpcServer($this->createMock(ServiceResolverInterface::class));
+        $server = new RpcServer(
+            $this->createMock(ServiceResolverInterface::class),
+            $this->createMock(LoggerInterface::class),
+        );
         $server->registerService(TestBundle::class, DoStuffService::class);
 
         $this->assertTrue($server->hasMethod(TestBundle::class, DoStuffService::class, 'sumTwoNumbers'));
@@ -78,7 +87,10 @@ class ServiceCallTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage($expectedExceptionMessage);
 
-        $server = new RpcServer($this->createMock(ServiceResolverInterface::class));
+        $server = new RpcServer(
+            $this->createMock(ServiceResolverInterface::class),
+            $this->createMock(LoggerInterface::class),
+        );
         $server->registerService(TestBundle::class, DoStuffService::class);
 
         $server->json($invalidJson);
@@ -115,7 +127,10 @@ class ServiceCallTest extends TestCase
             ->with(TestBundle::class, DoStuffService::class)
             ->willReturn($service);
 
-        $server = new RpcServer($serviceResolver);
+        $server = new RpcServer(
+            $serviceResolver,
+            $this->createMock(LoggerInterface::class),
+        );
         $server->registerService(TestBundle::class, DoStuffService::class);
 
         $result = $server->run(
@@ -143,7 +158,10 @@ class ServiceCallTest extends TestCase
             ->with(TestBundle::class, DoStuffService::class)
             ->willReturn($service);
 
-        $server = new RpcServer($serviceResolver);
+        $server = new RpcServer(
+            $serviceResolver,
+            $this->createMock(LoggerInterface::class),
+        );
         $server->registerService(TestBundle::class, DoStuffService::class);
 
         $result = $server->run(
@@ -167,7 +185,10 @@ class ServiceCallTest extends TestCase
             ->with(TestBundle::class, DoStuffService::class)
             ->willReturn($service);
 
-        $server = new RpcServer($serviceResolver);
+        $server = new RpcServer(
+            $serviceResolver,
+            $this->createMock(LoggerInterface::class),
+        );
         $server->registerService(TestBundle::class, DoStuffService::class);
 
         $result = $server->json('
