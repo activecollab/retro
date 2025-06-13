@@ -23,7 +23,7 @@ abstract class AppBootstrapper implements AppBootstrapperInterface
     public function __construct(
         private MetadataInterface $appMetadata,
         private ContainerInterface $container,
-        private LoggerInterface $logger
+        protected LoggerInterface $logger,
     )
     {
     }
@@ -102,7 +102,7 @@ abstract class AppBootstrapper implements AppBootstrapperInterface
             'Application ran.',
             [
                 'sapi' => php_sapi_name(),
-            ]
+            ],
         );
 
         return $this;

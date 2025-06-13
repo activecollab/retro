@@ -42,18 +42,23 @@ abstract class SlimAppBootstrapper extends AppBootstrapper implements WebAppBoot
 
         $this->afterAppConstruction();
 
-        $this->app->options('/{routes:.+}', function ($request, $response, $args) {
-            return $response;
-        });
+        $this->app->options(
+            '/{routes:.+}',
+            function ($request, $response, $args) {
+                return $response;
+            },
+        );
 
-        $this->app->add(function ($request, $handler) {
-            $response = $handler->handle($request);
+        $this->app->add(
+            function ($request, $handler) {
+                $response = $handler->handle($request);
 
-            return $response
-                ->withHeader('Access-Control-Allow-Origin', '*')
-                ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-                ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-        });
+                return $response
+                    ->withHeader('Access-Control-Allow-Origin', '*')
+                    ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+                    ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+            },
+        );
 
         $this->setIsBootstrapped();
 
@@ -77,6 +82,15 @@ abstract class SlimAppBootstrapper extends AppBootstrapper implements WebAppBoot
         if (!$this->isBootstrapped()) {
             throw new LogicException('App needs to be bootstrapped before it can be ran.');
         }
+
+        $this->logger->info(
+            'Handling {method} request to {uri}.',
+            [
+                'method' => $request->getMethod(),
+                'uri' => (string) $request->getUri(),
+                'headers' => $request->getHeaders(),
+            ],
+        );
 
         return $this->app->handle($request);
     }
