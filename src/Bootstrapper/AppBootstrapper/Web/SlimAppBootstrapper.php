@@ -117,7 +117,7 @@ abstract class SlimAppBootstrapper extends AppBootstrapper implements WebAppBoot
             [
                 'method' => $request->getMethod(),
                 'uri' => (string) $request->getUri(),
-                'headers' => $request->getHeaders(),
+                'headers' => array_keys($request->getHeaders()),
             ],
         );
 
