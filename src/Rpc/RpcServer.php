@@ -124,8 +124,22 @@ class RpcServer implements RpcServerInterface
             throw new RuntimeException('Payload cannot be empty.');
         }
 
+        $this->logger->debug(
+            'Parsing JSON-RPC string.',
+            [
+                'raw_payload' => $payload,
+            ],
+        );
+
         $decodedPayload = json_decode($payload, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
+            $this->logger->error(
+                'JSON-RPC payload is not valid JSON.',
+                [
+                    'raw_payload' => $payload,
+                ],
+            );
+
             throw new RuntimeException('Invalid JSON payload.');
         }
 
@@ -135,6 +149,13 @@ class RpcServer implements RpcServerInterface
     public function decodedJson(array $decodedPayload): JsonRpcResultInterface
     {
         if (!$this->isValidJsonRpc($decodedPayload)) {
+            $this->logger->error(
+                'Payload is not valid JSON-RPC request.',
+                [
+                    'decoded_payload' => $decodedPayload,
+                ],
+            );
+
             throw new RuntimeException('Invalid JSON-RPC request.');
         }
 
