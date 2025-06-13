@@ -59,9 +59,15 @@ class RpcServer implements RpcServerInterface
         $serviceClass = $this->serviceNameToServiceClass($bundleClass, $serviceName);
 
         if (empty($serviceClass)) {
-            $this->logger->error('Service class not provided.');
+            $this->logger->error(
+                'Service class for "{service}" not found in {bundle}.',
+                [
+                    'bundle' => $this->bundleClassToBundleName($bundleClass),
+                    'service' => $serviceName,
+                ],
+            );
 
-            throw new RuntimeException('Unknown service.');
+            throw new RuntimeException(sprintf('Service not found in "%s" bundle.', $bundleName));
         }
 
         if (!$this->hasMethod($bundleClass, $serviceClass, $methodName)) {
