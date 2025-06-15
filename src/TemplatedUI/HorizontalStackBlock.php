@@ -16,12 +16,16 @@ class HorizontalStackBlock extends WrapContentBlock
 {
     public function render(
         string $content,
+        string $justifyContent = 'center',
         string $alignItems = 'center',
+        string $width = 'fit-content',
     ): string
     {
         return sprintf(
-            '<div style="display: flex; justify-content: center; align-items: %s; width: fit-content; gap: 24px;">%s</div>',
+            '<div style="display: flex; justify-content: %s; align-items: %s; width: %s; gap: 24px;">%s</div>',
+            $justifyContent,
             $alignItems,
+            $width,
             $content,
         );
     }
