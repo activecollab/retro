@@ -12,15 +12,16 @@ namespace ActiveCollab\Retro\Bootstrapper\ContainerBuilder;
 
 use ActiveCollab\Retro\Bootstrapper\Bundle\BundleInterface;
 use DI\ContainerBuilder as BaseContainerBuilder;
+use LogicException;
 use Psr\Container\ContainerInterface;
+use ReflectionClass;
 
 class ContainerBuilder implements ContainerBuilderInterface
 {
-    private string $appPath;
-
-    public function __construct(string $appPath)
+    public function __construct(
+        private string $appPath,
+    )
     {
-        $this->appPath = $appPath;
     }
 
     public function buildDefinitions(string $version, string ...$bundles): array
@@ -74,10 +75,10 @@ class ContainerBuilder implements ContainerBuilderInterface
 
     private function getBundleDependenciesFiles(string $bundleClass): string
     {
-        $bundleClassReflection = new \ReflectionClass($bundleClass);
+        $bundleClassReflection = new ReflectionClass($bundleClass);
 
         if (!$bundleClassReflection->implementsInterface(BundleInterface::class)) {
-            throw new \LogicException('Invalid bundle class provided.');
+            throw new LogicException('Invalid bundle class provided.');
         }
 
         return $bundleClassReflection->getConstant('DEPENDENCIES');
