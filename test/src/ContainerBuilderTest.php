@@ -38,7 +38,7 @@ class ContainerBuilderTest extends TestCase
             (new ContainerBuilder('/var/www/app'))->buildDefinitions(
                 '1.0.0',
                 TestBundle::class,
-            )
+            ),
         );
     }
 }

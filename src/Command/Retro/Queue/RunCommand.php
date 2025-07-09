@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\Command\Retro\Queue;
 
 use ActiveCollab\CurrentTimestamp\CurrentTimestampInterface;
+use ActiveCollab\Retro\Bootstrapper\ContainerProxy\ContainerProxy;
+use ActiveCollab\Retro\Integrate\Queue\ContainerAliasesResolverInterface;
 use ActiveCollab\Retro\Queue\JobsConsumer;
 use ActiveCollab\Retro\Queue\Timer\JobsConsumerTimer;
 use Exception;
@@ -45,7 +47,10 @@ class RunCommand extends QueueCommand
             $jobsConsumer = new JobsConsumer(
                 $this->getJobsDispatcher(),
                 $this->get(LoggerInterface::class),
-                $this->getContainer(),
+                new ContainerProxy(
+                    $this->getContainer(),
+                    $this->get(ContainerAliasesResolverInterface::class)->getContainerAliases(),
+                ),
                 new JobsConsumerTimer(
                     $this->get(CurrentTimestampInterface::class),
                     microtime(true),
