@@ -50,7 +50,7 @@ class RunCommand extends QueueCommand
                     $this->get(CurrentTimestampInterface::class),
                     microtime(true),
                     $runtime,
-                )
+                ),
             );
 
             $jobsConsumer->run(
