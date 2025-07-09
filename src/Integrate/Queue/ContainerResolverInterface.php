@@ -10,7 +10,9 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\Integrate\Queue;
 
-interface ContainerAliasesResolverInterface
+use Psr\Container\ContainerInterface;
+
+interface ContainerResolverInterface
 {
-    public function getContainerAliases(): array;
+    public function getContainer(): ContainerInterface;
 }
