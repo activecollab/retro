@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\Command\Retro\Queue;
 
-use ActiveCollab\DatabaseMigrations\MigrationsInterface;
+use ActiveCollab\JobsQueue\JobsDispatcherInterface;
 use ActiveCollab\Retro\Command\Retro\RetroCommand;
 use RuntimeException;
 
@@ -21,14 +21,14 @@ abstract class QueueCommand extends RetroCommand
         return parent::getCommandNamePrefix() . 'queue:';
     }
 
-    protected function getJobsDispatcher(): MigrationsInterface
+    protected function getJobsDispatcher(): JobsDispatcherInterface
     {
-        $migrations = $this->get(MigrationsInterface::class);
+        $jobsDispatcher = $this->get(JobsDispatcherInterface::class);
 
-        if ($migrations instanceof MigrationsInterface) {
-            return $migrations;
+        if (!$jobsDispatcher instanceof JobsDispatcherInterface) {
+            throw new RuntimeException('Failed to get jobs dispatcher from DI container');
         }
 
-        throw new RuntimeException('Failed to get migrations utility from DI container');
+        return $jobsDispatcher;
     }
 }
