@@ -10,7 +10,11 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\Command\Retro\Queue;
 
+use ActiveCollab\CurrentTimestamp\CurrentTimestampInterface;
+use ActiveCollab\Retro\Queue\JobsConsumer;
+use ActiveCollab\Retro\Queue\Timer\JobsConsumerTimer;
 use Exception;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -23,7 +27,7 @@ class RunCommand extends QueueCommand
         parent::configure();
 
         $this
-            ->setDescription('')
+            ->setDescription('Run jobs from the queue.')
             ->addOption(
                 'runtime',
                 'r',
@@ -37,6 +41,19 @@ class RunCommand extends QueueCommand
     {
         try {
             $runtime = $this->mustGetRuntime($input);
+
+            $jobsConsumer = new JobsConsumer(
+                $this->getJobsDispatcher(),
+                $this->get(LoggerInterface::class),
+                $this->getContainer(),
+                new JobsConsumerTimer(
+                    $this->get(CurrentTimestampInterface::class),
+                    microtime(true),
+                    $runtime,
+                )
+            );
+
+            $jobsConsumer->run();
 
             return 0;
         } catch (Exception $e) {
