@@ -19,6 +19,7 @@
         "activecollab/eventsdispatcher": "^1.0",
         "activecollab/databasemigrations": "^4.0",
         "activecollab/databasestructure": "dev-master",
+        "activecollab/jobsqueue": "dev-master",
         "activecollab/sitemap": "dev-master",
         "activecollab/templatedui": "dev-master",
         "akrabat/ip-address-middleware": "^2.1",
