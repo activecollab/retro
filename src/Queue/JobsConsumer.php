@@ -28,13 +28,13 @@ class JobsConsumer implements JobsConsumerInterface
     {
     }
 
-    public function run(): int
+    public function run(callable $writeLine): int
     {
         $jobsRan = [];
         $jobsFailed = [];
 
         $this->jobsDispatcher->getQueue()->onJobFailure(
-            function (Job $job, Exception $e) use (&$jobsFailed) {
+            function (Job $job, Exception $e) use (&$jobsFailed, $writeLine) {
                 $jobId = $job->getQueueId();
 
                 if (!in_array($jobId, $jobsFailed)) {
@@ -42,6 +42,7 @@ class JobsConsumer implements JobsConsumerInterface
                 }
 
                 $this->writeLn(
+                    $writeLine,
                     sprintf(
                         'Exception %s: %s',
                         $e::class,
@@ -62,12 +63,13 @@ class JobsConsumer implements JobsConsumerInterface
         $jobsCount = $this->jobsDispatcher->getQueue()->count();
 
         if (empty($jobsCount)) {
-            $this->writeLn("Queue is empty\n");
+            $this->writeLn($writeLine, 'Queue is empty.');
 
-            return $this->done();
+            return $this->done($writeLine);
         }
 
         $this->writeLn(
+            $writeLine,
             sprintf(
                 'There are %d jobs in the queue.',
                 $jobsCount,
@@ -79,6 +81,7 @@ class JobsConsumer implements JobsConsumerInterface
         // ---------------------------------------------------
 
         $this->writeLn(
+            $writeLine,
             sprintf(
                 'Preparing to work for %d seconds.',
                 $this->timer->getRuntime(),
@@ -108,6 +111,7 @@ class JobsConsumer implements JobsConsumerInterface
             );
 
             $this->writeLn(
+                $writeLine,
                 sprintf(
                     'Running job #%s (%s).',
                     $nextInLine->getQueueId(),
@@ -122,6 +126,7 @@ class JobsConsumer implements JobsConsumerInterface
             $this->jobsDispatcher->getQueue()->execute($nextInLine);
 
             $this->writeLn(
+                $writeLine,
                 sprintf(
                     'Job #%d done.',
                     $nextInLine->getQueueId(),
@@ -153,6 +158,7 @@ class JobsConsumer implements JobsConsumerInterface
         );
 
         $this->writeLn(
+            $writeLine,
             sprintf(
                 'Execution stats: %d ran, %d failed. %d left in queue. Executed in %s',
                 count($jobsRan),
@@ -163,12 +169,13 @@ class JobsConsumer implements JobsConsumerInterface
             '',
         );
 
-        return $this->done();
+        return $this->done($writeLine);
     }
 
-    private function done(): int
+    private function done(callable $writeLine): int
     {
         $this->writeLn(
+            $writeLine,
             sprintf(
                 'Done in %s seconds.',
                 round(microtime(true) - $this->timer->getStartTime(), 5),
@@ -178,10 +185,10 @@ class JobsConsumer implements JobsConsumerInterface
         return 0;
     }
 
-    private function writeLn(string ...$lines): void
+    private function writeLn(callable $writeLine, string ...$lines): void
     {
         foreach ($lines as $line) {
-            print $line . "\n";
+            call_user_func($writeLine, $line);
         }
     }
 }

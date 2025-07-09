@@ -53,7 +53,9 @@ class RunCommand extends QueueCommand
                 )
             );
 
-            $jobsConsumer->run();
+            $jobsConsumer->run(
+                fn (string $line) => $output->writeln($line),
+            );
 
             return 0;
         } catch (Exception $e) {

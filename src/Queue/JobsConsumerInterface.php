@@ -12,5 +12,5 @@ namespace ActiveCollab\Retro\Queue;
 
 interface JobsConsumerInterface
 {
-    public function run(): int;
+    public function run(callable $writeLine): int;
 }
