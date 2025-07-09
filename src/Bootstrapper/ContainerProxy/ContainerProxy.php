@@ -46,24 +46,12 @@ class ContainerProxy implements ContainerInterface
             };
         }
 
-        $alias = $this->aliases[$id];
-
-        if (!$this->container->has($alias)) {
-            throw new class(
-                sprintf(
-                    "Service '%s' not found in container",
-                    "Service '$alias' not found in container",
-                )
-            ) extends Exception implements NotFoundExceptionInterface
-            {
-            };
-        }
-
-        return $this->container->get($alias);
+        return $this->container->get($this->aliases[$id]);
     }
 
     public function has(string $id)
     {
-        return array_key_exists($id, $this->aliases);
+        return array_key_exists($id, $this->aliases)
+            && $this->container->has($this->aliases[$id]);
     }
 }
