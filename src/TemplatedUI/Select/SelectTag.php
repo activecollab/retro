@@ -19,12 +19,17 @@ abstract class SelectTag extends FormFieldTag
         string $class = '',
         mixed $value = null,
         ?string $placeholder = null,
+        bool $clearable = null,
     ): string
     {
         $attributes = [
             'name' => $name,
             'class' => $this->prepareClassAttribute($class),
         ];
+
+        if ($clearable) {
+            $attributes['clearable'] = true;
+        }
 
         if ($value !== null) {
             $attributes['value'] = $value;
