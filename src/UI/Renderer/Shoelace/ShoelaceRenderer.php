@@ -64,7 +64,7 @@ class ShoelaceRenderer implements RendererInterface
         return sprintf(
             '%s%s',
             $this->openHtmlTag('sl-icon', $attributes),
-            $this->closeHtmlTag('sl-badge'),
+            $this->closeHtmlTag('sl-icon'),
         );
     }
 

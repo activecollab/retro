@@ -23,7 +23,6 @@ class MenuItem extends MenuElement
         private string $label,
         private ?AdornmentInterface $leftAdornment = null,
         private ?AdornmentInterface $rightAdornment = null,
-        private ?MenuInterface $submenu = null,
     )
     {
     }
@@ -41,10 +40,5 @@ class MenuItem extends MenuElement
     public function getRightAdornment(): ?AdornmentInterface
     {
         return $this->rightAdornment;
-    }
-
-    public function getSubmenu(): ?MenuInterface
-    {
-        return $this->submenu;
     }
 }
