@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Action;
 
-class DeleteResource implements ActionInterface
+class DeleteRequest implements ActionInterface
 {
     public function __construct(
         private string $deleteUrl,
