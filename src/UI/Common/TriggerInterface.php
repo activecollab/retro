@@ -8,8 +8,8 @@
 
 declare(strict_types=1);
 
-namespace ActiveCollab\Retro\UI\Dropdown\Common;
+namespace ActiveCollab\Retro\UI\Common;
 
-interface PanelInterface
+interface TriggerInterface
 {
 }

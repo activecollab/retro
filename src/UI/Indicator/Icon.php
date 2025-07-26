@@ -8,29 +8,23 @@
 
 declare(strict_types=1);
 
-namespace ActiveCollab\Retro\UI\Dropdown\Menu;
+namespace ActiveCollab\Retro\UI\Indicator;
 
-use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuElementInterface;
+use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 
-class Menu implements MenuInterface
+class Icon implements RenderableElementInterface, IconInterface
 {
-    /**
-     * @var MenuElementInterface[]
-     */
-    private array $elements;
-
     public function __construct(
-        MenuElementInterface ...$elements
+        private string $iconName,
     )
     {
-        $this->elements = $elements;
     }
 
-    public function getElements(): array
+    public function getIconName(): string
     {
-        return $this->elements;
+        return $this->iconName;
     }
 
     public function renderUsingRenderer(
@@ -38,6 +32,6 @@ class Menu implements MenuInterface
         RenderingExtensionInterface ...$extensions,
     ): string
     {
-        return $renderer->renderMenu($this, ...$extensions);
+        return $renderer->renderIcon($this, ...$extensions);
     }
 }

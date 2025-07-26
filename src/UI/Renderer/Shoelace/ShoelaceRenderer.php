@@ -10,17 +10,20 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Renderer\Shoelace;
 
-use ActiveCollab\Retro\UI\Dropdown\Button\ButtonInterface;
+use ActiveCollab\Retro\UI\Indicator\BadgeInterface;
+use ActiveCollab\Retro\UI\Button\ButtonInterface;
 use ActiveCollab\Retro\UI\Dropdown\DropdownInterface;
 use ActiveCollab\Retro\UI\Dropdown\Menu\Element\Divider;
 use ActiveCollab\Retro\UI\Dropdown\Menu\Element\Label;
 use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuElementInterface;
 use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuItem\MenuItem;
 use ActiveCollab\Retro\UI\Dropdown\Menu\MenuInterface;
+use ActiveCollab\Retro\UI\Indicator\IconInterface;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 use ActiveCollab\Retro\UI\Renderer\Shoelace\Extension\Slot;
 use ActiveCollab\TemplatedUI\Helper\HtmlHelpersTrait;
+use LogicException;
 
 class ShoelaceRenderer implements RendererInterface
 {
@@ -42,6 +45,45 @@ class ShoelaceRenderer implements RendererInterface
             $this->openHtmlTag('sl-button', $attributes),
             $this->sanitizeForHtml($button->getLabel()),
             $this->closeHtmlTag('sl-button'),
+        );
+    }
+
+    public function renderIcon(
+        IconInterface $icon,
+        RenderingExtensionInterface ...$extensions,
+    ): string
+    {
+        $attributes = [
+            'name' => $icon->getIconName(),
+        ];
+
+        foreach ($extensions as $extension) {
+            $attributes = $extension->extendAttributes($attributes);
+        }
+
+        return sprintf(
+            '%s%s',
+            $this->openHtmlTag('sl-icon', $attributes),
+            $this->closeHtmlTag('sl-badge'),
+        );
+    }
+
+    public function renderBadge(
+        BadgeInterface $badge,
+        RenderingExtensionInterface ...$extensions,
+    ): string
+    {
+        $attributes = [];
+
+        foreach ($extensions as $extension) {
+            $attributes = $extension->extendAttributes($attributes);
+        }
+
+        return sprintf(
+            '%s%s%s',
+            $this->openHtmlTag('sl-badge', $attributes),
+            $this->sanitizeForHtml($badge->getValue()),
+            $this->closeHtmlTag('sl-badge'),
         );
     }
 
@@ -85,10 +127,12 @@ class ShoelaceRenderer implements RendererInterface
     {
         if ($menuElement instanceof MenuItem) {
             return sprintf(
-                '%s%s%s',
+                '%s%s%s%s%s',
                 $this->openHtmlTag('sl-menu-item'),
                 $this->sanitizeForHtml($menuElement->getLabel()),
-                $this->openHtmlTag('sl-menu-item'),
+                $menuElement->getLeftAdornment()?->renderUsingRenderer($this, new Slot('prefix')) ?? '',
+                $menuElement->getRightAdornment()?->renderUsingRenderer($this, new Slot('suffix')) ?? '',
+                $this->closeHtmlTag('sl-menu-item'),
             );
         }
 
@@ -105,6 +149,6 @@ class ShoelaceRenderer implements RendererInterface
             );
         }
 
-        throw new \LogicException(sprintf('Unknown menu element type: %s', $menuElement::class));
+        throw new LogicException(sprintf('Unknown menu element type: %s', $menuElement::class));
     }
 }

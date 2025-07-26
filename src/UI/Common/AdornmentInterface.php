@@ -8,8 +8,8 @@
 
 declare(strict_types=1);
 
-namespace ActiveCollab\Retro\UI\Adornment;
+namespace ActiveCollab\Retro\UI\Common;
 
-abstract class Adornment implements AdornmentInterface
+interface AdornmentInterface
 {
 }

@@ -8,9 +8,9 @@
 
 declare(strict_types=1);
 
-namespace ActiveCollab\Retro\UI\Dropdown\Button;
+namespace ActiveCollab\Retro\UI\Button;
 
-use ActiveCollab\Retro\UI\Dropdown\Common\TriggerInterface;
+use ActiveCollab\Retro\UI\Common\TriggerInterface;
 use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
 
 interface ButtonInterface extends RenderableElementInterface, TriggerInterface
