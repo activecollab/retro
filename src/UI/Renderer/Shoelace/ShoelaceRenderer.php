@@ -126,9 +126,19 @@ class ShoelaceRenderer implements RendererInterface
     ): string
     {
         if ($menuElement instanceof MenuItem) {
+            $attributes = [];
+
+            if ($menuElement->getAction()) {
+                $attributes = $menuElement->getAction()->extendAttributes($attributes);
+            }
+
+            foreach ($extensions as $extension) {
+                $attributes = $extension->extendAttributes($attributes);
+            }
+
             return sprintf(
                 '%s%s%s%s%s',
-                $this->openHtmlTag('sl-menu-item'),
+                $this->openHtmlTag('sl-menu-item', $attributes),
                 $this->sanitizeForHtml($menuElement->getLabel()),
                 $menuElement->getLeftAdornment()?->renderUsingRenderer($this, new Slot('prefix')) ?? '',
                 $menuElement->getRightAdornment()?->renderUsingRenderer($this, new Slot('suffix')) ?? '',

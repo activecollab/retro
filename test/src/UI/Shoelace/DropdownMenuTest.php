@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\Test\UI\Shoelace;
 
 use ActiveCollab\Retro\Test\Base\TestCase;
+use ActiveCollab\Retro\UI\Action\GoToPage;
 use ActiveCollab\Retro\UI\Indicator\Badge;
 use ActiveCollab\Retro\UI\Button\Button;
 use ActiveCollab\Retro\UI\Dropdown\Dropdown;
@@ -38,7 +39,24 @@ class DropdownMenuTest extends TestCase
         $this->assertStringContainsString('<sl-menu', $renderedDropdown);
     }
 
-    public function testMenuUtimWillRenderAdornments(): void
+    public function testMenuItemWillGoToPage(): void
+    {
+        $renderedDropdown = (new ShoelaceRenderer())->renderDropdown(
+            new Dropdown(
+                new Button('Click to Open'),
+                new Menu(
+                    new MenuItem(
+                        'Open profile',
+                        new GoToPage('https://example.com/profile'),
+                    ),
+                ),
+            ),
+        );
+
+        $this->assertStringContainsString('hx-get="https://example.com/profile"', $renderedDropdown);
+    }
+
+    public function testMenuItemWillRenderAdornments(): void
     {
         $renderedMenuItem = (new ShoelaceRenderer())->renderMenuItem(
             new MenuItem(
