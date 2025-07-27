@@ -54,9 +54,11 @@ class ShoelaceRenderer implements RendererInterface
         $attributes = $this->extendAttributes($attributes, $button->getAction(), ...$extensions);
 
         return sprintf(
-            '%s%s%s',
+            '%s%s%s%s%s',
             $this->openHtmlTag('sl-button', $attributes),
             $this->renderButtonContent($button),
+            $button->getLeftAdornment()?->renderUsingRenderer($this, new Slot('prefix')) ?? '',
+            $button->getRightAdornment()?->renderUsingRenderer($this, new Slot('suffix')) ?? '',
             $this->closeHtmlTag('sl-button'),
         );
     }
