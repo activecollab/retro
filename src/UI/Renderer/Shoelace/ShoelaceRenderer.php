@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Renderer\Shoelace;
 
+use ActiveCollab\Retro\TemplatedUI\Property\ButtonVariant;
+use ActiveCollab\Retro\UI\Action\ActionInterface;
 use ActiveCollab\Retro\UI\Indicator\BadgeInterface;
 use ActiveCollab\Retro\UI\Button\ButtonInterface;
 use ActiveCollab\Retro\UI\Dropdown\DropdownInterface;
@@ -34,16 +36,27 @@ class ShoelaceRenderer implements RendererInterface
         RenderingExtensionInterface ...$extensions,
     ): string
     {
-        $attributes = [];
+        $attributes = [
+            'type' => $button->getType() ?? 'button',
+            'variant' => $button->getVariant()
+                ? $button->getVariant()->toAttributeValue()
+                : ButtonVariant::PRIMARY->toAttributeValue(),
+        ];
 
-        foreach ($extensions as $extension) {
-            $attributes = $extension->extendAttributes($attributes);
+        if ($button->getSize()) {
+            $attributes['size'] = $button->getSize()->toAttributeValue();
         }
+
+        if ($button->getStyle()) {
+            $attributes[$button->getStyle()->toAttributeName()] = true;
+        }
+
+        $attributes = $this->extendAttributes($attributes, $button->getAction(), ...$extensions);
 
         return sprintf(
             '%s%s%s',
             $this->openHtmlTag('sl-button', $attributes),
-            $this->sanitizeForHtml($button->getLabel()),
+            $this->sanitizeForHtml($button->getContent()),
             $this->closeHtmlTag('sl-button'),
         );
     }
@@ -160,5 +173,22 @@ class ShoelaceRenderer implements RendererInterface
         }
 
         throw new LogicException(sprintf('Unknown menu element type: %s', $menuElement::class));
+    }
+
+    private function extendAttributes(
+        array $attributes,
+        ?ActionInterface $action = null,
+        RenderingExtensionInterface ...$extensions,
+    ): array
+    {
+        if ($action) {
+            $attributes = $action->extendAttributes($attributes);
+        }
+
+        foreach ($extensions as $extension) {
+            $attributes = $extension->extendAttributes($attributes);
+        }
+
+        return $attributes;
     }
 }
