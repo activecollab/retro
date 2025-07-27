@@ -32,7 +32,6 @@ class Button implements ButtonInterface
         private ?ButtonStyle $style = null,
         private ?Size $size = null,
         private ?Width $width = null,
-        private bool $withCaret = false,
     )
     {
     }
@@ -80,11 +79,6 @@ class Button implements ButtonInterface
     public function getWidth(): ?Width
     {
         return $this->width;
-    }
-
-    public function isWithCaret(): bool
-    {
-        return $this->withCaret;
     }
 
     public function renderUsingRenderer(

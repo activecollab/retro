@@ -31,5 +31,4 @@ interface ButtonInterface extends RenderableElementInterface, TriggerInterface
     public function getStyle(): ?ButtonStyle;
     public function getSize(): ?Size;
     public function getWidth(): ?Width;
-    public function isWithCaret(): bool;
 }

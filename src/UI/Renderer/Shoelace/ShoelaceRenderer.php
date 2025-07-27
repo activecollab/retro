@@ -51,10 +51,6 @@ class ShoelaceRenderer implements RendererInterface
             $attributes[$button->getStyle()->toAttributeName()] = true;
         }
 
-        if ($button->isWithCaret()) {
-            $attributes['caret'] = true;
-        }
-
         $attributes = $this->extendAttributes($attributes, $button->getAction(), ...$extensions);
 
         return sprintf(
