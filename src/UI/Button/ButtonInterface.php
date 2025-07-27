@@ -17,10 +17,11 @@ use ActiveCollab\Retro\TemplatedUI\Property\Width;
 use ActiveCollab\Retro\UI\Action\ActionInterface;
 use ActiveCollab\Retro\UI\Common\TriggerInterface;
 use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
+use ActiveCollab\Retro\UI\Indicator\IconInterface;
 
 interface ButtonInterface extends RenderableElementInterface, TriggerInterface
 {
-    public function getContent(): string;
+    public function getContent(): IconInterface|string;
     public function getAction(): ?ActionInterface;
     public function getType(): ?string;
     public function getVariant(): ?ButtonVariant;

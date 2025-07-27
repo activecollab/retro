@@ -56,9 +56,18 @@ class ShoelaceRenderer implements RendererInterface
         return sprintf(
             '%s%s%s',
             $this->openHtmlTag('sl-button', $attributes),
-            $this->sanitizeForHtml($button->getContent()),
+            $this->renderButtonContent($button),
             $this->closeHtmlTag('sl-button'),
         );
+    }
+
+    private function renderButtonContent(ButtonInterface $button): string
+    {
+        if ($button->getContent() instanceof IconInterface) {
+            return $this->renderIcon($button->getContent());
+        }
+
+        return $this->sanitizeForHtml($button->getContent());
     }
 
     public function renderIcon(

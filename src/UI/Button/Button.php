@@ -15,13 +15,14 @@ use ActiveCollab\Retro\TemplatedUI\Property\ButtonVariant;
 use ActiveCollab\Retro\TemplatedUI\Property\Size;
 use ActiveCollab\Retro\TemplatedUI\Property\Width;
 use ActiveCollab\Retro\UI\Action\ActionInterface;
+use ActiveCollab\Retro\UI\Indicator\IconInterface;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 
 class Button implements ButtonInterface
 {
     public function __construct(
-        private string $content,
+        private IconInterface|string $content,
         private ?ActionInterface $action = null,
         private ?string $type = null,
         private ?ButtonVariant $variant = null,
@@ -32,7 +33,7 @@ class Button implements ButtonInterface
     {
     }
 
-    public function getContent(): string
+    public function getContent(): IconInterface|string
     {
         return $this->content;
     }
