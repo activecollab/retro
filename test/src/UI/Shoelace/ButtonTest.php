@@ -12,7 +12,6 @@ namespace ActiveCollab\Retro\Test\UI\Shoelace;
 
 use ActiveCollab\Retro\Test\Base\TestCase;
 use ActiveCollab\Retro\UI\Button\Button;
-use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuItem\MenuItem;
 use ActiveCollab\Retro\UI\Indicator\Badge;
 use ActiveCollab\Retro\UI\Indicator\Icon;
 use ActiveCollab\Retro\UI\Renderer\Shoelace\ShoelaceRenderer;
