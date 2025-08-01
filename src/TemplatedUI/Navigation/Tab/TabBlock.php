@@ -12,6 +12,7 @@ namespace ActiveCollab\Retro\TemplatedUI\Navigation\Tab;
 
 use ActiveCollab\Retro\UI\Navigation\Tab\Tab;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
+use ActiveCollab\Retro\UI\Renderer\Shoelace\Extension\Slot;
 use ActiveCollab\TemplatedUI\WrapContentBlock\WrapContentBlock;
 
 class TabBlock extends WrapContentBlock
@@ -34,6 +35,7 @@ class TabBlock extends WrapContentBlock
                 $content,
                 $name,
             ),
+            new Slot('nav'),
         );
     }
 }

@@ -49,5 +49,6 @@ class TabTest extends TestCase
         $this->assertStringContainsString('panel="tab-2"', $renderedTabGroup);
         $this->assertStringContainsString('name="tab-1"', $renderedTabGroup);
         $this->assertStringContainsString('name="tab-2"', $renderedTabGroup);
+        $this->assertStringContainsString('slot="nav"', $renderedTabGroup);
     }
 }
