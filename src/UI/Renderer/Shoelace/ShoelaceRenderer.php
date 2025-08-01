@@ -13,6 +13,7 @@ namespace ActiveCollab\Retro\UI\Renderer\Shoelace;
 use ActiveCollab\Retro\TemplatedUI\ComponentIdResolver\ComponentIdResolverInterface;
 use ActiveCollab\Retro\TemplatedUI\Property\ButtonVariant;
 use ActiveCollab\Retro\UI\Action\ActionInterface;
+use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Indicator\BadgeInterface;
 use ActiveCollab\Retro\UI\Button\ButtonInterface;
 use ActiveCollab\Retro\UI\Dropdown\DropdownInterface;
@@ -38,6 +39,14 @@ class ShoelaceRenderer implements RendererInterface
         private ComponentIdResolverInterface $componentIdResolver,
     )
     {
+    }
+
+    public function renderPreRenderedContent(
+        PreRenderedElementInterface $preRenderedElement,
+        RenderingExtensionInterface ...$extensions,
+    ): string
+    {
+        return $preRenderedElement->getPreRenderedContent();
     }
 
     public function renderButton(
@@ -209,14 +218,23 @@ class ShoelaceRenderer implements RendererInterface
         return sprintf(
             '%s%s%s',
             $this->openHtmlTag('sl-tab-group', $attributes),
-            implode(
-                '',
-                array_map(
-                    fn (TabInterface $tab): string => $tab->renderUsingRenderer($this, new Slot('nav')),
-                    $tabGroup->getTabs(),
-                ),
-            ),
+            $this->renderTabGroupContent($tabGroup),
             $this->closeHtmlTag('sl-tab-group'),
+        );
+    }
+
+    private function renderTabGroupContent(TabGroupInterface $tabGroup): string
+    {
+        if ($tabGroup->getPreRenderedElement()) {
+            return $tabGroup->getPreRenderedElement()->renderUsingRenderer($this);
+        }
+
+        return implode(
+            '',
+            array_map(
+                fn (TabInterface $tab): string => $tab->renderUsingRenderer($this, new Slot('nav')),
+                $tabGroup->getTabs(),
+            ),
         );
     }
 

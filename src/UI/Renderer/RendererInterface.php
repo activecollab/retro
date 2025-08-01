@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Renderer;
 
+use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Indicator\BadgeInterface;
 use ActiveCollab\Retro\UI\Button\ButtonInterface;
 use ActiveCollab\Retro\UI\Dropdown\DropdownInterface;
@@ -21,6 +22,11 @@ use ActiveCollab\Retro\UI\Navigation\Tab\TabInterface;
 
 interface RendererInterface
 {
+    public function renderPreRenderedContent(
+        PreRenderedElementInterface $preRenderedElement,
+        RenderingExtensionInterface ...$extensions,
+    ): string;
+
     public function renderButton(
         ButtonInterface $button,
         RenderingExtensionInterface ...$extensions,

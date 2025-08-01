@@ -12,9 +12,11 @@ namespace ActiveCollab\Retro\Test\UI\Shoelace;
 
 use ActiveCollab\Retro\TemplatedUI\ComponentIdResolver\ComponentIdResolverInterface;
 use ActiveCollab\Retro\Test\Base\TestCase;
+use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
 use ActiveCollab\Retro\UI\Navigation\Tab\Tab;
 use ActiveCollab\Retro\UI\Navigation\Tab\TabGroup;
 use ActiveCollab\Retro\UI\Renderer\Shoelace\ShoelaceRenderer;
+use LogicException;
 
 class TabTest extends TestCase
 {
@@ -27,6 +29,29 @@ class TabTest extends TestCase
 
         $this->componentIdResolver = $this->createMock(ComponentIdResolverInterface::class);
         $this->renderer = new ShoelaceRenderer($this->componentIdResolver);
+    }
+
+    public function testWillRenderPreRenderedElement(): void
+    {
+        $renderedTabGroup = $this->renderer->renderTabGroup(
+            new TabGroup(
+                new PreRenderedElement('Hello!'),
+            ),
+        );
+
+        $this->assertStringContainsString('Hello!', $renderedTabGroup)  ;
+    }
+
+    public function testWillNotAllowPreRenderedContentAndAdditionalTabs(): void
+    {
+        $this->expectException(LogicException::class);
+
+        $this->renderer->renderTabGroup(
+            new TabGroup(
+                new PreRenderedElement('Hello!'),
+                new Tab('Tab 1', 'Content for tab 1'),
+            ),
+        );
     }
 
     public function testWillConnectTabAndPanel(): void

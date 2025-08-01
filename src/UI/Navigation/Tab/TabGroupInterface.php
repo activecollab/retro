@@ -10,9 +10,11 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Navigation\Tab;
 
+use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
 
 interface TabGroupInterface extends RenderableElementInterface
 {
+    public function getPreRenderedElement(): ?PreRenderedElementInterface;
     public function getTabs(): array;
 }
