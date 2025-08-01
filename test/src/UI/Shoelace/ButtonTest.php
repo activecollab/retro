@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\Test\UI\Shoelace;
 
+use ActiveCollab\Retro\TemplatedUI\ComponentIdResolver\ComponentIdResolverInterface;
 use ActiveCollab\Retro\Test\Base\TestCase;
 use ActiveCollab\Retro\UI\Button\Button;
 use ActiveCollab\Retro\UI\Indicator\Badge;
@@ -18,9 +19,20 @@ use ActiveCollab\Retro\UI\Renderer\Shoelace\ShoelaceRenderer;
 
 class ButtonTest extends TestCase
 {
+    private ShoelaceRenderer $renderer;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->renderer = new ShoelaceRenderer(
+            $this->createMock(ComponentIdResolverInterface::class),
+        );
+    }
+
     public function testWillRenderButton(): void
     {
-        $renderedButton = (new ShoelaceRenderer())->renderButton(
+        $renderedButton = $this->renderer->renderButton(
             new Button('Click to Open'),
         );
 
@@ -31,7 +43,7 @@ class ButtonTest extends TestCase
 
     public function testWillRenderIcon(): void
     {
-        $renderedButton = (new ShoelaceRenderer())->renderButton(
+        $renderedButton = $this->renderer->renderButton(
             new Button(new Icon('x-lg')),
         );
 
@@ -40,7 +52,7 @@ class ButtonTest extends TestCase
 
     public function testButtonWillRenderAdornments(): void
     {
-        $renderedMenuItem = (new ShoelaceRenderer())->renderButton(
+        $renderedMenuItem = $this->renderer->renderButton(
             new Button(
                 'Click to Open',
                 leftAdornment: new Icon('alphabet'),

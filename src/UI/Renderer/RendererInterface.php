@@ -16,6 +16,8 @@ use ActiveCollab\Retro\UI\Dropdown\DropdownInterface;
 use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuElementInterface;
 use ActiveCollab\Retro\UI\Dropdown\Menu\MenuInterface;
 use ActiveCollab\Retro\UI\Indicator\IconInterface;
+use ActiveCollab\Retro\UI\Navigation\Tab\TabGroupInterface;
+use ActiveCollab\Retro\UI\Navigation\Tab\TabInterface;
 
 interface RendererInterface
 {
@@ -45,6 +47,16 @@ interface RendererInterface
 
     public function renderBadge(
         BadgeInterface $badge,
+        RenderingExtensionInterface ...$extensions,
+    ): string;
+
+    public function renderTabGroup(
+        TabGroupInterface $tabGroup,
+        RenderingExtensionInterface ...$extensions,
+    ): string;
+
+    public function renderTab(
+        TabInterface $tab,
         RenderingExtensionInterface ...$extensions,
     ): string;
 }

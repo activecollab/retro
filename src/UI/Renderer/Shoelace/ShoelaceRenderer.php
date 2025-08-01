@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Renderer\Shoelace;
 
+use ActiveCollab\Retro\TemplatedUI\ComponentIdResolver\ComponentIdResolverInterface;
 use ActiveCollab\Retro\TemplatedUI\Property\ButtonVariant;
 use ActiveCollab\Retro\UI\Action\ActionInterface;
 use ActiveCollab\Retro\UI\Indicator\BadgeInterface;
@@ -21,6 +22,8 @@ use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuElementInterface;
 use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuItem\MenuItem;
 use ActiveCollab\Retro\UI\Dropdown\Menu\MenuInterface;
 use ActiveCollab\Retro\UI\Indicator\IconInterface;
+use ActiveCollab\Retro\UI\Navigation\Tab\TabGroupInterface;
+use ActiveCollab\Retro\UI\Navigation\Tab\TabInterface;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 use ActiveCollab\Retro\UI\Renderer\Shoelace\Extension\Slot;
@@ -30,6 +33,12 @@ use LogicException;
 class ShoelaceRenderer implements RendererInterface
 {
     use HtmlHelpersTrait;
+
+    public function __construct(
+        private ComponentIdResolverInterface $componentIdResolver,
+    )
+    {
+    }
 
     public function renderButton(
         ButtonInterface $button,
@@ -186,12 +195,77 @@ class ShoelaceRenderer implements RendererInterface
         throw new LogicException(sprintf('Unknown menu element type: %s', $menuElement::class));
     }
 
+    public function renderTabGroup(
+        TabGroupInterface $tabGroup,
+        RenderingExtensionInterface ...$extensions,
+    ): string
+    {
+        $attributes = $this->extendAttributes(
+            null,
+            null,
+            ...$extensions,
+        );
+
+        return sprintf(
+            '%s%s%s',
+            $this->openHtmlTag('sl-tab-group', $attributes),
+            implode(
+                '',
+                array_map(
+                    fn (TabInterface $tab): string => $tab->renderUsingRenderer($this, new Slot('nav')),
+                    $tabGroup->getTabs(),
+                ),
+            ),
+            $this->closeHtmlTag('sl-tab-group'),
+        );
+    }
+
+    public function renderTab(
+        TabInterface $tab,
+        RenderingExtensionInterface ...$extensions,
+    ): string
+    {
+        $tabName = $tab->getName();
+
+        if (empty($tabName)) {
+            $tabName = $this->componentIdResolver->getUniqueId('tab');
+        }
+
+        $attributes = $this->extendAttributes(
+            [
+                'panel' => $tabName,
+            ],
+            null,
+            ...$extensions,
+        );
+
+        return sprintf(
+            '%s%s%s%s%s%s',
+            $this->openHtmlTag('sl-tab', $attributes),
+            $tab->getLabel(),
+            $this->closeHtmlTag('sl-tab'),
+            $this->openHtmlTag(
+                'sl-tab-panel',
+                [
+                    'name' => $tabName,
+                ],
+            ),
+            $tab->getContent(),
+            $this->closeHtmlTag('sl-tab-panel'),
+        );
+    }
+
+
     private function extendAttributes(
-        array $attributes,
+        ?array $attributes = null,
         ?ActionInterface $action = null,
         RenderingExtensionInterface ...$extensions,
     ): array
     {
+        if ($attributes === null) {
+            $attributes = [];
+        }
+
         if ($action) {
             $attributes = $action->extendAttributes($attributes);
         }

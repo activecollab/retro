@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\Test\UI\Shoelace;
 
+use ActiveCollab\Retro\TemplatedUI\ComponentIdResolver\ComponentIdResolverInterface;
 use ActiveCollab\Retro\Test\Base\TestCase;
 use ActiveCollab\Retro\UI\Action\GoToPage;
 use ActiveCollab\Retro\UI\Indicator\Badge;
@@ -22,9 +23,20 @@ use ActiveCollab\Retro\UI\Renderer\Shoelace\ShoelaceRenderer;
 
 class DropdownMenuTest extends TestCase
 {
+    private ShoelaceRenderer $renderer;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->renderer = new ShoelaceRenderer(
+            $this->createMock(ComponentIdResolverInterface::class),
+        );
+    }
+
     public function testDropdownTriggerWillHaveSlot(): void
     {
-        $renderedDropdown = (new ShoelaceRenderer())->renderDropdown(
+        $renderedDropdown = $this->renderer->renderDropdown(
             new Dropdown(
                 new Button('Click to Open'),
                 new Menu(
@@ -41,7 +53,7 @@ class DropdownMenuTest extends TestCase
 
     public function testMenuItemWillGoToPage(): void
     {
-        $renderedDropdown = (new ShoelaceRenderer())->renderDropdown(
+        $renderedDropdown = $this->renderer->renderDropdown(
             new Dropdown(
                 new Button('Click to Open'),
                 new Menu(
@@ -58,7 +70,7 @@ class DropdownMenuTest extends TestCase
 
     public function testMenuItemWillRenderAdornments(): void
     {
-        $renderedMenuItem = (new ShoelaceRenderer())->renderMenuItem(
+        $renderedMenuItem = $this->renderer->renderMenuItem(
             new MenuItem(
                 'Hello World!',
                 leftAdornment: new Icon('alphabet'),
