@@ -27,6 +27,6 @@ class IconTag extends Tag
         ?string $label = null,
     ): string
     {
-        return (new Icon($iconName))->renderUsingRenderer($this->renderer);
+        return (new Icon($iconName, $label))->renderUsingRenderer($this->renderer);
     }
 }
