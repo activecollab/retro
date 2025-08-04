@@ -57,3 +57,79 @@ php app/current/bin/console.php retro:create_crud_controller plural_entity_name 
 ```
 
 This command creates a set of controllers, one for working with collections of entities, and one for working with individual entities.
+
+## Service Transactions
+
+Services provide a simple structure to run all execution code within a transaction, and return service result:
+
+```php
+use ActiveCollab\Retro\Service\Service;
+use ActiveCollab\Retro\Service\Result\ServiceResultInterface;
+use ActiveCollab\Retro\Service\Result\Success\Success;
+
+class MyService extends Service
+{
+    public function serviceMethod(): ServiceResultInterface
+    {
+        return $this->withinTransaction(
+            function () {
+                return new Success();
+            },
+            null,
+        )
+    }
+}
+```
+
+`withinService()` method will commit the transaction on successful result, and roll it back on failure. While time saving for most scenario, this can be a problem if you want to keep something in the database even if the service fails. In that case, you can use:
+
+1. `afterTransaction()` - to run code after the transaction,
+2. `onTransactionException()` - to capture exceptions that are thrown within transaction closure.
+
+```php
+use ActiveCollab\Retro\Service\Service;
+use ActiveCollab\Retro\Service\Result\RequestProcessingFailed\RequestProcessingFailed;
+use ActiveCollab\Retro\Service\Result\ServiceResultInterface;
+use ActiveCollab\Retro\Service\Result\Success\Success;
+use Exception;
+
+class LoginService extends Service
+{
+    public function __construct(private UsersRepositoryInterface $usersRepository)
+    {
+    }
+
+    public function logUserIn(
+        string $username, 
+        string $password,
+    ): ServiceResultInterface
+    {
+        return $this->withinTransaction(
+            function () use ($username, $password) {
+            
+                // Capture any exceptions that are thrown during transaction execution.
+                $this->onTransactionException(
+                    function (Exception $e) use ($username) {
+                        $this->usersRepository->logFailedLoginAttempt($e->getMessage(), $username);
+                    }
+                );
+            
+                if (!$this->usersRepository->validate($username, $password)) {
+                
+                    // This callback will be executed after the transaction is rolled back, due to failed service result.
+                    $this->afterTransaction(
+                        function () use ($username) {
+                            $this->usersRepository->logFailedLoginAttempt('Invalid credentials', $username);
+                        },
+                    );
+                    
+                    return new RequestProcessingFailed(...);
+                }
+                
+                return new Success();
+            },
+            null,
+        )
+    }
+}
+```
