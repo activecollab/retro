@@ -10,22 +10,22 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\TemplatedUI\Indicator;
 
-use ActiveCollab\TemplatedUI\Helper\HtmlHelpersTrait;
+use ActiveCollab\Retro\UI\Indicator\Badge;
+use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\TemplatedUI\WrapContentBlock\WrapContentBlock;
 
 class BadgeBlock extends WrapContentBlock
 {
-    use HtmlHelpersTrait;
+    public function __construct(
+        private RendererInterface $renderer,
+    )
+    {
+    }
 
     public function render(
         string $content,
     ): string
     {
-        return sprintf(
-            '%s%s%s',
-            $this->openHtmlTag('sl-badge'),
-            $content,
-            $this->closeHtmlTag('sl-badge'),
-        );
+        return (new Badge($content))->renderUsingRenderer($this->renderer);
     }
 }
