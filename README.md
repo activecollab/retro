@@ -126,6 +126,9 @@ class LoginService extends Service
                     return new RequestProcessingFailed(...);
                 }
                 
+                // This call may throw an exception?
+                $this->usersRepository->logUserIn($username);
+                
                 return new Success();
             },
             null,
