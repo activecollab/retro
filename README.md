@@ -12,6 +12,8 @@ Building blocks of Retro:
 
 1. **Sitemap** enables file system based routing, provided by [Sitemap package](https://github.com/activecollab/sitemap),
 1. **Form processing** using a simple mechanism to capture data from forms, validate it, and re-render the form with errors when needed.
+1. **Controllers don't do any processing**, they just route the data to appropriate services, and return the result of their execution.
+1. Services can optionally be exposed and used as JSON-RPC endpoints with minimal effort.
 
 To be continued…
 
