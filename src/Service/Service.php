@@ -37,6 +37,28 @@ abstract class Service implements ServiceInterface
     {
     }
 
+    private array $afterTransaction = [];
+
+    /**
+     * Execute after transaction ran by withinTransaction() method. Use this when you need to keep something in the
+     * database even in cases of non-success service result (like error logs, rate limitation logs etc).
+     */
+    protected function afterTransaction(callable $execute): void
+    {
+        $this->afterTransaction[] = $execute;
+    }
+
+    private array $onTransactionException = [];
+
+    /**
+     * Execute in case of transaction exception. Exception will roll back the transaction. Use these callbacks in case
+     * you need to keep something in the database, like error log.
+     */
+    protected function onTransactionException(callable $execute): void
+    {
+        $this->onTransactionException[] = $execute;
+    }
+
     protected function withinTransaction(
         callable $callback,
         ?FormDataInterface $formData,
@@ -57,9 +79,29 @@ abstract class Service implements ServiceInterface
                 $this->connection->rollback();
             }
 
+            if (!empty($this->afterTransaction)) {
+                $this->connection->transact(
+                    function () {
+                        foreach ($this->afterTransaction as $execute) {
+                            call_user_func($execute);
+                        }
+                    },
+                );
+            }
+
             return $result;
         } catch (Exception $e) {
             $this->connection->rollback();
+
+            if (!empty($this->onTransactionException)) {
+                $this->connection->transact(
+                    function () use ($e) {
+                        foreach ($this->onTransactionException as $execute) {
+                            call_user_func($execute, $e);
+                        }
+                    },
+                );
+            }
 
             return $this->processingExceptionToResult($e, $formData);
         }
