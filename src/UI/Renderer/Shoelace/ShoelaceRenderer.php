@@ -99,6 +99,10 @@ class ShoelaceRenderer implements RendererInterface
             'name' => $icon->getIconName(),
         ];
 
+        if ($icon->getLabel()) {
+            $attributes['label'] = $icon->getLabel();
+        }
+
         foreach ($extensions as $extension) {
             $attributes = $extension->extendAttributes($attributes);
         }

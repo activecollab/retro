@@ -16,4 +16,5 @@ use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
 interface IconInterface extends RenderableElementInterface, AdornmentInterface
 {
     public function getIconName(): string;
+    public function getLabel(): ?string;
 }

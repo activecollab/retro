@@ -24,6 +24,7 @@ class IconTag extends Tag
 
     public function render(
         string $iconName,
+        ?string $label = null,
     ): string
     {
         return (new Icon($iconName))->renderUsingRenderer($this->renderer);

@@ -18,6 +18,7 @@ class Icon implements RenderableElementInterface, IconInterface
 {
     public function __construct(
         private string $iconName,
+        private ?string $label = null,
     )
     {
     }
@@ -25,6 +26,11 @@ class Icon implements RenderableElementInterface, IconInterface
     public function getIconName(): string
     {
         return $this->iconName;
+    }
+
+    public function getLabel(): ?string
+    {
+        return $this->label;
     }
 
     public function renderUsingRenderer(
