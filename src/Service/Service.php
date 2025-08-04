@@ -14,8 +14,6 @@ use ActiveCollab\DatabaseConnection\ConnectionInterface;
 use ActiveCollab\DatabaseObject\Exception\ValidationException;
 use ActiveCollab\DatabaseObject\PoolInterface;
 use ActiveCollab\Retro\FormData\FormDataInterface;
-use ActiveCollab\Retro\Service\Context\ServiceContextInterface;
-use ActiveCollab\Retro\Service\ExecutionRecorder\ServiceExecutionRecorderInterface;
 use ActiveCollab\Retro\Service\Result\Factory\ServiceResultFactoryInterface;
 use Exception;
 use ActiveCollab\Retro\Service\Result\InvalidFormData\InvalidFormData;
@@ -41,7 +39,7 @@ abstract class Service implements ServiceInterface
 
     /**
      * Execute after transaction ran by withinTransaction() method. Use this when you need to keep something in the
-     * database even in cases of non-success service result (like error logs, rate limitation logs etc).
+     * database even in cases of non-success service result (like error logs, rate limitation logs etc.)
      */
     protected function afterTransaction(callable $execute): void
     {
