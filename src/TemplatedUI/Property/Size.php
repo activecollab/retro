@@ -10,11 +10,11 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\TemplatedUI\Property;
 
-enum Size
+enum Size: string
 {
-    case SMALL;
-    case MEDIUM;
-    case LARGE;
+    case SMALL = 'small';
+    case MEDIUM = 'medium';
+    case LARGE = 'large';
 
     public function toAttributeValue(): string
     {

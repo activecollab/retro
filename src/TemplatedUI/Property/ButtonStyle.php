@@ -10,12 +10,12 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\TemplatedUI\Property;
 
-enum ButtonStyle
+enum ButtonStyle: string
 {
-    case OUTLINE;
-    case PILL;
-    case CIRCLE;
-    case LOADING;
+    case OUTLINE = 'outline';
+    case PILL = 'pill';
+    case CIRCLE = 'circle';
+    case LOADING = 'loading';
 
     public function toAttributeName(): string
     {

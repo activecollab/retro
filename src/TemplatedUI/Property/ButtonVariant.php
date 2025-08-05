@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\TemplatedUI\Property;
 
-enum ButtonVariant
+enum ButtonVariant: string
 {
-    case DEFAULT;
-    case PRIMARY;
-    case SUCCESS;
-    case NEUTRAL;
-    case WARNING;
-    case DANGER;
+    case DEFAULT = 'default';
+    case PRIMARY = 'primary';
+    case SUCCESS = 'success';
+    case NEUTRAL = 'neutral';
+    case WARNING = 'warning';
+    case DANGER = 'danger';
 
     public function toAttributeValue(): string
     {
