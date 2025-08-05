@@ -17,7 +17,6 @@ use ActiveCollab\Retro\TemplatedUI\Property\Size;
 use ActiveCollab\Retro\Test\Base\TestCase;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\Shoelace\ShoelaceRenderer;
-use SebastianBergmann\CodeCoverage\Report\Html\Renderer;
 
 class ButtonTest extends TestCase
 {
