@@ -16,6 +16,7 @@ use ActiveCollab\Retro\TemplatedUI\Property\Size;
 use ActiveCollab\Retro\TemplatedUI\Property\Width;
 use ActiveCollab\Retro\UI\Action\ActionInterface;
 use ActiveCollab\Retro\UI\Common\AdornmentInterface;
+use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Indicator\IconInterface;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
@@ -23,7 +24,7 @@ use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 class Button implements ButtonInterface
 {
     public function __construct(
-        private IconInterface|string $content,
+        private IconInterface|PreRenderedElementInterface|string $content,
         private ?ActionInterface $action = null,
         private ?AdornmentInterface $leftAdornment = null,
         private ?AdornmentInterface $rightAdornment = null,
@@ -36,7 +37,7 @@ class Button implements ButtonInterface
     {
     }
 
-    public function getContent(): IconInterface|string
+    public function getContent(): IconInterface|PreRenderedElementInterface|string
     {
         return $this->content;
     }

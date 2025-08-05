@@ -11,17 +11,34 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\Test\TemplatedUI;
 
 use ActiveCollab\Retro\TemplatedUI\Button\ButtonBlock;
+use ActiveCollab\Retro\TemplatedUI\ComponentIdResolver\ComponentIdResolverInterface;
 use ActiveCollab\Retro\TemplatedUI\Property\ButtonStyle;
 use ActiveCollab\Retro\TemplatedUI\Property\Size;
 use ActiveCollab\Retro\Test\Base\TestCase;
+use ActiveCollab\Retro\UI\Renderer\RendererInterface;
+use ActiveCollab\Retro\UI\Renderer\Shoelace\ShoelaceRenderer;
+use SebastianBergmann\CodeCoverage\Report\Html\Renderer;
 
 class ButtonTest extends TestCase
 {
+    private RendererInterface $renderer;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->renderer = new ShoelaceRenderer(
+            $this->createMock(
+                ComponentIdResolverInterface::class,
+            ),
+        );
+    }
+
     public function testWillRenderButton(): void
     {
         $this->assertSame(
             '<sl-button type="button" variant="primary">Save</sl-button>',
-            (new ButtonBlock())->render(
+            (new ButtonBlock($this->renderer))->render(
                 'Save',
             ),
         );
@@ -31,7 +48,7 @@ class ButtonTest extends TestCase
     {
         $this->assertSame(
             '<sl-button type="button" variant="primary" size="large">Save</sl-button>',
-            (new ButtonBlock())->render(
+            (new ButtonBlock($this->renderer))->render(
                 'Save',
                 size: Size::LARGE,
             ),
@@ -51,7 +68,7 @@ class ButtonTest extends TestCase
                 '<sl-button type="button" variant="primary" %s>Save</sl-button>',
                 $expectedAttribute,
             ),
-            (new ButtonBlock())->render(
+            (new ButtonBlock($this->renderer))->render(
                 'Save',
                 style: $buttonStyle,
             ),

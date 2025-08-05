@@ -14,12 +14,21 @@ use ActiveCollab\Retro\TemplatedUI\Property\ButtonStyle;
 use ActiveCollab\Retro\TemplatedUI\Property\Size;
 use ActiveCollab\Retro\TemplatedUI\Property\ButtonVariant;
 use ActiveCollab\Retro\TemplatedUI\Property\Width;
+use ActiveCollab\Retro\UI\Button\Button;
+use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
+use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\TemplatedUI\MethodInvoker\CatchAllParameters\CatchAllParametersInterface;
 use ActiveCollab\TemplatedUI\WrapContentBlock\WrapContentBlock;
 use LogicException;
 
 class ButtonBlock extends WrapContentBlock implements ButtonBlockInterface
 {
+    public function __construct(
+        private RendererInterface $renderer,
+    )
+    {
+    }
+
     public function render(
         string $content,
         ?ButtonVariant $variant = null,
@@ -29,6 +38,17 @@ class ButtonBlock extends WrapContentBlock implements ButtonBlockInterface
         ?CatchAllParametersInterface $catchAllParameters = null,
     ): string
     {
+        return (new Button(
+            new PreRenderedElement($content),
+            type: $catchAllParameters
+                ? $this->getButtonType($catchAllParameters)
+                : 'button',
+            variant: $variant,
+            style: $style,
+            size: $size,
+            width: $width,
+        ))->renderUsingRenderer($this->renderer);
+
         $attributes = [
             'type' => $catchAllParameters
                 ? $this->getButtonType($catchAllParameters)

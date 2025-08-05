@@ -13,6 +13,7 @@ namespace ActiveCollab\Retro\Test\UI\Shoelace;
 use ActiveCollab\Retro\TemplatedUI\ComponentIdResolver\ComponentIdResolverInterface;
 use ActiveCollab\Retro\Test\Base\TestCase;
 use ActiveCollab\Retro\UI\Button\Button;
+use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
 use ActiveCollab\Retro\UI\Indicator\Badge;
 use ActiveCollab\Retro\UI\Indicator\Icon;
 use ActiveCollab\Retro\UI\Renderer\Shoelace\ShoelaceRenderer;
@@ -48,6 +49,15 @@ class ButtonTest extends TestCase
         );
 
         $this->assertStringContainsString('<sl-icon name="x-lg"></sl-icon>', $renderedButton);
+    }
+
+    public function testWillRenderPreRenderedContent(): void
+    {
+        $renderedButton = $this->renderer->renderButton(
+            new Button(new PreRenderedElement('Save <span class="gray">(13)</span>')),
+        );
+
+        $this->assertStringContainsString('Save <span class="gray">(13)</span>', $renderedButton);
     }
 
     public function testButtonWillRenderAdornments(): void

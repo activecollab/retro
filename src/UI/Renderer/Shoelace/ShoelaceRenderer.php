@@ -87,6 +87,10 @@ class ShoelaceRenderer implements RendererInterface
             return $this->renderIcon($button->getContent());
         }
 
+        if ($button->getContent() instanceof PreRenderedElementInterface) {
+            return $button->getContent()->getPreRenderedContent();
+        }
+
         return $this->sanitizeForHtml($button->getContent());
     }
 
