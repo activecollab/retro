@@ -14,6 +14,7 @@ use ActiveCollab\Retro\TemplatedUI\Property\ButtonStyle;
 use ActiveCollab\Retro\TemplatedUI\Property\Size;
 use ActiveCollab\Retro\TemplatedUI\Property\ButtonVariant;
 use ActiveCollab\Retro\TemplatedUI\Property\Width;
+use ActiveCollab\Retro\UI\Action\GoToPage;
 use ActiveCollab\Retro\UI\Button\Button;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
@@ -40,6 +41,9 @@ class ButtonBlock extends WrapContentBlock implements ButtonBlockInterface
     {
         return (new Button(
             new PreRenderedElement($content),
+            action: $catchAllParameters && $catchAllParameters->hasParameter('href')
+                ? new GoToPage($catchAllParameters->getParameter('href'))
+                : null,
             type: $catchAllParameters
                 ? $this->getButtonType($catchAllParameters)
                 : 'button',
@@ -48,34 +52,6 @@ class ButtonBlock extends WrapContentBlock implements ButtonBlockInterface
             size: $size,
             width: $width,
         ))->renderUsingRenderer($this->renderer);
-
-        $attributes = [
-            'type' => $catchAllParameters
-                ? $this->getButtonType($catchAllParameters)
-                : 'button',
-            'variant' => $variant
-                ? $variant->toAttributeValue()
-                : ButtonVariant::PRIMARY->toAttributeValue(),
-        ];
-
-        if ($size) {
-            $attributes['size'] = $size->toAttributeValue();
-        }
-
-        if ($style) {
-            $attributes[$style->toAttributeName()] = true;
-        }
-
-        if ($catchAllParameters && $catchAllParameters->hasParameter('href')) {
-            $attributes['href'] = $catchAllParameters->getParameter('href');
-        }
-
-        return sprintf(
-            '%s%s%s',
-            $this->openHtmlTag('sl-button', $attributes),
-            $content,
-            $this->closeHtmlTag('sl-button'),
-        );
     }
 
     private function getButtonType(CatchAllParametersInterface $catchAllParameters): string
