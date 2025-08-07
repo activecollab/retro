@@ -14,12 +14,14 @@ use ActiveCollab\Retro\TemplatedUI\Property\ButtonStyle;
 use ActiveCollab\Retro\TemplatedUI\Property\Size;
 use ActiveCollab\Retro\TemplatedUI\Property\ButtonVariant;
 use ActiveCollab\Retro\TemplatedUI\Property\Width;
+use ActiveCollab\Retro\UI\Action\ActionInterface;
 use ActiveCollab\TemplatedUI\MethodInvoker\CatchAllParameters\CatchAllParametersInterface;
 
 interface ButtonBlockInterface
 {
     public function render(
         string $content,
+        ?ActionInterface $action = null,
         ?ButtonVariant $variant = null,
         ?ButtonStyle $style = null,
         ?Size $size = null,

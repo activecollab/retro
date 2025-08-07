@@ -14,6 +14,7 @@ use ActiveCollab\Retro\TemplatedUI\Property\ButtonStyle;
 use ActiveCollab\Retro\TemplatedUI\Property\Size;
 use ActiveCollab\Retro\TemplatedUI\Property\ButtonVariant;
 use ActiveCollab\Retro\TemplatedUI\Property\Width;
+use ActiveCollab\Retro\UI\Action\ActionInterface;
 use ActiveCollab\Retro\UI\Action\GoToPage;
 use ActiveCollab\Retro\UI\Button\Button;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
@@ -32,6 +33,7 @@ class ButtonBlock extends WrapContentBlock implements ButtonBlockInterface
 
     public function render(
         string $content,
+        ?ActionInterface $action = null,
         ?ButtonVariant $variant = null,
         ?ButtonStyle $style = null,
         ?Size $size = null,
@@ -41,9 +43,7 @@ class ButtonBlock extends WrapContentBlock implements ButtonBlockInterface
     {
         return (new Button(
             new PreRenderedElement($content),
-            action: $catchAllParameters && $catchAllParameters->hasParameter('href')
-                ? new GoToPage($catchAllParameters->getParameter('href'))
-                : null,
+            action: $this->getButtonAction($action, $catchAllParameters),
             type: $catchAllParameters
                 ? $this->getButtonType($catchAllParameters)
                 : 'button',
@@ -52,6 +52,22 @@ class ButtonBlock extends WrapContentBlock implements ButtonBlockInterface
             size: $size,
             width: $width,
         ))->renderUsingRenderer($this->renderer);
+    }
+
+    private function getButtonAction(
+        ?ActionInterface $action,
+        ?CatchAllParametersInterface $catchAllParameters,
+    ): ?ActionInterface
+    {
+        if ($action) {
+            return $action;
+        }
+
+        if ($catchAllParameters && $catchAllParameters->hasParameter('href')) {
+            return new GoToPage($catchAllParameters->getParameter('href'));
+        }
+
+        return null;
     }
 
     private function getButtonType(CatchAllParametersInterface $catchAllParameters): string
