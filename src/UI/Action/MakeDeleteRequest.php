@@ -14,7 +14,9 @@ class MakeDeleteRequest implements ActionInterface
 {
     public function __construct(
         private string $deleteUrl,
-        private ?string $confirmMessage = 'Are you sure you want to delete this item?',
+        private ?string $target = null,
+        private ?string $swap = null,
+        private ?string $confirmMessage = null,
     )
     {
     }
@@ -24,6 +26,14 @@ class MakeDeleteRequest implements ActionInterface
         $attributesToAppend = [
             'hx-delete' => $this->deleteUrl,
         ];
+
+        if ($this->target) {
+            $attributesToAppend['hx-target'] = $this->target;
+        }
+
+        if ($this->swap) {
+            $attributesToAppend['hx-swap'] = $this->swap;
+        }
 
         if ($this->confirmMessage) {
             $attributesToAppend['hx-confirm'] =  $this->confirmMessage;

@@ -22,9 +22,16 @@ class ActionFactory implements ActionFactoryInterface
 
     public function makeDeleteRequest(
         string $deleteUrl,
-        ?string $confirmMessage = 'Are you sure you want to delete this item?',
+        ?string $target = null,
+        ?string $swap = null,
+        ?string $confirmMessage = null,
     ): MakeDeleteRequest
     {
-        return new MakeDeleteRequest($deleteUrl, $confirmMessage);
+        return new MakeDeleteRequest(
+            $deleteUrl,
+            $target,
+            $swap,
+            $confirmMessage,
+        );
     }
 }

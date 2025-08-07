@@ -18,6 +18,8 @@ interface ActionFactoryInterface
     public function goToPage(string $pageUrl): GoToPage;
     public function makeDeleteRequest(
         string $deleteUrl,
-        ?string $confirmMessage = 'Are you sure you want to delete this item?'
+        ?string $target = null,
+        ?string $swap = null,
+        ?string $confirmMessage = null,
     ): MakeDeleteRequest;
 }
