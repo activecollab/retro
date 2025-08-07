@@ -44,7 +44,7 @@ class TemplateUtilsCommand extends RetroCommand
             $table->setHeaders(
                 [
                     'Template Variable',
-                    'Service ID',
+                    'Service',
                 ],
             );
 
