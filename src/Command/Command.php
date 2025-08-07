@@ -152,6 +152,11 @@ abstract class Command extends BaseCommand implements CommandInterface
         return $e->getCode() ? $e->getCode() : 1;
     }
 
+    protected function has(string $id): bool
+    {
+        return $this->getContainer()?->has($id);
+    }
+
     /**
      * @template TClassName
      * @param class-string<TClassName> $id

@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\Command\Retro;
 
+use ActiveCollab\TemplatedUI\Util\TemplateUtilsResolverInterface;
 use Exception;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -26,6 +27,37 @@ class TemplateUtilsCommand extends RetroCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
+            if (!$this->has(TemplateUtilsResolverInterface::class)) {
+                $output->writeln('This application does not provide any template utils automatically.');
+                return 0;
+            }
+
+            $templateUtils = $this->get(TemplateUtilsResolverInterface::class)->resolve();
+
+            if (empty($templateUtils)) {
+                $output->writeln('This application does not provide any template utils automatically.');
+                return 0;
+            }
+
+            $table = $this->getHelper('table');
+            $table->setHeaders(
+                [
+                    'Template Variable',
+                    'Service ID'
+                ],
+            );
+
+            foreach ($templateUtils as $variableName => $service) {
+                $table->addRow(
+                    [
+                        $variableName,
+                        get_class($service),
+                    ],
+                );
+            }
+
+            $table->render($output);
+
             return 1;
         } catch (Exception $e) {
             return $this->abortDueToException($e, $input, $output);
