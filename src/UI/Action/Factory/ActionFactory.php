@@ -20,18 +20,8 @@ class ActionFactory implements ActionFactoryInterface
         return new GoToPage($pageUrl);
     }
 
-    public function makeDeleteRequest(
-        string $deleteUrl,
-        ?string $target = null,
-        ?string $swap = null,
-        ?string $confirmMessage = null,
-    ): MakeDeleteRequest
+    public function makeDeleteRequest(string $deleteUrl): MakeDeleteRequest
     {
-        return new MakeDeleteRequest(
-            $deleteUrl,
-            $target,
-            $swap,
-            $confirmMessage,
-        );
+        return new MakeDeleteRequest($deleteUrl);
     }
 }

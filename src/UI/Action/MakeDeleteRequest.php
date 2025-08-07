@@ -10,13 +10,18 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Action;
 
+use ActiveCollab\Retro\UI\Action\Trait\ConfirmTrait;
+use ActiveCollab\Retro\UI\Action\Trait\SwapTrait;
+use ActiveCollab\Retro\UI\Action\Trait\TargetTrait;
+
 class MakeDeleteRequest implements ActionInterface
 {
+    use ConfirmTrait;
+    use SwapTrait;
+    use TargetTrait;
+
     public function __construct(
         private string $deleteUrl,
-        private ?string $target = null,
-        private ?string $swap = null,
-        private ?string $confirmMessage = null,
     )
     {
     }
@@ -27,17 +32,9 @@ class MakeDeleteRequest implements ActionInterface
             'hx-delete' => $this->deleteUrl,
         ];
 
-        if ($this->target) {
-            $attributesToAppend['hx-target'] = $this->target;
-        }
-
-        if ($this->swap) {
-            $attributesToAppend['hx-swap'] = $this->swap;
-        }
-
-        if ($this->confirmMessage) {
-            $attributesToAppend['hx-confirm'] =  $this->confirmMessage;
-        }
+        $attributesToAppend = $this->applyConfirm($attributesToAppend);
+        $attributesToAppend = $this->applySwap($attributesToAppend);
+        $attributesToAppend = $this->applyTarget($attributesToAppend);
 
         return array_merge($attributes, $attributesToAppend);
     }
