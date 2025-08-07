@@ -12,6 +12,7 @@ namespace ActiveCollab\Retro\Command\Retro;
 
 use ActiveCollab\TemplatedUI\Util\TemplateUtilsResolverInterface;
 use Exception;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -39,11 +40,11 @@ class TemplateUtilsCommand extends RetroCommand
                 return 0;
             }
 
-            $table = $this->getHelper('table');
+            $table = new Table($output);
             $table->setHeaders(
                 [
                     'Template Variable',
-                    'Service ID'
+                    'Service ID',
                 ],
             );
 
@@ -56,7 +57,7 @@ class TemplateUtilsCommand extends RetroCommand
                 );
             }
 
-            $table->render($output);
+            $table->render();
 
             return 1;
         } catch (Exception $e) {
