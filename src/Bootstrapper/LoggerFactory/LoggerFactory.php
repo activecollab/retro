@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\Bootstrapper\LoggerFactory;
 
 use ActiveCollab\Retro\Bootstrapper\Metadata\NameInterface;
+use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
@@ -27,12 +28,21 @@ class LoggerFactory implements LoggerFactoryInterface
 
     public function createLogger(HandlerInterface ...$handlers): LoggerInterface
     {
-        $logger = new Logger($this->appName->getName());
-
-        $formatter = new LineFormatter(
-            "[%datetime%] %level_name%: %message% %context% %extra%\n",
-            'Y-m-d H:i:s',
+        return $this->createLoggerWithFormatter(
+            new LineFormatter(
+                "[%datetime%] %level_name%: %message% %context% %extra%\n",
+                'Y-m-d H:i:s',
+            ),
+            ...$handlers,
         );
+    }
+
+    public function createLoggerWithFormatter(
+        FormatterInterface $formatter,
+        HandlerInterface ...$handlers,
+    ): LoggerInterface
+    {
+        $logger = new Logger($this->appName->getName());
         $processor = new PsrLogMessageProcessor();
 
         foreach ($handlers as $handler) {
