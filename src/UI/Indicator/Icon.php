@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Indicator;
 
+use ActiveCollab\Retro\UI\Indicator\Tooltip\TooltipInterface;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 
@@ -18,6 +19,7 @@ class Icon implements IconInterface
     public function __construct(
         private string $iconName,
         private ?string $label = null,
+        private ?TooltipInterface $tooltip = null,
     )
     {
     }
@@ -30,6 +32,11 @@ class Icon implements IconInterface
     public function getLabel(): ?string
     {
         return $this->label;
+    }
+
+    public function getTooltip(): ?TooltipInterface
+    {
+        return $this->tooltip;
     }
 
     public function renderUsingRenderer(
