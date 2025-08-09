@@ -71,10 +71,10 @@ class ShoelaceRenderer implements RendererInterface
             $tooltip->getContent() instanceof PreRenderedElementInterface
                 ? $tooltip->getContent()->getPreRenderedContent()
                 : $this->sanitizeForHtml($tooltip->getContent()),
+            $this->closeHtmlTag('div'),
             $tooltip->getWrapAround()
                 ? $tooltip->getWrapAround()->renderUsingRenderer($this)
                 : '',
-            $this->closeHtmlTag('div'),
             $this->closeHtmlTag('sl-tooltip'),
         );
     }
