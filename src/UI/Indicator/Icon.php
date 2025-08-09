@@ -10,11 +10,10 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Indicator;
 
-use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 
-class Icon implements RenderableElementInterface, IconInterface
+class Icon implements IconInterface
 {
     public function __construct(
         private string $iconName,
