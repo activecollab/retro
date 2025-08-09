@@ -13,6 +13,9 @@ namespace ActiveCollab\Retro\UI\Renderer\Shoelace;
 use ActiveCollab\Retro\TemplatedUI\ComponentIdResolver\ComponentIdResolverInterface;
 use ActiveCollab\Retro\TemplatedUI\Property\ButtonVariant;
 use ActiveCollab\Retro\UI\Action\ActionInterface;
+use ActiveCollab\Retro\UI\Common\WithTooltipInterface;
+use ActiveCollab\Retro\UI\Element\ElementInterface;
+use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Indicator\BadgeInterface;
 use ActiveCollab\Retro\UI\Button\ButtonInterface;
@@ -23,6 +26,8 @@ use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuElementInterface;
 use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuItem\MenuItem;
 use ActiveCollab\Retro\UI\Dropdown\Menu\MenuInterface;
 use ActiveCollab\Retro\UI\Indicator\IconInterface;
+use ActiveCollab\Retro\UI\Indicator\Tooltip\Tooltip;
+use ActiveCollab\Retro\UI\Indicator\Tooltip\TooltipInterface;
 use ActiveCollab\Retro\UI\Navigation\Tab\TabGroupInterface;
 use ActiveCollab\Retro\UI\Navigation\Tab\TabInterface;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
@@ -46,7 +51,32 @@ class ShoelaceRenderer implements RendererInterface
         RenderingExtensionInterface ...$extensions,
     ): string
     {
-        return $preRenderedElement->getPreRenderedContent();
+        return $this->wrapOutput(
+            $preRenderedElement->getPreRenderedContent(),
+            $preRenderedElement,
+        );
+    }
+
+    public function renderTooltip(
+        TooltipInterface $tooltip,
+        RenderingExtensionInterface ...$extensions,
+    ): string
+    {
+        $attributes = $this->extendAttributes([], null, ...$extensions);
+
+        return sprintf(
+            '%s%s%s%s%s%s',
+            $this->openHtmlTag('sl-tooltip', $attributes),
+            $this->openHtmlTag('div', ['slot' => 'content']),
+            $tooltip->getContent() instanceof PreRenderedElementInterface
+                ? $tooltip->getContent()->getPreRenderedContent()
+                : $this->sanitizeForHtml($tooltip->getContent()),
+            $tooltip->getWrapAround()
+                ? $tooltip->getWrapAround()->renderUsingRenderer($this)
+                : '',
+            $this->closeHtmlTag('div'),
+            $this->closeHtmlTag('sl-tooltip'),
+        );
     }
 
     public function renderButton(
@@ -71,13 +101,16 @@ class ShoelaceRenderer implements RendererInterface
 
         $attributes = $this->extendAttributes($attributes, $button->getAction(), ...$extensions);
 
-        return sprintf(
-            '%s%s%s%s%s',
-            $this->openHtmlTag('sl-button', $attributes),
-            $this->renderButtonContent($button),
-            $button->getLeftAdornment()?->renderUsingRenderer($this, new Slot('prefix')) ?? '',
-            $button->getRightAdornment()?->renderUsingRenderer($this, new Slot('suffix')) ?? '',
-            $this->closeHtmlTag('sl-button'),
+        return $this->wrapOutput(
+            sprintf(
+                '%s%s%s%s%s',
+                $this->openHtmlTag('sl-button', $attributes),
+                $this->renderButtonContent($button),
+                $button->getLeftAdornment()?->renderUsingRenderer($this, new Slot('prefix')) ?? '',
+                $button->getRightAdornment()?->renderUsingRenderer($this, new Slot('suffix')) ?? '',
+                $this->closeHtmlTag('sl-button'),
+            ),
+            $button,
         );
     }
 
@@ -111,10 +144,13 @@ class ShoelaceRenderer implements RendererInterface
             $attributes = $extension->extendAttributes($attributes);
         }
 
-        return sprintf(
-            '%s%s',
-            $this->openHtmlTag('sl-icon', $attributes),
-            $this->closeHtmlTag('sl-icon'),
+        return $this->wrapOutput(
+            sprintf(
+                '%s%s',
+                $this->openHtmlTag('sl-icon', $attributes),
+                $this->closeHtmlTag('sl-icon'),
+            ),
+            $icon,
         );
     }
 
@@ -129,11 +165,14 @@ class ShoelaceRenderer implements RendererInterface
             $attributes = $extension->extendAttributes($attributes);
         }
 
-        return sprintf(
-            '%s%s%s',
-            $this->openHtmlTag('sl-badge', $attributes),
-            $this->sanitizeForHtml($badge->getValue()),
-            $this->closeHtmlTag('sl-badge'),
+        return $this->wrapOutput(
+            sprintf(
+                '%s%s%s',
+                $this->openHtmlTag('sl-badge', $attributes),
+                $this->sanitizeForHtml($badge->getValue()),
+                $this->closeHtmlTag('sl-badge'),
+            ),
+            $badge,
         );
     }
 
@@ -142,12 +181,15 @@ class ShoelaceRenderer implements RendererInterface
         RenderingExtensionInterface ...$extensions,
     ): string
     {
-        return sprintf(
-            '%s%s%s%s',
-            $this->openHtmlTag('sl-dropdown'),
-            $dropdown->getTrigger()->renderUsingRenderer($this, new Slot('trigger')),
-            $dropdown->getPanel()->renderUsingRenderer($this),
-            $this->closeHtmlTag('sl-dropdown'),
+        return $this->wrapOutput(
+            sprintf(
+                '%s%s%s%s',
+                $this->openHtmlTag('sl-dropdown'),
+                $dropdown->getTrigger()->renderUsingRenderer($this, new Slot('trigger')),
+                $dropdown->getPanel()->renderUsingRenderer($this),
+                $this->closeHtmlTag('sl-dropdown'),
+            ),
+            $dropdown,
         );
     }
 
@@ -156,17 +198,20 @@ class ShoelaceRenderer implements RendererInterface
         RenderingExtensionInterface ...$extensions,
     ): string
     {
-        return sprintf(
-            '%s%s%s',
-            $this->openHtmlTag('sl-menu'),
-            implode(
-                '',
-                array_map(
-                    fn (MenuElementInterface $element): string => $element->renderUsingRenderer($this),
-                    $menu->getElements(),
+        return $this->wrapOutput(
+            sprintf(
+                '%s%s%s',
+                $this->openHtmlTag('sl-menu'),
+                implode(
+                    '',
+                    array_map(
+                        fn (MenuElementInterface $element): string => $element->renderUsingRenderer($this),
+                        $menu->getElements(),
+                    ),
                 ),
+                $this->closeHtmlTag('sl-menu'),
             ),
-            $this->closeHtmlTag('sl-menu'),
+            $menu,
         );
     }
 
@@ -186,26 +231,35 @@ class ShoelaceRenderer implements RendererInterface
                 $attributes = $extension->extendAttributes($attributes);
             }
 
-            return sprintf(
-                '%s%s%s%s%s',
-                $this->openHtmlTag('sl-menu-item', $attributes),
-                $this->sanitizeForHtml($menuElement->getLabel()),
-                $menuElement->getLeftAdornment()?->renderUsingRenderer($this, new Slot('prefix')) ?? '',
-                $menuElement->getRightAdornment()?->renderUsingRenderer($this, new Slot('suffix')) ?? '',
-                $this->closeHtmlTag('sl-menu-item'),
+            return $this->wrapOutput(
+                sprintf(
+                    '%s%s%s%s%s',
+                    $this->openHtmlTag('sl-menu-item', $attributes),
+                    $this->sanitizeForHtml($menuElement->getLabel()),
+                    $menuElement->getLeftAdornment()?->renderUsingRenderer($this, new Slot('prefix')) ?? '',
+                    $menuElement->getRightAdornment()?->renderUsingRenderer($this, new Slot('suffix')) ?? '',
+                    $this->closeHtmlTag('sl-menu-item'),
+                ),
+                $menuElement,
             );
         }
 
         if ($menuElement instanceof Divider) {
-            return '<sl-divider></sl-divider>';
+            return $this->wrapOutput(
+                '<sl-divider></sl-divider>',
+                $menuElement,
+            );
         }
 
         if ($menuElement instanceof Label) {
-            return sprintf(
-                '%s%s%s',
-                $this->openHtmlTag('sl-menu-label'),
-                $this->sanitizeForHtml($menuElement->getLabel()),
-                $this->closeHtmlTag('sl-menu-label'),
+            return $this->wrapOutput(
+                sprintf(
+                    '%s%s%s',
+                    $this->openHtmlTag('sl-menu-label'),
+                    $this->sanitizeForHtml($menuElement->getLabel()),
+                    $this->closeHtmlTag('sl-menu-label'),
+                ),
+                $menuElement,
             );
         }
 
@@ -223,11 +277,14 @@ class ShoelaceRenderer implements RendererInterface
             ...$extensions,
         );
 
-        return sprintf(
-            '%s%s%s',
-            $this->openHtmlTag('sl-tab-group', $attributes),
-            $this->renderTabGroupContent($tabGroup),
-            $this->closeHtmlTag('sl-tab-group'),
+        return $this->wrapOutput(
+            sprintf(
+                '%s%s%s',
+                $this->openHtmlTag('sl-tab-group', $attributes),
+                $this->renderTabGroupContent($tabGroup),
+                $this->closeHtmlTag('sl-tab-group'),
+            ),
+            $tabGroup,
         );
     }
 
@@ -237,12 +294,15 @@ class ShoelaceRenderer implements RendererInterface
             return $tabGroup->getPreRenderedElement()->renderUsingRenderer($this);
         }
 
-        return implode(
-            '',
-            array_map(
-                fn (TabInterface $tab): string => $tab->renderUsingRenderer($this, new Slot('nav')),
-                $tabGroup->getTabs(),
+        return $this->wrapOutput(
+            implode(
+                '',
+                array_map(
+                    fn (TabInterface $tab): string => $tab->renderUsingRenderer($this, new Slot('nav')),
+                    $tabGroup->getTabs(),
+                ),
             ),
+            $tabGroup,
         );
     }
 
@@ -265,22 +325,41 @@ class ShoelaceRenderer implements RendererInterface
             ...$extensions,
         );
 
-        return sprintf(
-            '%s%s%s%s%s%s',
-            $this->openHtmlTag('sl-tab', $attributes),
-            $tab->getLabel(),
-            $this->closeHtmlTag('sl-tab'),
-            $this->openHtmlTag(
-                'sl-tab-panel',
-                [
-                    'name' => $tabName,
-                ],
+        return $this->wrapOutput(
+            sprintf(
+                '%s%s%s%s%s%s',
+                $this->openHtmlTag('sl-tab', $attributes),
+                $tab->getLabel(),
+                $this->closeHtmlTag('sl-tab'),
+                $this->openHtmlTag(
+                    'sl-tab-panel',
+                    [
+                        'name' => $tabName,
+                    ],
+                ),
+                $tab->getContent(),
+                $this->closeHtmlTag('sl-tab-panel'),
             ),
-            $tab->getContent(),
-            $this->closeHtmlTag('sl-tab-panel'),
+            $tab,
         );
     }
 
+    private function wrapOutput(
+        string $output,
+        ?ElementInterface $element,
+    ): string
+    {
+        if ($element instanceof WithTooltipInterface && $element->getTooltip()) {
+            return $this->renderTooltip(
+                new Tooltip(
+                    $element->getTooltip()->getContent(),
+                    new PreRenderedElement($output),
+                ),
+            );
+        }
+
+        return $output;
+    }
 
     private function extendAttributes(
         ?array $attributes = null,

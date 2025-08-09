@@ -18,6 +18,7 @@ use ActiveCollab\Retro\UI\Action\ActionInterface;
 use ActiveCollab\Retro\UI\Common\AdornmentInterface;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Indicator\IconInterface;
+use ActiveCollab\Retro\UI\Indicator\Tooltip\TooltipInterface;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 
@@ -33,6 +34,7 @@ class Button implements ButtonInterface
         private ?ButtonStyle $style = null,
         private ?Size $size = null,
         private ?Width $width = null,
+        private ?TooltipInterface $tooltip = null,
     )
     {
     }
@@ -80,6 +82,11 @@ class Button implements ButtonInterface
     public function getWidth(): ?Width
     {
         return $this->width;
+    }
+
+    public function getTooltip(): ?TooltipInterface
+    {
+        return $this->tooltip;
     }
 
     public function renderUsingRenderer(

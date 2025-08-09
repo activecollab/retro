@@ -17,6 +17,7 @@ use ActiveCollab\Retro\UI\Dropdown\DropdownInterface;
 use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuElementInterface;
 use ActiveCollab\Retro\UI\Dropdown\Menu\MenuInterface;
 use ActiveCollab\Retro\UI\Indicator\IconInterface;
+use ActiveCollab\Retro\UI\Indicator\Tooltip\TooltipInterface;
 use ActiveCollab\Retro\UI\Navigation\Tab\TabGroupInterface;
 use ActiveCollab\Retro\UI\Navigation\Tab\TabInterface;
 
@@ -24,6 +25,11 @@ interface RendererInterface
 {
     public function renderPreRenderedContent(
         PreRenderedElementInterface $preRenderedElement,
+        RenderingExtensionInterface ...$extensions,
+    ): string;
+
+    public function renderTooltip(
+        TooltipInterface $tooltip,
         RenderingExtensionInterface ...$extensions,
     ): string;
 
@@ -41,6 +47,7 @@ interface RendererInterface
         MenuInterface $menu,
         RenderingExtensionInterface ...$extensions,
     ): string;
+
     public function renderMenuItem(
         MenuElementInterface $menuElement,
         RenderingExtensionInterface ...$extensions,
