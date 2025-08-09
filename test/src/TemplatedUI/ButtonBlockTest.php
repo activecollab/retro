@@ -18,7 +18,7 @@ use ActiveCollab\Retro\Test\Base\TestCase;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\Shoelace\ShoelaceRenderer;
 
-class ButtonTest extends TestCase
+class ButtonBlockTest extends TestCase
 {
     private RendererInterface $renderer;
 
@@ -82,5 +82,16 @@ class ButtonTest extends TestCase
             [ButtonStyle::CIRCLE, ButtonStyle::CIRCLE->toAttributeName()],
             [ButtonStyle::LOADING, ButtonStyle::LOADING->toAttributeName()],
         ];
+    }
+
+    public function testWillRenderButtonWithTooltip(): void
+    {
+        $this->assertSame(
+            '<sl-tooltip><div slot="content">Hello there!<sl-button type="button" variant="primary">Save</sl-button></div></sl-tooltip>',
+            (new ButtonBlock($this->renderer))->render(
+                'Save',
+                tooltip: 'Hello there!'
+            ),
+        );
     }
 }
