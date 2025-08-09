@@ -18,6 +18,7 @@ use ActiveCollab\Retro\UI\Action\ActionInterface;
 use ActiveCollab\Retro\UI\Action\GoToPage;
 use ActiveCollab\Retro\UI\Button\Button;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
+use ActiveCollab\Retro\UI\Indicator\Tooltip\Tooltip;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\TemplatedUI\MethodInvoker\CatchAllParameters\CatchAllParametersInterface;
 use ActiveCollab\TemplatedUI\WrapContentBlock\WrapContentBlock;
@@ -38,6 +39,7 @@ class ButtonBlock extends WrapContentBlock implements ButtonBlockInterface
         ?ButtonStyle $style = null,
         ?Size $size = null,
         ?Width $width = null,
+        ?string $tooltip = null,
         ?CatchAllParametersInterface $catchAllParameters = null,
     ): string
     {
@@ -51,6 +53,7 @@ class ButtonBlock extends WrapContentBlock implements ButtonBlockInterface
             style: $style,
             size: $size,
             width: $width,
+            tooltip: $tooltip ? new Tooltip($tooltip) : null,
         ))->renderUsingRenderer($this->renderer);
     }
 

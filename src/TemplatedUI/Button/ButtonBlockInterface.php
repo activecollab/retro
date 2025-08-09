@@ -26,6 +26,7 @@ interface ButtonBlockInterface
         ?ButtonStyle $style = null,
         ?Size $size = null,
         ?Width $width = null,
+        ?string $tooltip = null,
         ?CatchAllParametersInterface $catchAllParameters = null,
     ): string;
 }
