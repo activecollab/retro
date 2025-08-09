@@ -87,7 +87,7 @@ class ButtonBlockTest extends TestCase
     public function testWillRenderButtonWithTooltip(): void
     {
         $this->assertSame(
-            '<sl-tooltip><div slot="content">Hello there!<sl-button type="button" variant="primary">Save</sl-button></div></sl-tooltip>',
+            '<sl-tooltip><div slot="content">Hello there!</div><sl-button type="button" variant="primary">Save</sl-button></sl-tooltip>',
             (new ButtonBlock($this->renderer))->render(
                 'Save',
                 tooltip: 'Hello there!'
