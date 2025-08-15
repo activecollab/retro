@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\TemplatedUI\Indicator;
 
 use ActiveCollab\Retro\UI\Common\Variant;
+use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
 use ActiveCollab\Retro\UI\Indicator\Icon;
 use ActiveCollab\Retro\UI\Indicator\InfoBox;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
@@ -31,7 +32,7 @@ class InfoBoxBlock extends WrapContentBlock
     ): string
     {
         return (new InfoBox(
-            $content,
+            new PreRenderedElement($content),
             $variant,
             $iconName ? new Icon($iconName) : null,
         ))->renderUsingRenderer($this->renderer);
