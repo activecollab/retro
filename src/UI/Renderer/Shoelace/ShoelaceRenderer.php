@@ -26,6 +26,7 @@ use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuElementInterface;
 use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuItem\MenuItem;
 use ActiveCollab\Retro\UI\Dropdown\Menu\MenuInterface;
 use ActiveCollab\Retro\UI\Indicator\IconInterface;
+use ActiveCollab\Retro\UI\Indicator\InfoBoxInterface;
 use ActiveCollab\Retro\UI\Indicator\Tooltip\Tooltip;
 use ActiveCollab\Retro\UI\Indicator\Tooltip\TooltipInterface;
 use ActiveCollab\Retro\UI\Navigation\Tab\TabGroupInterface;
@@ -174,6 +175,39 @@ class ShoelaceRenderer implements RendererInterface
             ),
             $badge,
         );
+    }
+
+    public function renderInfoBox(
+        InfoBoxInterface $infoBox,
+        RenderingExtensionInterface ...$extensions,
+    ): string
+    {
+        $attributes = $this->extendAttributes(
+            [
+                'variant' => $infoBox->getVariant()->value,
+                'open' => true,
+            ],
+            ...$extensions,
+        );
+
+        return sprintf(
+            '%s%s%s%s',
+            $this->openHtmlTag('sl-alert', $attributes),
+            $this->renderInfoBoxIcon($infoBox),
+            $infoBox->getContent() instanceof PreRenderedElementInterface
+                ? $infoBox->getContent()->getPreRenderedContent()
+                : $this->sanitizeForHtml($infoBox->getContent()),
+            $this->closeHtmlTag('sl-alert'),
+        );
+    }
+
+    private function renderInfoBoxIcon(InfoBoxInterface $infoBox): string
+    {
+        if (empty($infoBox->getIcon())) {
+            return '';
+        }
+
+        return $this->renderIcon($infoBox->getIcon(), new Slot('icon'));
     }
 
     public function renderDropdown(
