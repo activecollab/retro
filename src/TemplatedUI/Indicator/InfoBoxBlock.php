@@ -27,7 +27,7 @@ class InfoBoxBlock extends WrapContentBlock
 
     public function render(
         string $content,
-        Variant|string $variant = Variant::PRIMARY,
+        Variant $variant = Variant::PRIMARY,
         ?string $iconName = null,
     ): string
     {
