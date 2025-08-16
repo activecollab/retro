@@ -163,6 +163,7 @@ class ShoelaceRenderer implements RendererInterface
         $attributes = $this->extendAttributes(
             [
                 'pill' => $badge->isRounded(),
+                'variant' => $badge->getVariant()->value,
             ],
             null,
             ...$extensions,
@@ -192,14 +193,17 @@ class ShoelaceRenderer implements RendererInterface
             ...$extensions,
         );
 
-        return sprintf(
-            '%s%s%s%s',
-            $this->openHtmlTag('sl-alert', $attributes),
-            $this->renderInfoBoxIcon($infoBox),
-            $infoBox->getContent() instanceof PreRenderedElementInterface
-                ? $infoBox->getContent()->getPreRenderedContent()
-                : $this->sanitizeForHtml($infoBox->getContent()),
-            $this->closeHtmlTag('sl-alert'),
+        return $this->wrapOutput(
+            sprintf(
+                '%s%s%s%s',
+                $this->openHtmlTag('sl-alert', $attributes),
+                $this->renderInfoBoxIcon($infoBox),
+                $infoBox->getContent() instanceof PreRenderedElementInterface
+                    ? $infoBox->getContent()->getPreRenderedContent()
+                    : $this->sanitizeForHtml($infoBox->getContent()),
+                $this->closeHtmlTag('sl-alert'),
+            ),
+            $infoBox,
         );
     }
 

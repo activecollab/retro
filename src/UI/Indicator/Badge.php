@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Indicator;
 
+use ActiveCollab\Retro\UI\Common\Variant;
 use ActiveCollab\Retro\UI\Indicator\Tooltip\TooltipInterface;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
@@ -18,6 +19,7 @@ class Badge implements BadgeInterface
 {
     public function __construct(
         private string $value,
+        private Variant $variant = Variant::PRIMARY,
         private bool $rounded = false,
         private ?TooltipInterface $tooltip = null,
     )
@@ -27,6 +29,11 @@ class Badge implements BadgeInterface
     public function getValue(): string
     {
         return $this->value;
+    }
+
+    public function getVariant(): Variant
+    {
+        return $this->variant;
     }
 
     public function isRounded(): bool
