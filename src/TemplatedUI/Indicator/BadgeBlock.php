@@ -24,8 +24,9 @@ class BadgeBlock extends WrapContentBlock
 
     public function render(
         string $content,
+        bool $rounded = false,
     ): string
     {
-        return (new Badge($content))->renderUsingRenderer($this->renderer);
+        return (new Badge($content, $rounded))->renderUsingRenderer($this->renderer);
     }
 }

@@ -160,11 +160,13 @@ class ShoelaceRenderer implements RendererInterface
         RenderingExtensionInterface ...$extensions,
     ): string
     {
-        $attributes = [];
-
-        foreach ($extensions as $extension) {
-            $attributes = $extension->extendAttributes($attributes);
-        }
+        $attributes = $this->extendAttributes(
+            [
+                'pill' => $badge->isRounded(),
+            ],
+            null,
+            ...$extensions,
+        );
 
         return $this->wrapOutput(
             sprintf(

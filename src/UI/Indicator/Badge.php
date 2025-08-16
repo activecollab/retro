@@ -18,6 +18,7 @@ class Badge implements BadgeInterface
 {
     public function __construct(
         private string $value,
+        private bool $rounded = false,
         private ?TooltipInterface $tooltip = null,
     )
     {
@@ -26,6 +27,11 @@ class Badge implements BadgeInterface
     public function getValue(): string
     {
         return $this->value;
+    }
+
+    public function isRounded(): bool
+    {
+        return $this->rounded;
     }
 
     public function getTooltip(): ?TooltipInterface

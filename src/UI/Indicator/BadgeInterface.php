@@ -17,4 +17,5 @@ use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
 interface BadgeInterface extends RenderableElementInterface, AdornmentInterface, WithTooltipInterface
 {
     public function getValue(): string;
+    public function isRounded(): bool;
 }
