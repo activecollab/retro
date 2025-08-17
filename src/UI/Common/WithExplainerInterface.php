@@ -12,5 +12,6 @@ namespace ActiveCollab\Retro\UI\Common;
 
 interface WithExplainerInterface
 {
+    public function explainer(?string $explainer): static;
     public function getExplainer(): ?string;
 }

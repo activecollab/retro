@@ -14,6 +14,13 @@ trait WithExplainerTrait
 {
     private ?string $explainer = null;
 
+    public function explainer(?string $explainer): static
+    {
+        $this->explainer = $explainer;
+
+        return $this;
+    }
+
     public function getExplainer(): ?string
     {
         return $this->explainer;

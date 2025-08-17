@@ -12,5 +12,6 @@ namespace ActiveCollab\Retro\UI\Common;
 
 interface WithLabelInterface
 {
+    public function label(string $label): static;
     public function getLabel(): string;
 }
