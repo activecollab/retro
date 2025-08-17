@@ -54,7 +54,6 @@ class RadioGroupTest extends TestCase
                 'Radio Group Label',
                 54321,
                 null,
-                null,
                 new Radio('Option 1', 12345, true),
                 new Radio('Option 2', 54321),
             ),
@@ -62,5 +61,7 @@ class RadioGroupTest extends TestCase
 
         $this->assertStringContainsString('<sl-radio value="12345" disabled>', $renderedRadioGroup);
         $this->assertStringContainsString('<sl-radio value="54321">', $renderedRadioGroup);
+        $this->assertStringContainsString('Option 1', $renderedRadioGroup);
+        $this->assertStringContainsString('Option 2', $renderedRadioGroup);
     }
 }

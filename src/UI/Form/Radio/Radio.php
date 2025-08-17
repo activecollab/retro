@@ -10,22 +10,21 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Form\Radio;
 
+use ActiveCollab\Retro\UI\Common\Trait\WithLabelTrait;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 
 class Radio implements RadioInterface
 {
+    use WithLabelTrait;
+
     public function __construct(
-        private string $label,
+        string $label,
         private mixed $value,
         private bool $disabled = false,
     )
     {
-    }
-
-    public function getLabel(): string
-    {
-        return $this->label;
+        $this->label = $label;
     }
 
     public function getValue(): mixed

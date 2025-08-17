@@ -11,33 +11,33 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\UI\Form\Radio;
 
 use ActiveCollab\Retro\UI\Common\Size;
+use ActiveCollab\Retro\UI\Common\Trait\WithExplainerTrait;
+use ActiveCollab\Retro\UI\Common\Trait\WithLabelTrait;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 
 class RadioGroup implements RadioGroupInterface
 {
+    use WithLabelTrait;
+    use WithExplainerTrait;
+
     private array $options = [];
 
     public function __construct(
         private string $name,
-        private string $label,
+        string $label,
         private mixed $value,
         private ?Size $size = null,
-        private ?string $explainer = null,
         RadioInterface ...$options,
     )
     {
+        $this->label = $label;
         $this->options = $options;
     }
 
     public function getName(): string
     {
         return $this->name;
-    }
-
-    public function getLabel(): string
-    {
-        return $this->label;
     }
 
     public function getValue(): mixed
@@ -48,11 +48,6 @@ class RadioGroup implements RadioGroupInterface
     public function getSize(): ?Size
     {
         return $this->size;
-    }
-
-    public function getExplainer(): ?string
-    {
-        return $this->explainer;
     }
 
     public function getOptions(): array

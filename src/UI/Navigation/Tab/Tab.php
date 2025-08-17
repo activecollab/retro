@@ -10,22 +10,21 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Navigation\Tab;
 
+use ActiveCollab\Retro\UI\Common\Trait\WithLabelTrait;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 
 class Tab implements TabInterface
 {
+    use WithLabelTrait;
+
     public function __construct(
-        private string $label,
+        string $label,
         private string $content,
         private ?string $name = null,
     )
     {
-    }
-
-    public function getLabel(): string
-    {
-        return $this->label;
+        $this->label = $label;
     }
 
     public function getContent(): string
