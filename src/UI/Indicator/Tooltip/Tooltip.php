@@ -13,6 +13,7 @@ namespace ActiveCollab\Retro\UI\Indicator\Tooltip;
 use ActiveCollab\Retro\UI\Common\WithTooltipInterface;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
+use LogicException;
 
 class Tooltip implements TooltipInterface
 {
@@ -24,7 +25,7 @@ class Tooltip implements TooltipInterface
     )
     {
         if ($wrapAround instanceof WithTooltipInterface && $wrapAround->getTooltip()) {
-            throw new \LogicException('Element already has a tooltip.');
+            throw new LogicException('Element already has a tooltip.');
         }
 
         $this->wrapAround = $wrapAround;
