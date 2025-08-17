@@ -12,7 +12,7 @@ namespace ActiveCollab\Retro\UI\Button;
 
 use ActiveCollab\Retro\TemplatedUI\Property\ButtonStyle;
 use ActiveCollab\Retro\TemplatedUI\Property\ButtonVariant;
-use ActiveCollab\Retro\TemplatedUI\Property\Size;
+use ActiveCollab\Retro\UI\Common\Size;
 use ActiveCollab\Retro\TemplatedUI\Property\Width;
 use ActiveCollab\Retro\UI\Action\ActionInterface;
 use ActiveCollab\Retro\UI\Common\AdornmentInterface;

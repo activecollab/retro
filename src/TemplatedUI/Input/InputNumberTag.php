@@ -12,7 +12,7 @@ namespace ActiveCollab\Retro\TemplatedUI\Input;
 
 use ActiveCollab\Retro\FormData\FormDataInterface;
 use ActiveCollab\Retro\TemplatedUI\Input\Type\InputType;
-use ActiveCollab\Retro\TemplatedUI\Property\Size;
+use ActiveCollab\Retro\UI\Common\Size;
 use ActiveCollab\TemplatedUI\MethodInvoker\CatchAllParameters\CatchAllParametersInterface;
 
 class InputNumberTag extends InputTag

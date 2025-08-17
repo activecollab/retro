@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\TemplatedUI\Radio;
 
-use ActiveCollab\Retro\TemplatedUI\Property\Size;
+use ActiveCollab\Retro\UI\Common\Size;
 use ActiveCollab\TemplatedUI\Tag\Tag;
 
 class RadioTag extends Tag
@@ -28,7 +28,7 @@ class RadioTag extends Tag
         ];
 
         if ($size) {
-            $attributes['size'] = $size->toAttributeValue();
+            $attributes['size'] = $size->value;
         }
 
         return sprintf(

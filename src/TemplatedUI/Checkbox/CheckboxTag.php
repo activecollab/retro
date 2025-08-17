@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\TemplatedUI\Checkbox;
 
 use ActiveCollab\Retro\FormData\FormDataInterface;
-use ActiveCollab\Retro\TemplatedUI\Property\Size;
+use ActiveCollab\Retro\UI\Common\Size;
 use ActiveCollab\TemplatedUI\Tag\Tag;
 
 class CheckboxTag extends Tag
@@ -41,7 +41,7 @@ class CheckboxTag extends Tag
         }
 
         if ($size) {
-            $attributes['size'] = $size->toAttributeValue();
+            $attributes['size'] = $size->value;
         }
 
         return sprintf(

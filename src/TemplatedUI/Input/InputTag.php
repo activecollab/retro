@@ -13,7 +13,7 @@ namespace ActiveCollab\Retro\TemplatedUI\Input;
 use ActiveCollab\Retro\FormData\FormDataInterface;
 use ActiveCollab\Retro\TemplatedUI\Form\FormField\FormFieldTag;
 use ActiveCollab\Retro\TemplatedUI\Input\Type\InputTypeInterface;
-use ActiveCollab\Retro\TemplatedUI\Property\Size;
+use ActiveCollab\Retro\UI\Common\Size;
 use ActiveCollab\TemplatedUI\MethodInvoker\CatchAllParameters\CatchAllParametersInterface;
 
 abstract class InputTag extends FormFieldTag

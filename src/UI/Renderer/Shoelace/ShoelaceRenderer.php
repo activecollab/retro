@@ -93,7 +93,7 @@ class ShoelaceRenderer implements RendererInterface
         ];
 
         if ($button->getSize()) {
-            $attributes['size'] = $button->getSize()->toAttributeValue();
+            $attributes['size'] = $button->getSize()->value;
         }
 
         if ($button->getStyle()) {

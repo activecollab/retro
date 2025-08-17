@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\TemplatedUI\Radio;
 
 use ActiveCollab\Retro\FormData\FormDataInterface;
-use ActiveCollab\Retro\TemplatedUI\Property\Size;
+use ActiveCollab\Retro\UI\Common\Size;
 use ActiveCollab\TemplatedUI\WrapContentBlock\WrapContentBlock;
 
 class RadioGroupBlock extends WrapContentBlock
@@ -44,7 +44,7 @@ class RadioGroupBlock extends WrapContentBlock
         }
 
         if ($size) {
-            $attributes['size'] = $size->toAttributeValue();
+            $attributes['size'] = $size->value;
         }
 
         return sprintf(

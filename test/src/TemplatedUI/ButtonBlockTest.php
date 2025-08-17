@@ -13,7 +13,7 @@ namespace ActiveCollab\Retro\Test\TemplatedUI;
 use ActiveCollab\Retro\TemplatedUI\Button\ButtonBlock;
 use ActiveCollab\Retro\TemplatedUI\ComponentIdResolver\ComponentIdResolverInterface;
 use ActiveCollab\Retro\TemplatedUI\Property\ButtonStyle;
-use ActiveCollab\Retro\TemplatedUI\Property\Size;
+use ActiveCollab\Retro\UI\Common\Size;
 use ActiveCollab\Retro\Test\Base\TestCase;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\Shoelace\ShoelaceRenderer;
