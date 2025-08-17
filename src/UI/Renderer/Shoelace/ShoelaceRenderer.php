@@ -17,6 +17,7 @@ use ActiveCollab\Retro\UI\Common\WithTooltipInterface;
 use ActiveCollab\Retro\UI\Element\ElementInterface;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
+use ActiveCollab\Retro\UI\Form\Radio\RadioGroupInterface;
 use ActiveCollab\Retro\UI\Indicator\BadgeInterface;
 use ActiveCollab\Retro\UI\Button\ButtonInterface;
 use ActiveCollab\Retro\UI\Dropdown\DropdownInterface;
@@ -381,6 +382,38 @@ class ShoelaceRenderer implements RendererInterface
                 $this->closeHtmlTag('sl-tab-panel'),
             ),
             $tab,
+        );
+    }
+
+    public function renderRadioGroup(
+        RadioGroupInterface $radioGroup,
+        RenderingExtensionInterface ...$extensions,
+    ): string
+    {
+        $attributes = [
+            'name' => $radioGroup->getName(),
+            'label' => $radioGroup->getLabel(),
+            'value' => $radioGroup->getValue(),
+        ];
+
+        if ($radioGroup->getSize()) {
+            $attributes['size'] = $radioGroup->getSize()->value;
+        }
+
+        return $this->wrapOutput(
+            sprintf(
+                '%s%s',
+                $this->openHtmlTag(
+                    'sl-radio-group',
+                    $this->extendAttributes(
+                        $attributes,
+                        null,
+                        ...$extensions,
+                    ),
+                ),
+                $this->closeHtmlTag('sl-radio-group'),
+            ),
+            $radioGroup,
         );
     }
 

@@ -10,12 +10,17 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Form\Radio;
 
-class RadioGroup
+use ActiveCollab\Retro\UI\Common\Size;
+use ActiveCollab\Retro\UI\Renderer\RendererInterface;
+use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
+
+class RadioGroup implements RadioGroupInterface
 {
     public function __construct(
         private string $name,
         private string $label,
         private mixed $value,
+        private ?Size $size = null,
     )
     {
     }
@@ -33,5 +38,18 @@ class RadioGroup
     public function getValue(): mixed
     {
         return $this->value;
+    }
+
+    public function getSize(): ?Size
+    {
+        return $this->size;
+    }
+
+    public function renderUsingRenderer(
+        RendererInterface $renderer,
+        RenderingExtensionInterface ...$extensions,
+    ): string
+    {
+        return $renderer->renderButton($this, ...$extensions);
     }
 }
