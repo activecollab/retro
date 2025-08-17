@@ -12,6 +12,7 @@ namespace ActiveCollab\Retro\Test\UI\Shoelace;
 
 use ActiveCollab\Retro\TemplatedUI\ComponentIdResolver\ComponentIdResolverInterface;
 use ActiveCollab\Retro\Test\Base\TestCase;
+use ActiveCollab\Retro\UI\Form\Radio\Radio;
 use ActiveCollab\Retro\UI\Form\Radio\RadioGroup;
 use ActiveCollab\Retro\UI\Renderer\Shoelace\ShoelaceRenderer;
 
@@ -43,5 +44,23 @@ class RadioGroupTest extends TestCase
         $this->assertStringContainsString('radio-group-name', $renderedRadioGroup);
         $this->assertStringContainsString('Radio Group Label', $renderedRadioGroup);
         $this->assertStringContainsString('54321', $renderedRadioGroup);
+    }
+
+    public function testWillRenderRadios(): void
+    {
+        $renderedRadioGroup = $this->renderer->renderRadioGroup(
+            new RadioGroup(
+                'radio-group-name',
+                'Radio Group Label',
+                54321,
+                null,
+                null,
+                new Radio('Option 1', 12345, true),
+                new Radio('Option 2', 54321),
+            ),
+        );
+
+        $this->assertStringContainsString('<sl-radio value="12345" disabled>', $renderedRadioGroup);
+        $this->assertStringContainsString('<sl-radio value="54321">', $renderedRadioGroup);
     }
 }

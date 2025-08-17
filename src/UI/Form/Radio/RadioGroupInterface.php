@@ -20,4 +20,9 @@ interface RadioGroupInterface extends RenderableElementInterface, WithNameInterf
 {
     public function getValue(): mixed;
     public function getSize(): ?Size;
+
+    /**
+     * @return RadioInterface[]
+     */
+    public function getOptions(): array;
 }

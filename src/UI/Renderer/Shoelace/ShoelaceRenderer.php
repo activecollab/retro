@@ -18,6 +18,7 @@ use ActiveCollab\Retro\UI\Element\ElementInterface;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Form\Radio\RadioGroupInterface;
+use ActiveCollab\Retro\UI\Form\Radio\RadioInterface;
 use ActiveCollab\Retro\UI\Indicator\BadgeInterface;
 use ActiveCollab\Retro\UI\Button\ButtonInterface;
 use ActiveCollab\Retro\UI\Dropdown\DropdownInterface;
@@ -406,7 +407,7 @@ class ShoelaceRenderer implements RendererInterface
 
         return $this->wrapOutput(
             sprintf(
-                '%s%s',
+                '%s%s%s',
                 $this->openHtmlTag(
                     'sl-radio-group',
                     $this->extendAttributes(
@@ -415,9 +416,42 @@ class ShoelaceRenderer implements RendererInterface
                         ...$extensions,
                     ),
                 ),
+                implode(
+                    '',
+                    array_map(
+                        fn (RadioInterface $radio): string => $radio->renderUsingRenderer($this),
+                        $radioGroup->getOptions(),
+                    ),
+                ),
                 $this->closeHtmlTag('sl-radio-group'),
             ),
             $radioGroup,
+        );
+    }
+
+    public function renderRadio(
+        RadioInterface $radio,
+        RenderingExtensionInterface ...$extensions,
+    ): string
+    {
+        return $this->wrapOutput(
+            sprintf(
+                '%s%s%s',
+                $this->openHtmlTag(
+                    'sl-radio',
+                    $this->extendAttributes(
+                        [
+                            'value' => $radio->getValue(),
+                            'disabled' => $radio->isDisabled(),
+                        ],
+                        null,
+                        ...$extensions,
+                    )
+                ),
+                $this->sanitizeForHtml($radio->getLabel()),
+                $this->closeHtmlTag('sl-radio'),
+            ),
+            $radio,
         );
     }
 

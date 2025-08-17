@@ -10,29 +10,17 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Form\Radio;
 
-use ActiveCollab\Retro\UI\Common\Size;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 
-class RadioGroup implements RadioGroupInterface
+class Radio implements RadioInterface
 {
-    private array $options = [];
-
     public function __construct(
-        private string $name,
         private string $label,
         private mixed $value,
-        private ?Size $size = null,
-        private ?string $explainer = null,
-        RadioInterface ...$options,
+        private bool $disabled = false,
     )
     {
-        $this->options = $options;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     public function getLabel(): string
@@ -45,19 +33,9 @@ class RadioGroup implements RadioGroupInterface
         return $this->value;
     }
 
-    public function getSize(): ?Size
+    public function isDisabled(): bool
     {
-        return $this->size;
-    }
-
-    public function getExplainer(): ?string
-    {
-        return $this->explainer;
-    }
-
-    public function getOptions(): array
-    {
-        return $this->options;
+        return $this->disabled;
     }
 
     public function renderUsingRenderer(
@@ -65,6 +43,6 @@ class RadioGroup implements RadioGroupInterface
         RenderingExtensionInterface ...$extensions,
     ): string
     {
-        return $renderer->renderRadioGroup($this, ...$extensions);
+        return $renderer->renderRadio($this, ...$extensions);
     }
 }
