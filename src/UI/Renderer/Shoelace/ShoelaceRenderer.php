@@ -400,6 +400,10 @@ class ShoelaceRenderer implements RendererInterface
             $attributes['size'] = $radioGroup->getSize()->value;
         }
 
+        if ($radioGroup->getExplainer()) {
+            $attributes['help-text'] = $radioGroup->getExplainer();
+        }
+
         return $this->wrapOutput(
             sprintf(
                 '%s%s',

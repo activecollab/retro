@@ -21,6 +21,7 @@ class RadioGroup implements RadioGroupInterface
         private string $label,
         private mixed $value,
         private ?Size $size = null,
+        private ?string $explainer = null,
     )
     {
     }
@@ -45,11 +46,16 @@ class RadioGroup implements RadioGroupInterface
         return $this->size;
     }
 
+    public function getExplainer(): ?string
+    {
+        return $this->explainer;
+    }
+
     public function renderUsingRenderer(
         RendererInterface $renderer,
         RenderingExtensionInterface ...$extensions,
     ): string
     {
-        return $renderer->renderButton($this, ...$extensions);
+        return $renderer->renderRadioGroup($this, ...$extensions);
     }
 }
