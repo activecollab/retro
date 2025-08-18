@@ -13,6 +13,7 @@ namespace ActiveCollab\Retro\UI\Form\Radio;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithExplainerTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithRequiredLabelTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithRequiredNameTrait;
+use ActiveCollab\Retro\UI\Common\Property\Trait\WithSizeTrait;
 use ActiveCollab\Retro\UI\Common\Size;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
@@ -23,6 +24,7 @@ class RadioGroup implements RadioGroupInterface
 {
     use WithRequiredNameTrait;
     use WithRequiredLabelTrait;
+    use WithSizeTrait;
     use WithExplainerTrait;
 
     private ?PreRenderedElementInterface $preRenderedElement = null;
@@ -32,7 +34,6 @@ class RadioGroup implements RadioGroupInterface
         string $name,
         string $label,
         private mixed $value,
-        private ?Size $size = null,
         PreRenderedElementInterface|RadioInterface $firstRadioOrPreRenderedElement,
         RadioInterface ...$additionalOptions,
     )
@@ -61,11 +62,6 @@ class RadioGroup implements RadioGroupInterface
     public function getValue(): mixed
     {
         return $this->value;
-    }
-
-    public function getSize(): ?Size
-    {
-        return $this->size;
     }
 
     public function getOptions(): array
