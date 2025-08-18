@@ -36,6 +36,7 @@ use ActiveCollab\Retro\UI\Navigation\Tab\TabInterface;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 use ActiveCollab\Retro\UI\Renderer\Shoelace\Extension\Slot;
+use ActiveCollab\Retro\UI\Surface\Details\DetailsInterface;
 use ActiveCollab\TemplatedUI\Helper\HtmlHelpersTrait;
 use LogicException;
 
@@ -458,6 +459,34 @@ class ShoelaceRenderer implements RendererInterface
                 $this->closeHtmlTag('sl-radio'),
             ),
             $radio,
+        );
+    }
+
+    public function renderDetails(
+        DetailsInterface $details,
+        RenderingExtensionInterface ...$extensions,
+    ): string
+    {
+        return $this->wrapOutput(
+            sprintf(
+                '%s%s%s',
+                $this->openHtmlTag(
+                    'sl-details',
+                    $this->extendAttributes(
+                        [
+                            'summary' => $details->getLabel(),
+                            'open' => $details->isOpen(),
+                            'disabled' => (bool) $details->isDisabled(),
+                        ],
+                        ...$extensions,
+                    ),
+                ),
+                $details->getContent() instanceof PreRenderedElementInterface
+                   ? $details->getContent()->getPreRenderedContent()
+                   : $this->sanitizeForHtml($details->getContent()),
+                $this->closeHtmlTag('sl-details'),
+            ),
+            $details,
         );
     }
 

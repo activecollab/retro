@@ -23,6 +23,7 @@ use ActiveCollab\Retro\UI\Indicator\InfoBoxInterface;
 use ActiveCollab\Retro\UI\Indicator\Tooltip\TooltipInterface;
 use ActiveCollab\Retro\UI\Navigation\Tab\TabGroupInterface;
 use ActiveCollab\Retro\UI\Navigation\Tab\TabInterface;
+use ActiveCollab\Retro\UI\Surface\Details\DetailsInterface;
 
 interface RendererInterface
 {
@@ -77,17 +78,22 @@ interface RendererInterface
     ): string;
 
     public function renderTab(
-        TabInterface                $tab,
+        TabInterface $tab,
         RenderingExtensionInterface ...$extensions,
     ): string;
 
     public function renderRadioGroup(
-        RadioGroupInterface         $radioGroup,
+        RadioGroupInterface $radioGroup,
         RenderingExtensionInterface ...$extensions,
     ): string;
 
     public function renderRadio(
-        RadioInterface              $radio,
+        RadioInterface $radio,
+        RenderingExtensionInterface ...$extensions,
+    ): string;
+
+    public function renderDetails(
+        DetailsInterface $details,
         RenderingExtensionInterface ...$extensions,
     ): string;
 }
