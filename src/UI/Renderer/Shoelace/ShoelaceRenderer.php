@@ -469,7 +469,7 @@ class ShoelaceRenderer implements RendererInterface
     {
         return $this->wrapOutput(
             sprintf(
-                '%s%s%s',
+                '%s%s%s%s%s',
                 $this->openHtmlTag(
                     'sl-details',
                     $this->extendAttributes(
@@ -481,6 +481,12 @@ class ShoelaceRenderer implements RendererInterface
                         ...$extensions,
                     ),
                 ),
+                $details->getExpandIcon()
+                    ? $this->renderIcon($details->getExpandIcon(), new Slot('expand-icon'))
+                    : '',
+                $details->getCollapseIcon()
+                    ? $this->renderIcon($details->getCollapseIcon(), new Slot('collapse-icon'))
+                    : '',
                 $details->getContent() instanceof PreRenderedElementInterface
                    ? $details->getContent()->getPreRenderedContent()
                    : $this->sanitizeForHtml($details->getContent()),

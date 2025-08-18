@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\TemplatedUI\Surface;
 
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
+use ActiveCollab\Retro\UI\Indicator\Icon;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Surface\Details\Details;
 use ActiveCollab\TemplatedUI\WrapContentBlock\WrapContentBlock;
@@ -28,14 +29,19 @@ class DetailsBlock extends WrapContentBlock
         string $content,
         bool $open = false,
         ?bool $disabled = null,
+        ?string $expandIcon = null,
+        ?string $collapseIcon = null,
     ): string
     {
         return $this->renderer->renderDetails(
-            new Details(
+            (new Details(
                 $label,
                 new PreRenderedElement($content),
                 $open,
                 $disabled,
+            ))->icon(
+                $expandIcon ? new Icon($expandIcon) : null,
+                $collapseIcon ? new Icon($collapseIcon) : null,
             ),
         );
     }
