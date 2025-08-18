@@ -442,7 +442,7 @@ class ShoelaceRenderer implements RendererInterface
                     $this->extendAttributes(
                         [
                             'value' => $radio->getValue(),
-                            'disabled' => $radio->isDisabled(),
+                            'disabled' => (bool) $radio->isDisabled(),
                         ],
                         null,
                         ...$extensions,

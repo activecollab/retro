@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Form\Radio;
 
+use ActiveCollab\Retro\UI\Common\Property\Trait\WithDisabledTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithRequiredLabelTrait;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
@@ -17,24 +18,21 @@ use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 class Radio implements RadioInterface
 {
     use WithRequiredLabelTrait;
+    use WithDisabledTrait;
 
     public function __construct(
         string $label,
         private mixed $value,
-        private bool $disabled = false,
+        ?bool $disabled = null,
     )
     {
         $this->label = $label;
+        $this->disabled = $disabled;
     }
 
     public function getValue(): mixed
     {
         return $this->value;
-    }
-
-    public function isDisabled(): bool
-    {
-        return $this->disabled;
     }
 
     public function renderUsingRenderer(
