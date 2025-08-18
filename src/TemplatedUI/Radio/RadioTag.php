@@ -10,32 +10,30 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\TemplatedUI\Radio;
 
-use ActiveCollab\Retro\UI\Common\Size;
+use ActiveCollab\Retro\UI\Form\Radio\Radio;
+use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\TemplatedUI\Tag\Tag;
 
 class RadioTag extends Tag
 {
+    public function __construct(
+        private RendererInterface $renderer,
+    )
+    {
+    }
+
     public function render(
         string $label,
         mixed $value,
         bool $disabled = false,
-        ?Size $size = null,
     ): string
     {
-        $attributes = [
-            'value' => $value,
-            'disabled' => $disabled,
-        ];
-
-        if ($size) {
-            $attributes['size'] = $size->value;
-        }
-
-        return sprintf(
-            '%s%s%s',
-            $this->openHtmlTag('sl-radio', $attributes),
-            $this->sanitizeForHtml($label),
-            $this->closeHtmlTag('sl-radio'),
+        return $this->renderer->renderRadio(
+            new Radio(
+                $label,
+                $value,
+                $disabled,
+            ),
         );
     }
 }
