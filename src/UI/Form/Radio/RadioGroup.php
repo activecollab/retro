@@ -64,6 +64,11 @@ class RadioGroup implements RadioGroupInterface
         return $this->value;
     }
 
+    public function getPreRenderedElement(): ?PreRenderedElementInterface
+    {
+        return $this->preRenderedElement;
+    }
+
     public function getOptions(): array
     {
         return $this->options;

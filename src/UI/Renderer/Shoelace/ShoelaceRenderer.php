@@ -336,20 +336,17 @@ class ShoelaceRenderer implements RendererInterface
             return $tabGroup->getPreRenderedElement()->renderUsingRenderer($this);
         }
 
-        return $this->wrapOutput(
-            implode(
-                '',
-                array_map(
-                    fn (TabInterface $tab): string => $tab->renderUsingRenderer($this, new Slot('nav')),
-                    $tabGroup->getTabs(),
-                ),
+        return implode(
+            '',
+            array_map(
+                fn (TabInterface $tab): string => $tab->renderUsingRenderer($this, new Slot('nav')),
+                $tabGroup->getTabs(),
             ),
-            $tabGroup,
         );
     }
 
     public function renderTab(
-        TabInterface                $tab,
+        TabInterface $tab,
         RenderingExtensionInterface ...$extensions,
     ): string
     {
@@ -387,7 +384,7 @@ class ShoelaceRenderer implements RendererInterface
     }
 
     public function renderRadioGroup(
-        RadioGroupInterface         $radioGroup,
+        RadioGroupInterface $radioGroup,
         RenderingExtensionInterface ...$extensions,
     ): string
     {
@@ -416,16 +413,25 @@ class ShoelaceRenderer implements RendererInterface
                         ...$extensions,
                     ),
                 ),
-                implode(
-                    '',
-                    array_map(
-                        fn (RadioInterface $radio): string => $radio->renderUsingRenderer($this),
-                        $radioGroup->getOptions(),
-                    ),
-                ),
+                $this->renderRadioGroupContent($radioGroup),
                 $this->closeHtmlTag('sl-radio-group'),
             ),
             $radioGroup,
+        );
+    }
+
+    private function renderRadioGroupContent(RadioGroupInterface $radioGroup): string
+    {
+        if ($radioGroup->getPreRenderedElement()) {
+            return $radioGroup->getPreRenderedElement()->renderUsingRenderer($this);
+        }
+
+        return implode(
+            '',
+            array_map(
+                fn (RadioInterface $radio): string => $radio->renderUsingRenderer($this),
+                $radioGroup->getOptions(),
+            ),
         );
     }
 
