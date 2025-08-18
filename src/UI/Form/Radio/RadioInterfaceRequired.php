@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Form\Radio;
 
-use ActiveCollab\Retro\UI\Common\WithRequiredLabelInterface;
+use ActiveCollab\Retro\UI\Common\Property\WithRequiredLabelInterface;
 use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
 
 interface RadioInterfaceRequired extends RenderableElementInterface, WithRequiredLabelInterface

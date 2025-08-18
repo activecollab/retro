@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Navigation\Tab;
 
-use ActiveCollab\Retro\UI\Common\Trait\WithNameTrait;
-use ActiveCollab\Retro\UI\Common\Trait\WithRequiredLabelTrait;
+use ActiveCollab\Retro\UI\Common\Property\Trait\WithNameTrait;
+use ActiveCollab\Retro\UI\Common\Property\Trait\WithRequiredLabelTrait;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 

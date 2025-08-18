@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Form\Radio;
 
+use ActiveCollab\Retro\UI\Common\Property\WithExplainerInterface;
+use ActiveCollab\Retro\UI\Common\Property\WithRequiredLabelInterface;
+use ActiveCollab\Retro\UI\Common\Property\WithRequiredNameInterface;
 use ActiveCollab\Retro\UI\Common\Size;
-use ActiveCollab\Retro\UI\Common\WithExplainerInterface;
-use ActiveCollab\Retro\UI\Common\WithRequiredLabelInterface;
-use ActiveCollab\Retro\UI\Common\WithRequiredNameInterface;
 use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
 
 interface RadioGroupInterfaceRequiredRequired extends RenderableElementInterface, WithRequiredNameInterface, WithRequiredLabelInterface, WithExplainerInterface

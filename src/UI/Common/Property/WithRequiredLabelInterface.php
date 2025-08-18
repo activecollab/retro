@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace ActiveCollab\Retro\UI\Common;
+namespace ActiveCollab\Retro\UI\Common\Property;
 
 interface WithRequiredLabelInterface
 {

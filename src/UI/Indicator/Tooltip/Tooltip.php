@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Indicator\Tooltip;
 
-use ActiveCollab\Retro\UI\Common\WithTooltipInterface;
+use ActiveCollab\Retro\UI\Common\Property\WithTooltipInterface;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
 use LogicException;

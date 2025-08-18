@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Form\Radio;
 
+use ActiveCollab\Retro\UI\Common\Property\Trait\WithExplainerTrait;
+use ActiveCollab\Retro\UI\Common\Property\Trait\WithRequiredLabelTrait;
 use ActiveCollab\Retro\UI\Common\Size;
-use ActiveCollab\Retro\UI\Common\Trait\WithExplainerTrait;
-use ActiveCollab\Retro\UI\Common\Trait\WithRequiredLabelTrait;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 

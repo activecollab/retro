@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace ActiveCollab\Retro\UI\Common\Trait;
+namespace ActiveCollab\Retro\UI\Common\Property\Trait;
 
 trait WithNameTrait
 {
