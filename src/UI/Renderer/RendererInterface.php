@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\UI\Renderer;
 
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
-use ActiveCollab\Retro\UI\Form\Radio\RadioGroupInterfaceRequiredRequired;
+use ActiveCollab\Retro\UI\Form\Radio\RadioGroupInterface;
 use ActiveCollab\Retro\UI\Form\Radio\RadioInterfaceRequired;
 use ActiveCollab\Retro\UI\Indicator\BadgeInterface;
 use ActiveCollab\Retro\UI\Button\ButtonInterface;
@@ -82,7 +82,7 @@ interface RendererInterface
     ): string;
 
     public function renderRadioGroup(
-        RadioGroupInterfaceRequiredRequired $radioGroup,
+        RadioGroupInterface         $radioGroup,
         RenderingExtensionInterface ...$extensions,
     ): string;
 

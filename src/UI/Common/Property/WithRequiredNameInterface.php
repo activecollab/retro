@@ -12,5 +12,6 @@ namespace ActiveCollab\Retro\UI\Common\Property;
 
 interface WithRequiredNameInterface
 {
+    public function name(string $name): static;
     public function getName(): string;
 }

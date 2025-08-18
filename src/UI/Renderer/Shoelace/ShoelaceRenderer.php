@@ -24,7 +24,7 @@ use ActiveCollab\Retro\UI\Dropdown\Menu\MenuInterface;
 use ActiveCollab\Retro\UI\Element\ElementInterface;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
-use ActiveCollab\Retro\UI\Form\Radio\RadioGroupInterfaceRequiredRequired;
+use ActiveCollab\Retro\UI\Form\Radio\RadioGroupInterface;
 use ActiveCollab\Retro\UI\Form\Radio\RadioInterfaceRequired;
 use ActiveCollab\Retro\UI\Indicator\BadgeInterface;
 use ActiveCollab\Retro\UI\Indicator\IconInterface;
@@ -387,7 +387,7 @@ class ShoelaceRenderer implements RendererInterface
     }
 
     public function renderRadioGroup(
-        RadioGroupInterfaceRequiredRequired $radioGroup,
+        RadioGroupInterface         $radioGroup,
         RenderingExtensionInterface ...$extensions,
     ): string
     {

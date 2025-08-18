@@ -16,7 +16,7 @@ use ActiveCollab\Retro\UI\Common\Property\WithRequiredNameInterface;
 use ActiveCollab\Retro\UI\Common\Size;
 use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
 
-interface RadioGroupInterfaceRequiredRequired extends RenderableElementInterface, WithRequiredNameInterface, WithRequiredLabelInterface, WithExplainerInterface
+interface RadioGroupInterface extends RenderableElementInterface, WithRequiredNameInterface, WithRequiredLabelInterface, WithExplainerInterface
 {
     public function getValue(): mixed;
     public function getSize(): ?Size;

@@ -14,5 +14,6 @@ use ActiveCollab\Retro\UI\Indicator\Tooltip\TooltipInterface;
 
 interface WithTooltipInterface
 {
+    public function tooltip(?TooltipInterface $tooltip): static;
     public function getTooltip(): ?TooltipInterface;
 }

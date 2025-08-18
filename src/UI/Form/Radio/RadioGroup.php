@@ -12,32 +12,30 @@ namespace ActiveCollab\Retro\UI\Form\Radio;
 
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithExplainerTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithRequiredLabelTrait;
+use ActiveCollab\Retro\UI\Common\Property\Trait\WithRequiredNameTrait;
 use ActiveCollab\Retro\UI\Common\Size;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 
-class RadioGroup implements RadioGroupInterfaceRequiredRequired
+class RadioGroup implements RadioGroupInterface
 {
     use WithRequiredLabelTrait;
+    use WithRequiredNameTrait;
     use WithExplainerTrait;
 
     private array $options = [];
 
     public function __construct(
-        private string $name,
+        string $name,
         string $label,
         private mixed $value,
         private ?Size $size = null,
         RadioInterfaceRequired ...$options,
     )
     {
+        $this->name = $name;
         $this->label = $label;
         $this->options = $options;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     public function getValue(): mixed

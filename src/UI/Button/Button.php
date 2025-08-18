@@ -34,7 +34,7 @@ class Button implements ButtonInterface
         private ?ButtonStyle $style = null,
         private ?Size $size = null,
         private ?Width $width = null,
-        private ?TooltipInterface $tooltip = null,
+        ?TooltipInterface $tooltip = null,
     )
     {
     }
@@ -82,11 +82,6 @@ class Button implements ButtonInterface
     public function getWidth(): ?Width
     {
         return $this->width;
-    }
-
-    public function getTooltip(): ?TooltipInterface
-    {
-        return $this->tooltip;
     }
 
     public function renderUsingRenderer(
