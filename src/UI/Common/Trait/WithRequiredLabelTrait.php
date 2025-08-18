@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Common\Trait;
 
-trait WithLabelTrait
+trait WithRequiredLabelTrait
 {
     private string $label;
 

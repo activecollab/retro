@@ -12,17 +12,17 @@ namespace ActiveCollab\Retro\UI\Form\Radio;
 
 use ActiveCollab\Retro\UI\Common\Size;
 use ActiveCollab\Retro\UI\Common\WithExplainerInterface;
-use ActiveCollab\Retro\UI\Common\WithLabelInterface;
-use ActiveCollab\Retro\UI\Common\WithNameInterface;
+use ActiveCollab\Retro\UI\Common\WithRequiredLabelInterface;
+use ActiveCollab\Retro\UI\Common\WithRequiredNameInterface;
 use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
 
-interface RadioGroupInterface extends RenderableElementInterface, WithNameInterface, WithLabelInterface, WithExplainerInterface
+interface RadioGroupInterfaceRequiredRequired extends RenderableElementInterface, WithRequiredNameInterface, WithRequiredLabelInterface, WithExplainerInterface
 {
     public function getValue(): mixed;
     public function getSize(): ?Size;
 
     /**
-     * @return RadioInterface[]
+     * @return RadioInterfaceRequired[]
      */
     public function getOptions(): array;
 }

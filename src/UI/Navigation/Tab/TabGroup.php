@@ -21,8 +21,8 @@ class TabGroup implements TabGroupInterface
     private array $tabs = [];
 
     public function __construct(
-        PreRenderedElementInterface|TabInterface $firstTabOrPreRenderedElement,
-        TabInterface ...$additionalTabs,
+        PreRenderedElementInterface|TabInterfaceRequired $firstTabOrPreRenderedElement,
+        TabInterfaceRequired ...$additionalTabs,
     )
     {
         if ($firstTabOrPreRenderedElement instanceof PreRenderedElementInterface) {

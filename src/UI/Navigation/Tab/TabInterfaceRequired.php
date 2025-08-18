@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Navigation\Tab;
 
-use ActiveCollab\Retro\UI\Common\WithLabelInterface;
+use ActiveCollab\Retro\UI\Common\WithRequiredLabelInterface;
 use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
 
-interface TabInterface extends RenderableElementInterface, WithLabelInterface
+interface TabInterfaceRequired extends RenderableElementInterface, WithRequiredLabelInterface
 {
     public function getContent(): string;
     public function getName(): ?string;

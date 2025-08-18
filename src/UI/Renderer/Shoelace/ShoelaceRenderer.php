@@ -17,8 +17,8 @@ use ActiveCollab\Retro\UI\Common\WithTooltipInterface;
 use ActiveCollab\Retro\UI\Element\ElementInterface;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
-use ActiveCollab\Retro\UI\Form\Radio\RadioGroupInterface;
-use ActiveCollab\Retro\UI\Form\Radio\RadioInterface;
+use ActiveCollab\Retro\UI\Form\Radio\RadioGroupInterfaceRequiredRequired;
+use ActiveCollab\Retro\UI\Form\Radio\RadioInterfaceRequired;
 use ActiveCollab\Retro\UI\Indicator\BadgeInterface;
 use ActiveCollab\Retro\UI\Button\ButtonInterface;
 use ActiveCollab\Retro\UI\Dropdown\DropdownInterface;
@@ -32,7 +32,7 @@ use ActiveCollab\Retro\UI\Indicator\InfoBoxInterface;
 use ActiveCollab\Retro\UI\Indicator\Tooltip\Tooltip;
 use ActiveCollab\Retro\UI\Indicator\Tooltip\TooltipInterface;
 use ActiveCollab\Retro\UI\Navigation\Tab\TabGroupInterface;
-use ActiveCollab\Retro\UI\Navigation\Tab\TabInterface;
+use ActiveCollab\Retro\UI\Navigation\Tab\TabInterfaceRequired;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 use ActiveCollab\Retro\UI\Renderer\Shoelace\Extension\Slot;
@@ -340,7 +340,7 @@ class ShoelaceRenderer implements RendererInterface
             implode(
                 '',
                 array_map(
-                    fn (TabInterface $tab): string => $tab->renderUsingRenderer($this, new Slot('nav')),
+                    fn (TabInterfaceRequired $tab): string => $tab->renderUsingRenderer($this, new Slot('nav')),
                     $tabGroup->getTabs(),
                 ),
             ),
@@ -349,7 +349,7 @@ class ShoelaceRenderer implements RendererInterface
     }
 
     public function renderTab(
-        TabInterface $tab,
+        TabInterfaceRequired        $tab,
         RenderingExtensionInterface ...$extensions,
     ): string
     {
@@ -387,7 +387,7 @@ class ShoelaceRenderer implements RendererInterface
     }
 
     public function renderRadioGroup(
-        RadioGroupInterface $radioGroup,
+        RadioGroupInterfaceRequiredRequired $radioGroup,
         RenderingExtensionInterface ...$extensions,
     ): string
     {
@@ -419,7 +419,7 @@ class ShoelaceRenderer implements RendererInterface
                 implode(
                     '',
                     array_map(
-                        fn (RadioInterface $radio): string => $radio->renderUsingRenderer($this),
+                        fn (RadioInterfaceRequired $radio): string => $radio->renderUsingRenderer($this),
                         $radioGroup->getOptions(),
                     ),
                 ),
@@ -430,7 +430,7 @@ class ShoelaceRenderer implements RendererInterface
     }
 
     public function renderRadio(
-        RadioInterface $radio,
+        RadioInterfaceRequired      $radio,
         RenderingExtensionInterface ...$extensions,
     ): string
     {

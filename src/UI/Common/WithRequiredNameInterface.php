@@ -10,8 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Common;
 
-interface WithLabelInterface
+interface WithRequiredNameInterface
 {
-    public function label(string $label): static;
-    public function getLabel(): string;
+    public function getName(): string;
 }

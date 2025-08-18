@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Navigation\Tab;
 
-use ActiveCollab\Retro\UI\Common\Trait\WithLabelTrait;
+use ActiveCollab\Retro\UI\Common\Trait\WithRequiredLabelTrait;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 
-class Tab implements TabInterface
+class Tab implements TabInterfaceRequired
 {
-    use WithLabelTrait;
+    use WithRequiredLabelTrait;
 
     public function __construct(
         string $label,

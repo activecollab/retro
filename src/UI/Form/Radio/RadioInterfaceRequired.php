@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Form\Radio;
 
-use ActiveCollab\Retro\UI\Common\WithLabelInterface;
+use ActiveCollab\Retro\UI\Common\WithRequiredLabelInterface;
 use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
 
-interface RadioInterface extends RenderableElementInterface, WithLabelInterface
+interface RadioInterfaceRequired extends RenderableElementInterface, WithRequiredLabelInterface
 {
     public function getValue(): mixed;
     public function isDisabled(): bool;
