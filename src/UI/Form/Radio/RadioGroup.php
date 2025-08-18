@@ -24,10 +24,10 @@ class RadioGroup implements RadioGroupInterfaceRequiredRequired
     private array $options = [];
 
     public function __construct(
-        private string         $name,
-        string                 $label,
-        private mixed          $value,
-        private ?Size          $size = null,
+        private string $name,
+        string $label,
+        private mixed $value,
+        private ?Size $size = null,
         RadioInterfaceRequired ...$options,
     )
     {
