@@ -12,10 +12,19 @@ namespace ActiveCollab\Retro\TemplatedUI\Radio;
 
 use ActiveCollab\Retro\FormData\FormDataInterface;
 use ActiveCollab\Retro\UI\Common\Size;
+use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
+use ActiveCollab\Retro\UI\Form\Radio\RadioGroup;
+use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\TemplatedUI\WrapContentBlock\WrapContentBlock;
 
 class RadioGroupBlock extends WrapContentBlock
 {
+    public function __construct(
+        private RendererInterface $renderer,
+    )
+    {
+    }
+
     public function render(
         string $content,
         string $name,
@@ -26,35 +35,17 @@ class RadioGroupBlock extends WrapContentBlock
         ?FormDataInterface $formData = null,
     ): string
     {
-        $attributes = [
-            'name' => $name,
-            'label' => $label,
-        ];
-
         if ($value === null) {
             $value = $formData?->getFieldValue($name);
         }
 
-        if ($value !== null) {
-            $attributes['value'] = $value;
-        }
-
-        if ($helpText) {
-            $attributes['help-text'] = $helpText;
-        }
-
-        if ($size) {
-            $attributes['size'] = $size->value;
-        }
-
-        return sprintf(
-            '%s%s%s',
-            $this->openHtmlTag(
-                'sl-radio-group',
-                $attributes,
-            ),
-            $content,
-            $this->closeHtmlTag('sl-radio-group'),
+        return $this->renderer->renderRadioGroup(
+            (new RadioGroup(
+                $name,
+                $label,
+                $value,
+                new PreRenderedElement($content),
+            ))->explainer($helpText)->size($size),
         );
     }
 }
