@@ -38,7 +38,7 @@ class DetailsTest extends TestCase
         );
 
         $this->assertStringStartsWith('<sl-details', $renderedDetails);
-        $this->assertStringContainsString('open', $renderedDetails);
+        $this->assertStringNotContainsString('open', $renderedDetails);
         $this->assertStringContainsString('summary="Toggle Details"', $renderedDetails);
         $this->assertStringContainsString('Here are the details', $renderedDetails);
         $this->assertStringEndsWith('</sl-details>', $renderedDetails);

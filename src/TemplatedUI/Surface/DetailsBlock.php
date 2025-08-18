@@ -26,7 +26,7 @@ class DetailsBlock extends WrapContentBlock
     public function render(
         string $label,
         string $content,
-        bool $open = true,
+        bool $open = false,
         ?bool $disabled = null,
     ): string
     {

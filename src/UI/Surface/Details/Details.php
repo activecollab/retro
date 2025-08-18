@@ -24,7 +24,7 @@ class Details implements DetailsInterface
     public function __construct(
         string $label,
         private PreRenderedElementInterface|string $content,
-        private bool $open = true,
+        private bool $open = false,
         ?bool $disabled = null,
     )
     {
