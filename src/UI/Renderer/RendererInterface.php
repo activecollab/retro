@@ -12,7 +12,7 @@ namespace ActiveCollab\Retro\UI\Renderer;
 
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Form\Radio\RadioGroupInterface;
-use ActiveCollab\Retro\UI\Form\Radio\RadioInterfaceRequired;
+use ActiveCollab\Retro\UI\Form\Radio\RadioInterface;
 use ActiveCollab\Retro\UI\Indicator\BadgeInterface;
 use ActiveCollab\Retro\UI\Button\ButtonInterface;
 use ActiveCollab\Retro\UI\Dropdown\DropdownInterface;
@@ -22,7 +22,7 @@ use ActiveCollab\Retro\UI\Indicator\IconInterface;
 use ActiveCollab\Retro\UI\Indicator\InfoBoxInterface;
 use ActiveCollab\Retro\UI\Indicator\Tooltip\TooltipInterface;
 use ActiveCollab\Retro\UI\Navigation\Tab\TabGroupInterface;
-use ActiveCollab\Retro\UI\Navigation\Tab\TabInterfaceRequired;
+use ActiveCollab\Retro\UI\Navigation\Tab\TabInterface;
 
 interface RendererInterface
 {
@@ -77,7 +77,7 @@ interface RendererInterface
     ): string;
 
     public function renderTab(
-        TabInterfaceRequired        $tab,
+        TabInterface                $tab,
         RenderingExtensionInterface ...$extensions,
     ): string;
 
@@ -87,7 +87,7 @@ interface RendererInterface
     ): string;
 
     public function renderRadio(
-        RadioInterfaceRequired      $radio,
+        RadioInterface              $radio,
         RenderingExtensionInterface ...$extensions,
     ): string;
 }

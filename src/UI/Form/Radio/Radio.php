@@ -14,7 +14,7 @@ use ActiveCollab\Retro\UI\Common\Property\Trait\WithRequiredLabelTrait;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 
-class Radio implements RadioInterfaceRequired
+class Radio implements RadioInterface
 {
     use WithRequiredLabelTrait;
 

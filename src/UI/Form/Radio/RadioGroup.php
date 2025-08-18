@@ -26,11 +26,11 @@ class RadioGroup implements RadioGroupInterface
     private array $options = [];
 
     public function __construct(
-        string $name,
-        string $label,
-        private mixed $value,
-        private ?Size $size = null,
-        RadioInterfaceRequired ...$options,
+        string         $name,
+        string         $label,
+        private mixed  $value,
+        private ?Size  $size = null,
+        RadioInterface ...$options,
     )
     {
         $this->name = $name;

@@ -22,7 +22,7 @@ interface RadioGroupInterface extends RenderableElementInterface, WithRequiredNa
     public function getSize(): ?Size;
 
     /**
-     * @return RadioInterfaceRequired[]
+     * @return RadioInterface[]
      */
     public function getOptions(): array;
 }

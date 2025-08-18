@@ -15,7 +15,7 @@ use ActiveCollab\Retro\UI\Common\Property\Trait\WithRequiredLabelTrait;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 
-class Tab implements TabInterfaceRequired
+class Tab implements TabInterface
 {
     use WithNameTrait;
     use WithRequiredLabelTrait;

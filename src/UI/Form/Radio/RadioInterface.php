@@ -8,13 +8,13 @@
 
 declare(strict_types=1);
 
-namespace ActiveCollab\Retro\UI\Navigation\Tab;
+namespace ActiveCollab\Retro\UI\Form\Radio;
 
-use ActiveCollab\Retro\UI\Common\Property\WithNameInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithRequiredLabelInterface;
 use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
 
-interface TabInterfaceRequired extends RenderableElementInterface, WithNameInterface, WithRequiredLabelInterface
+interface RadioInterface extends RenderableElementInterface, WithRequiredLabelInterface
 {
-    public function getContent(): string;
+    public function getValue(): mixed;
+    public function isDisabled(): bool;
 }
