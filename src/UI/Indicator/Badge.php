@@ -10,20 +10,25 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Indicator;
 
+use ActiveCollab\Retro\UI\Common\Property\Trait\WithTooltipTrait;
 use ActiveCollab\Retro\UI\Common\Variant;
+use ActiveCollab\Retro\UI\Indicator\Tooltip\Tooltip;
 use ActiveCollab\Retro\UI\Indicator\Tooltip\TooltipInterface;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 
 class Badge implements BadgeInterface
 {
+    use WithTooltipTrait;
+
     public function __construct(
         private string $value,
         private Variant $variant = Variant::PRIMARY,
         private bool $rounded = false,
-        private ?TooltipInterface $tooltip = null,
+        ?TooltipInterface $tooltip = null,
     )
     {
+        $this->tooltip = $tooltip;
     }
 
     public function getValue(): string

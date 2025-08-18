@@ -10,28 +10,30 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Indicator;
 
+use ActiveCollab\Retro\UI\Common\Property\Trait\WithLabelTrait;
+use ActiveCollab\Retro\UI\Common\Property\Trait\WithTooltipTrait;
 use ActiveCollab\Retro\UI\Indicator\Tooltip\TooltipInterface;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 
 class Icon implements IconInterface
 {
+    use WithLabelTrait;
+    use WithTooltipTrait;
+
     public function __construct(
         private string $iconName,
-        private ?string $label = null,
-        private ?TooltipInterface $tooltip = null,
+        ?string $label = null,
+        ?TooltipInterface $tooltip = null,
     )
     {
+        $this->label = $label;
+        $this->tooltip = $tooltip;
     }
 
     public function getIconName(): string
     {
         return $this->iconName;
-    }
-
-    public function getLabel(): ?string
-    {
-        return $this->label;
     }
 
     public function getTooltip(): ?TooltipInterface

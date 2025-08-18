@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\UI\Indicator;
 
 use ActiveCollab\Retro\UI\Common\AdornmentInterface;
+use ActiveCollab\Retro\UI\Common\Property\WithLabelInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithTooltipInterface;
 use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
 
-interface IconInterface extends RenderableElementInterface, AdornmentInterface, WithTooltipInterface
+interface IconInterface extends RenderableElementInterface, AdornmentInterface, WithLabelInterface, WithTooltipInterface
 {
     public function getIconName(): string;
-    public function getLabel(): ?string;
 }

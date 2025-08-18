@@ -14,28 +14,48 @@ use ActiveCollab\Retro\UI\Common\Property\Trait\WithExplainerTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithRequiredLabelTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithRequiredNameTrait;
 use ActiveCollab\Retro\UI\Common\Size;
+use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
+use LogicException;
 
 class RadioGroup implements RadioGroupInterface
 {
-    use WithRequiredLabelTrait;
     use WithRequiredNameTrait;
+    use WithRequiredLabelTrait;
     use WithExplainerTrait;
 
+    private ?PreRenderedElementInterface $preRenderedElement = null;
     private array $options = [];
 
     public function __construct(
-        string         $name,
-        string         $label,
-        private mixed  $value,
-        private ?Size  $size = null,
-        RadioInterface ...$options,
+        string $name,
+        string $label,
+        private mixed $value,
+        private ?Size $size = null,
+        PreRenderedElementInterface|RadioInterface $firstRadioOrPreRenderedElement,
+        RadioInterface ...$additionalOptions,
     )
     {
         $this->name = $name;
         $this->label = $label;
-        $this->options = $options;
+
+        if ($firstRadioOrPreRenderedElement instanceof PreRenderedElementInterface) {
+            $this->preRenderedElement = $firstRadioOrPreRenderedElement;
+
+            if (!empty($additionalOptions)) {
+                throw new LogicException('You cannot pass additional radios when the first argument is a pre-rendered element.');
+            }
+        } else {
+            $this->options[] = $firstRadioOrPreRenderedElement;
+
+            if (!empty($additionalOptions)) {
+                $this->options = array_merge(
+                    $this->options,
+                    $additionalOptions,
+                );
+            }
+        }
     }
 
     public function getValue(): mixed

@@ -36,6 +36,8 @@ class RadioGroupTest extends TestCase
                 'radio-group-name',
                 'Radio Group Label',
                 54321,
+                null,
+                new Radio('Option 1', 12345, true),
             ),
         );
 
