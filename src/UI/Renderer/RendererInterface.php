@@ -24,6 +24,7 @@ use ActiveCollab\Retro\UI\Indicator\Tooltip\TooltipInterface;
 use ActiveCollab\Retro\UI\Navigation\Tab\TabGroupInterface;
 use ActiveCollab\Retro\UI\Navigation\Tab\TabInterface;
 use ActiveCollab\Retro\UI\Surface\Details\DetailsInterface;
+use ActiveCollab\Retro\UI\Surface\Drawer\DrawerInterface;
 
 interface RendererInterface
 {
@@ -94,6 +95,11 @@ interface RendererInterface
 
     public function renderDetails(
         DetailsInterface $details,
+        RenderingExtensionInterface ...$extensions,
+    ): string;
+
+    public function renderDrawer(
+        DrawerInterface $drawer,
         RenderingExtensionInterface ...$extensions,
     ): string;
 }

@@ -39,6 +39,7 @@ use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 use ActiveCollab\Retro\UI\Renderer\Shoelace\Extension\Slot;
 use ActiveCollab\Retro\UI\Surface\Details\DetailsInterface;
+use ActiveCollab\Retro\UI\Surface\Drawer\DrawerInterface;
 use ActiveCollab\TemplatedUI\Helper\HtmlHelpersTrait;
 use LogicException;
 
@@ -506,6 +507,34 @@ class ShoelaceRenderer implements RendererInterface
                 $this->closeHtmlTag('sl-details'),
             ),
             $details,
+        );
+    }
+
+    public function renderDrawer(
+        DrawerInterface $drawer,
+        RenderingExtensionInterface ...$extensions,
+    ): string
+    {
+        return $this->wrapOutput(
+            sprintf(
+                '%s%s%s',
+                $this->openHtmlTag(
+                    'sl-drawer',
+                    $this->prepareAttributes(
+                        $drawer,
+                        [
+                            'label' => $drawer->getLabel(),
+                        ],
+                        null,
+                        ...$extensions,
+                    )
+                ),
+                $drawer->getContent() instanceof PreRenderedElementInterface
+                    ? $drawer->getContent()->getPreRenderedContent()
+                    : $this->sanitizeForHtml($drawer->getContent()),
+                $this->closeHtmlTag('sl-drawer'),
+            ),
+            $drawer,
         );
     }
 
