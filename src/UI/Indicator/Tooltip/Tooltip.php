@@ -13,6 +13,8 @@ namespace ActiveCollab\Retro\UI\Indicator\Tooltip;
 use ActiveCollab\Retro\UI\Common\Property\WithTooltipInterface;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
+use ActiveCollab\Retro\UI\Renderer\RendererInterface;
+use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 use LogicException;
 
 class Tooltip implements TooltipInterface
@@ -39,5 +41,13 @@ class Tooltip implements TooltipInterface
     public function getWrapAround(): ?RenderableElementInterface
     {
         return $this->wrapAround;
+    }
+
+    public function renderUsingRenderer(
+        RendererInterface $renderer,
+        RenderingExtensionInterface ...$extensions,
+    ): string
+    {
+        return $renderer->renderTooltip($this, ...$extensions);
     }
 }

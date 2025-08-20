@@ -13,7 +13,7 @@ namespace ActiveCollab\Retro\UI\Indicator\Tooltip;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
 
-interface TooltipInterface
+interface TooltipInterface extends RenderableElementInterface
 {
     public function getContent(): PreRenderedElementInterface|string;
     public function getWrapAround(): ?RenderableElementInterface;
