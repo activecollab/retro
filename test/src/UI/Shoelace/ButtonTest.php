@@ -36,11 +36,13 @@ class ButtonTest extends TestCase
     {
         $renderedButton = $this->renderer->renderButton(
             (new Button('Click to Open'))
+                ->id('hello-button')
                 ->size(Size::SMALL),
         );
 
         $this->assertStringStartsWith('<sl-button', $renderedButton);
         $this->assertStringEndsWith('</sl-button>', $renderedButton);
+        $this->assertStringContainsString('id="hello-button"', $renderedButton);
         $this->assertStringContainsString('size="small"', $renderedButton);
         $this->assertStringContainsString('Click to Open', $renderedButton);
     }

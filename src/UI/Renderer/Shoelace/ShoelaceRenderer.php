@@ -14,6 +14,7 @@ use ActiveCollab\Retro\TemplatedUI\ComponentIdResolver\ComponentIdResolverInterf
 use ActiveCollab\Retro\TemplatedUI\Property\ButtonVariant;
 use ActiveCollab\Retro\UI\Action\ActionInterface;
 use ActiveCollab\Retro\UI\Button\ButtonInterface;
+use ActiveCollab\Retro\UI\Common\Property\WithIdInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithSizeInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithTooltipInterface;
 use ActiveCollab\Retro\UI\Dropdown\DropdownInterface;
@@ -534,6 +535,10 @@ class ShoelaceRenderer implements RendererInterface
     {
         if ($action) {
             $initialAttributes = $action->extendAttributes($initialAttributes);
+        }
+
+        if ($element instanceof WithIdInterface && $element->getId()) {
+            $initialAttributes['id'] = $element->getId();
         }
 
         if ($element instanceof WithSizeInterface && $element->getSize()) {

@@ -12,9 +12,9 @@ namespace ActiveCollab\Retro\UI\Button;
 
 use ActiveCollab\Retro\TemplatedUI\Property\ButtonStyle;
 use ActiveCollab\Retro\TemplatedUI\Property\ButtonVariant;
+use ActiveCollab\Retro\UI\Common\Property\Trait\WithIdTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithSizeTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithTooltipTrait;
-use ActiveCollab\Retro\UI\Common\Size;
 use ActiveCollab\Retro\TemplatedUI\Property\Width;
 use ActiveCollab\Retro\UI\Action\ActionInterface;
 use ActiveCollab\Retro\UI\Common\AdornmentInterface;
@@ -26,8 +26,9 @@ use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 
 class Button implements ButtonInterface
 {
-    use WithTooltipTrait;
+    use WithIdTrait;
     use WithSizeTrait;
+    use WithTooltipTrait;
 
     public function __construct(
         private IconInterface|PreRenderedElementInterface|string $content,
