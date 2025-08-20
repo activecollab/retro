@@ -14,6 +14,7 @@ use ActiveCollab\Retro\TemplatedUI\ComponentIdResolver\ComponentIdResolverInterf
 use ActiveCollab\Retro\TemplatedUI\Property\ButtonVariant;
 use ActiveCollab\Retro\UI\Action\ActionInterface;
 use ActiveCollab\Retro\UI\Button\ButtonInterface;
+use ActiveCollab\Retro\UI\Common\Property\WithSizeInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithTooltipInterface;
 use ActiveCollab\Retro\UI\Dropdown\DropdownInterface;
 use ActiveCollab\Retro\UI\Dropdown\Menu\Element\Divider;
@@ -99,10 +100,6 @@ class ShoelaceRenderer implements RendererInterface
                 ? $button->getVariant()->toAttributeValue()
                 : ButtonVariant::PRIMARY->toAttributeValue(),
         ];
-
-        if ($button->getSize()) {
-            $attributes['size'] = $button->getSize()->value;
-        }
 
         if ($button->getStyle()) {
             $attributes[$button->getStyle()->toAttributeName()] = true;
@@ -410,10 +407,6 @@ class ShoelaceRenderer implements RendererInterface
             'value' => $radioGroup->getValue(),
         ];
 
-        if ($radioGroup->getSize()) {
-            $attributes['size'] = $radioGroup->getSize()->value;
-        }
-
         if ($radioGroup->getExplainer()) {
             $attributes['help-text'] = $radioGroup->getExplainer();
         }
@@ -541,6 +534,10 @@ class ShoelaceRenderer implements RendererInterface
     {
         if ($action) {
             $initialAttributes = $action->extendAttributes($initialAttributes);
+        }
+
+        if ($element instanceof WithSizeInterface && $element->getSize()) {
+            $initialAttributes['size'] = $element->getSize()->value;
         }
 
         foreach ($extensions as $extension) {

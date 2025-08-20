@@ -14,7 +14,6 @@ use ActiveCollab\Retro\UI\Common\Property\Trait\WithExplainerTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithRequiredLabelTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithRequiredNameTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithSizeTrait;
-use ActiveCollab\Retro\UI\Common\Size;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
