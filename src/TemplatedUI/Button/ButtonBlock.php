@@ -44,7 +44,7 @@ class ButtonBlock extends WrapContentBlock implements ButtonBlockInterface
         ?CatchAllParametersInterface $catchAllParameters = null,
     ): string
     {
-        return (new Button(
+        $button = new Button(
             new PreRenderedElement($content),
             action: $this->getButtonAction($action, $catchAllParameters),
             type: $catchAllParameters
@@ -52,10 +52,15 @@ class ButtonBlock extends WrapContentBlock implements ButtonBlockInterface
                 : 'button',
             variant: $variant,
             style: $style,
-            size: $size,
             width: $width,
             tooltip: $this->getTooltipInstance($tooltip),
-        ))->renderUsingRenderer($this->renderer);
+        );
+
+        if ($size) {
+            $button->size($size);
+        }
+
+        return $button->renderUsingRenderer($this->renderer);
     }
 
     private function getButtonAction(

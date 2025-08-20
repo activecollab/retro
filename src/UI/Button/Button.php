@@ -37,12 +37,10 @@ class Button implements ButtonInterface
         private ?string $type = null,
         private ?ButtonVariant $variant = null,
         private ?ButtonStyle $style = null,
-        ?Size $size = null,
         private ?Width $width = null,
         ?TooltipInterface $tooltip = null,
     )
     {
-        $this->size = $size;
         $this->tooltip = $tooltip;
     }
 
