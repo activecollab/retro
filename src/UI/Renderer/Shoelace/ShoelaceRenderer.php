@@ -205,6 +205,7 @@ class ShoelaceRenderer implements RendererInterface
                 'variant' => $infoBox->getVariant()->value,
                 'open' => true,
             ],
+            null,
             ...$extensions,
         );
 
@@ -328,7 +329,7 @@ class ShoelaceRenderer implements RendererInterface
     {
         $attributes = $this->prepareAttributes(
             $tabGroup,
-            null,
+            [],
             null,
             ...$extensions,
         );
@@ -495,6 +496,7 @@ class ShoelaceRenderer implements RendererInterface
                             'open' => $details->isOpen(),
                             'disabled' => (bool) $details->isDisabled(),
                         ],
+                        null,
                         ...$extensions,
                     ),
                 ),
@@ -532,15 +534,11 @@ class ShoelaceRenderer implements RendererInterface
 
     private function prepareAttributes(
         ElementInterface $element,
-        ?array $initialAttributes = null,
+        array $initialAttributes = [],
         ?ActionInterface $action = null,
         RenderingExtensionInterface ...$extensions,
     ): array
     {
-        if ($initialAttributes === null) {
-            $initialAttributes = [];
-        }
-
         if ($action) {
             $initialAttributes = $action->extendAttributes($initialAttributes);
         }
