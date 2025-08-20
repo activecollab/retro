@@ -13,6 +13,7 @@ namespace ActiveCollab\Retro\Test\UI\Shoelace;
 use ActiveCollab\Retro\TemplatedUI\ComponentIdResolver\ComponentIdResolverInterface;
 use ActiveCollab\Retro\Test\Base\TestCase;
 use ActiveCollab\Retro\UI\Button\Button;
+use ActiveCollab\Retro\UI\Common\Size;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
 use ActiveCollab\Retro\UI\Indicator\Badge;
 use ActiveCollab\Retro\UI\Indicator\Icon;
@@ -34,11 +35,13 @@ class ButtonTest extends TestCase
     public function testWillRenderButton(): void
     {
         $renderedButton = $this->renderer->renderButton(
-            new Button('Click to Open'),
+            (new Button('Click to Open'))
+                ->size(Size::SMALL),
         );
 
         $this->assertStringStartsWith('<sl-button', $renderedButton);
         $this->assertStringEndsWith('</sl-button>', $renderedButton);
+        $this->assertStringContainsString('size="small"', $renderedButton);
         $this->assertStringContainsString('Click to Open', $renderedButton);
     }
 

@@ -437,7 +437,7 @@ class ShoelaceRenderer implements RendererInterface
     }
 
     public function renderRadio(
-        RadioInterface              $radio,
+        RadioInterface $radio,
         RenderingExtensionInterface ...$extensions,
     ): string
     {

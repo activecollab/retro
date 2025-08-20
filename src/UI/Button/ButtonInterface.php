@@ -15,6 +15,7 @@ use ActiveCollab\Retro\TemplatedUI\Property\ButtonVariant;
 use ActiveCollab\Retro\TemplatedUI\Property\Width;
 use ActiveCollab\Retro\UI\Action\ActionInterface;
 use ActiveCollab\Retro\UI\Common\AdornmentInterface;
+use ActiveCollab\Retro\UI\Common\Property\WithSizeInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithTooltipInterface;
 use ActiveCollab\Retro\UI\Common\Size;
 use ActiveCollab\Retro\UI\Common\TriggerInterface;
@@ -22,7 +23,7 @@ use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
 use ActiveCollab\Retro\UI\Indicator\IconInterface;
 
-interface ButtonInterface extends RenderableElementInterface, TriggerInterface, WithTooltipInterface
+interface ButtonInterface extends RenderableElementInterface, TriggerInterface, WithTooltipInterface, WithSizeInterface
 {
     public function getContent(): IconInterface|PreRenderedElementInterface|string;
     public function getAction(): ?ActionInterface;
