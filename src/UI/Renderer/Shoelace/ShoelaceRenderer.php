@@ -66,7 +66,7 @@ class ShoelaceRenderer implements RendererInterface
         RenderingExtensionInterface ...$extensions,
     ): string
     {
-        $attributes = $this->extendAttributes(
+        $attributes = $this->prepareAttributes(
             $tooltip,
             [],
             null,
@@ -108,7 +108,7 @@ class ShoelaceRenderer implements RendererInterface
             $attributes[$button->getStyle()->toAttributeName()] = true;
         }
 
-        $attributes = $this->extendAttributes(
+        $attributes = $this->prepareAttributes(
             $button,
             $attributes,
             $button->getAction(),
@@ -173,7 +173,7 @@ class ShoelaceRenderer implements RendererInterface
         RenderingExtensionInterface ...$extensions,
     ): string
     {
-        $attributes = $this->extendAttributes(
+        $attributes = $this->prepareAttributes(
             $badge,
             [
                 'pill' => $badge->isRounded(),
@@ -199,7 +199,7 @@ class ShoelaceRenderer implements RendererInterface
         RenderingExtensionInterface ...$extensions,
     ): string
     {
-        $attributes = $this->extendAttributes(
+        $attributes = $this->prepareAttributes(
             $infoBox,
             [
                 'variant' => $infoBox->getVariant()->value,
@@ -326,7 +326,7 @@ class ShoelaceRenderer implements RendererInterface
         RenderingExtensionInterface ...$extensions,
     ): string
     {
-        $attributes = $this->extendAttributes(
+        $attributes = $this->prepareAttributes(
             $tabGroup,
             null,
             null,
@@ -370,7 +370,7 @@ class ShoelaceRenderer implements RendererInterface
             $tabName = $this->componentIdResolver->getUniqueId('tab');
         }
 
-        $attributes = $this->extendAttributes(
+        $attributes = $this->prepareAttributes(
             $tab,
             [
                 'panel' => $tabName,
@@ -422,7 +422,7 @@ class ShoelaceRenderer implements RendererInterface
                 '%s%s%s',
                 $this->openHtmlTag(
                     'sl-radio-group',
-                    $this->extendAttributes(
+                    $this->prepareAttributes(
                         $radioGroup,
                         $attributes,
                         null,
@@ -461,7 +461,7 @@ class ShoelaceRenderer implements RendererInterface
                 '%s%s%s',
                 $this->openHtmlTag(
                     'sl-radio',
-                    $this->extendAttributes(
+                    $this->prepareAttributes(
                         $radio,
                         [
                             'value' => $radio->getValue(),
@@ -488,7 +488,7 @@ class ShoelaceRenderer implements RendererInterface
                 '%s%s%s%s%s',
                 $this->openHtmlTag(
                     'sl-details',
-                    $this->extendAttributes(
+                    $this->prepareAttributes(
                         $details,
                         [
                             'summary' => $details->getLabel(),
@@ -530,7 +530,7 @@ class ShoelaceRenderer implements RendererInterface
         return $output;
     }
 
-    private function extendAttributes(
+    private function prepareAttributes(
         ElementInterface $element,
         ?array $initialAttributes = null,
         ?ActionInterface $action = null,
