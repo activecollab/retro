@@ -11,12 +11,12 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\UI\Renderer\Shoelace;
 
 use ActiveCollab\Retro\TemplatedUI\ComponentIdResolver\ComponentIdResolverInterface;
-use ActiveCollab\Retro\TemplatedUI\Property\ButtonVariant;
 use ActiveCollab\Retro\UI\Action\ActionInterface;
 use ActiveCollab\Retro\UI\Button\ButtonInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithIdInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithSizeInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithTooltipInterface;
+use ActiveCollab\Retro\UI\Common\Variant;
 use ActiveCollab\Retro\UI\Dropdown\DropdownInterface;
 use ActiveCollab\Retro\UI\Dropdown\Menu\Element\Divider;
 use ActiveCollab\Retro\UI\Dropdown\Menu\Element\Label;
@@ -99,8 +99,8 @@ class ShoelaceRenderer implements RendererInterface
         $attributes = [
             'type' => $button->getType() ?? 'button',
             'variant' => $button->getVariant()
-                ? $button->getVariant()->toAttributeValue()
-                : ButtonVariant::PRIMARY->toAttributeValue(),
+                ? $button->getVariant()->value
+                : Variant::PRIMARY->value,
         ];
 
         if ($button->getStyle()) {

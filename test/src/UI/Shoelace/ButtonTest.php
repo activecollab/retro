@@ -14,6 +14,7 @@ use ActiveCollab\Retro\TemplatedUI\ComponentIdResolver\ComponentIdResolverInterf
 use ActiveCollab\Retro\Test\Base\TestCase;
 use ActiveCollab\Retro\UI\Button\Button;
 use ActiveCollab\Retro\UI\Common\Size;
+use ActiveCollab\Retro\UI\Common\Variant;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
 use ActiveCollab\Retro\UI\Indicator\Badge;
 use ActiveCollab\Retro\UI\Indicator\Icon;
@@ -37,13 +38,15 @@ class ButtonTest extends TestCase
         $renderedButton = $this->renderer->renderButton(
             (new Button('Click to Open'))
                 ->id('hello-button')
-                ->size(Size::SMALL),
+                ->size(Size::SMALL)
+                ->variant(Variant::DANGER)
         );
 
         $this->assertStringStartsWith('<sl-button', $renderedButton);
         $this->assertStringEndsWith('</sl-button>', $renderedButton);
         $this->assertStringContainsString('id="hello-button"', $renderedButton);
         $this->assertStringContainsString('size="small"', $renderedButton);
+        $this->assertStringContainsString('variant="danger"', $renderedButton);
         $this->assertStringContainsString('Click to Open', $renderedButton);
     }
 

@@ -12,11 +12,11 @@ namespace ActiveCollab\Retro\TemplatedUI\Button;
 
 use ActiveCollab\Retro\TemplatedUI\Property\ButtonStyle;
 use ActiveCollab\Retro\UI\Common\Size;
-use ActiveCollab\Retro\TemplatedUI\Property\ButtonVariant;
 use ActiveCollab\Retro\TemplatedUI\Property\Width;
 use ActiveCollab\Retro\UI\Action\ActionInterface;
 use ActiveCollab\Retro\UI\Action\GoToPage;
 use ActiveCollab\Retro\UI\Button\Button;
+use ActiveCollab\Retro\UI\Common\Variant;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
 use ActiveCollab\Retro\UI\Indicator\Tooltip\Tooltip;
 use ActiveCollab\Retro\UI\Indicator\Tooltip\TooltipInterface;
@@ -36,7 +36,7 @@ class ButtonBlock extends WrapContentBlock implements ButtonBlockInterface
     public function render(
         string $content,
         ?ActionInterface $action = null,
-        ?ButtonVariant $variant = null,
+        ?Variant $variant = null,
         ?ButtonStyle $style = null,
         ?Size $size = null,
         ?Width $width = null,
@@ -44,17 +44,16 @@ class ButtonBlock extends WrapContentBlock implements ButtonBlockInterface
         ?CatchAllParametersInterface $catchAllParameters = null,
     ): string
     {
-        $button = new Button(
+        $button = (new Button(
             new PreRenderedElement($content),
             action: $this->getButtonAction($action, $catchAllParameters),
             type: $catchAllParameters
                 ? $this->getButtonType($catchAllParameters)
                 : 'button',
-            variant: $variant,
             style: $style,
             width: $width,
             tooltip: $this->getTooltipInstance($tooltip),
-        );
+        ))->variant($variant);
 
         if ($size) {
             $button->size($size);

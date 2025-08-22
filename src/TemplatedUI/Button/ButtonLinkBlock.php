@@ -12,8 +12,8 @@ namespace ActiveCollab\Retro\TemplatedUI\Button;
 
 use ActiveCollab\Retro\TemplatedUI\Property\ButtonStyle;
 use ActiveCollab\Retro\UI\Common\Size;
-use ActiveCollab\Retro\TemplatedUI\Property\ButtonVariant;
 use ActiveCollab\Retro\TemplatedUI\Property\Width;
+use ActiveCollab\Retro\UI\Common\Variant;
 use ActiveCollab\TemplatedUI\MethodInvoker\CatchAllParameters\CatchAllParametersInterface;
 use ActiveCollab\TemplatedUI\WrapContentBlock\WrapContentBlock;
 use LogicException;
@@ -24,7 +24,7 @@ class ButtonLinkBlock extends WrapContentBlock
         string $content,
         string $href,
         string $target = 'body',
-        ?ButtonVariant $variant = null,
+        ?Variant $variant = null,
         ?ButtonStyle $style = null,
         ?Size $size = null,
         ?Width $width = null,
@@ -37,8 +37,8 @@ class ButtonLinkBlock extends WrapContentBlock
             'hx-push-url' => 'true',
             'type' => 'button',
             'variant' => $variant
-                ? $variant->toAttributeValue()
-                : ButtonVariant::DEFAULT->toAttributeValue(),
+                ? $variant->value
+                : Variant::DEFAULT->value,
         ];
 
         if ($size) {

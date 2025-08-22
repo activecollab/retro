@@ -11,13 +11,13 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\UI\Button;
 
 use ActiveCollab\Retro\TemplatedUI\Property\ButtonStyle;
-use ActiveCollab\Retro\TemplatedUI\Property\ButtonVariant;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithIdTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithSizeTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithTooltipTrait;
 use ActiveCollab\Retro\TemplatedUI\Property\Width;
 use ActiveCollab\Retro\UI\Action\ActionInterface;
 use ActiveCollab\Retro\UI\Common\AdornmentInterface;
+use ActiveCollab\Retro\UI\Common\Property\Trait\WithVariantTrait;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Indicator\IconInterface;
 use ActiveCollab\Retro\UI\Indicator\Tooltip\TooltipInterface;
@@ -29,6 +29,7 @@ class Button implements ButtonInterface
     use WithIdTrait;
     use WithSizeTrait;
     use WithTooltipTrait;
+    use WithVariantTrait;
 
     public function __construct(
         private IconInterface|PreRenderedElementInterface|string $content,
@@ -36,7 +37,6 @@ class Button implements ButtonInterface
         private ?AdornmentInterface $leftAdornment = null,
         private ?AdornmentInterface $rightAdornment = null,
         private ?string $type = null,
-        private ?ButtonVariant $variant = null,
         private ?ButtonStyle $style = null,
         private ?Width $width = null,
         ?TooltipInterface $tooltip = null,
@@ -68,11 +68,6 @@ class Button implements ButtonInterface
     public function getType(): ?string
     {
         return $this->type;
-    }
-
-    public function getVariant(): ?ButtonVariant
-    {
-        return $this->variant;
     }
 
     public function getStyle(): ?ButtonStyle
