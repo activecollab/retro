@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuItem;
 
 use ActiveCollab\Retro\UI\Action\ActionInterface;
-use ActiveCollab\Retro\UI\Common\AdornmentInterface;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithAdornmentsTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithRequiredLabelTrait;
 use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuElement;
@@ -26,13 +25,9 @@ class MenuItem extends MenuElement implements MenuItemInterface
     public function __construct(
         string $label,
         private ?ActionInterface $action = null,
-        ?AdornmentInterface $leftAdornment = null,
-        ?AdornmentInterface $rightAdornment = null,
     )
     {
         $this->label = $label;
-        $this->leftAdornment = $leftAdornment;
-        $this->rightAdornment = $rightAdornment;
     }
 
     public function getAction(): ?ActionInterface
