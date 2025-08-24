@@ -17,7 +17,6 @@ use ActiveCollab\Retro\UI\Common\Property\Trait\WithSizeTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithTooltipTrait;
 use ActiveCollab\Retro\TemplatedUI\Property\Width;
 use ActiveCollab\Retro\UI\Action\ActionInterface;
-use ActiveCollab\Retro\UI\Common\AdornmentInterface;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithVariantTrait;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Indicator\IconInterface;
