@@ -26,8 +26,8 @@ class OptionTag extends Tag
     public function render(
         string $label,
         mixed $value,
-        ?AdornmentInterface $leftAdornment,
-        ?AdornmentInterface $rightAdornment,
+        ?AdornmentInterface $leftAdornment = null,
+        ?AdornmentInterface $rightAdornment = null,
     ): string
     {
         return $this->renderer->renderSelectOption(
