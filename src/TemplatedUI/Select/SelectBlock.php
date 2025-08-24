@@ -33,6 +33,7 @@ class SelectBlock extends WrapContentBlock
         ?string $placeholder = null,
         ?string $helpText = null,
         ?Size $size = null,
+        ?string $injectAttributes = 'x-inject-form-field-attributes',
         ?FormDataInterface $formData = null,
     ): string
     {
@@ -46,7 +47,11 @@ class SelectBlock extends WrapContentBlock
                 $label,
                 $value,
                 new PreRenderedElement($content),
-            ))->placeholder($placeholder)->explainer($helpText)->size($size)->size($size)->injectAttributeName('x-inject-form-field-attributes'),
+            ))
+                ->placeholder($placeholder)
+                ->explainer($helpText)
+                ->size($size)
+                ->injectAttributeName($injectAttributes),
         );
     }
 }
