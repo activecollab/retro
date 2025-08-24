@@ -44,10 +44,10 @@ class SelectBlock extends WrapContentBlock
         return $this->renderer->renderSelect(
             (new Select(
                 $name,
-                $label,
                 $value,
                 new PreRenderedElement($content),
             ))
+                ->label($label)
                 ->placeholder($placeholder)
                 ->explainer($helpText)
                 ->size($size)

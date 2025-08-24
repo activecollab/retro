@@ -37,7 +37,6 @@ class SelectTest extends TestCase
 
         new Select(
             'test',
-            'Test',
             null,
             new PreRenderedElement('Test content'),
             new Option('Option 1', 'option_1'),
@@ -49,11 +48,10 @@ class SelectTest extends TestCase
         $renderedSelect = $this->renderer->renderSelect(
             (new Select(
                 'test',
-                'Test',
                 'option_1',
                 new Option('Option 1', 'option_1'),
                 new Option('Option 2', 'option_2'),
-            ))->placeholder('Holding place')->explainer('Choose wisely')
+            ))->label('Test')->placeholder('Holding place')->explainer('Choose wisely')
         );
 
         $this->assertStringStartsWith('<sl-select', $renderedSelect);
@@ -72,7 +70,6 @@ class SelectTest extends TestCase
         $renderedSelect = $this->renderer->renderSelect(
             new Select(
                 'test',
-                'Test',
                 null,
                 new PreRenderedElement('<option value="option_1">Option 1</option>'),
             )
@@ -80,7 +77,6 @@ class SelectTest extends TestCase
 
         $this->assertStringStartsWith('<sl-select', $renderedSelect);
         $this->assertStringContainsString('name="test"', $renderedSelect);
-        $this->assertStringContainsString('label="Test"', $renderedSelect);
         $this->assertStringContainsString('<option value="option_1">Option 1</option>', $renderedSelect);
         $this->assertStringEndsWith('</sl-select>', $renderedSelect);
     }

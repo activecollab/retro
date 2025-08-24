@@ -36,14 +36,12 @@ class Select implements SelectInterface
 
     public function __construct(
         string $name,
-        string $label,
         private mixed $value,
         PreRenderedElementInterface|ElementInterface $firstOrPreRenderedElement,
         ElementInterface ...$additionalElements,
     )
     {
         $this->name = $name;
-        $this->label = $label;
 
         if ($firstOrPreRenderedElement instanceof PreRenderedElementInterface) {
             $this->preRenderedElement = $firstOrPreRenderedElement;
