@@ -71,10 +71,9 @@ class DropdownMenuTest extends TestCase
     public function testMenuItemWillRenderAdornments(): void
     {
         $renderedMenuItem = $this->renderer->renderMenuItem(
-            new MenuItem(
-                'Hello World!',
-                leftAdornment: new Icon('alphabet'),
-                rightAdornment: new Badge('123'),
+            (new MenuItem('Hello World!'))->adornments(
+                new Icon('alphabet'),
+                new Badge('123'),
             ),
         );
 

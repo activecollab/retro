@@ -71,10 +71,9 @@ class ButtonTest extends TestCase
     public function testButtonWillRenderAdornments(): void
     {
         $renderedMenuItem = $this->renderer->renderButton(
-            new Button(
-                'Click to Open',
-                leftAdornment: new Icon('alphabet'),
-                rightAdornment: new Badge('123'),
+            (new Button('Click to Open'))->adornments(
+                new Icon('alphabet'),
+                new Badge('123'),
             ),
         );
 
