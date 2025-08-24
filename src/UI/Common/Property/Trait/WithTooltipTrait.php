@@ -10,14 +10,21 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Common\Property\Trait;
 
+use ActiveCollab\Retro\UI\Indicator\Tooltip\Tooltip;
 use ActiveCollab\Retro\UI\Indicator\Tooltip\TooltipInterface;
 
 trait WithTooltipTrait
 {
     private ?TooltipInterface $tooltip = null;
 
-    public function tooltip(?TooltipInterface $tooltip): static
+    public function tooltip(TooltipInterface|string|null $tooltip): static
     {
+        if (is_string($tooltip)) {
+            $this->tooltip = new Tooltip($tooltip);
+
+            return $this;
+        }
+
         $this->tooltip = $tooltip;
 
         return $this;

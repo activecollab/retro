@@ -37,9 +37,8 @@ class TooltipTest extends TestCase
         $this->renderer->renderTooltip(
             new Tooltip(
                 'This is a tooltip message',
-                new Button(
-                    'Click to Open',
-                    tooltip: new Tooltip('This is a tooltip message'),
+                (new Button('Click to Open'))->tooltip(
+                    new Tooltip('This is a tooltip message'),
                 ),
             ),
         );
@@ -63,9 +62,8 @@ class TooltipTest extends TestCase
     public function testWillRenderButtonWithTooltipAttribute(): void
     {
         $renderedButton = $this->renderer->renderButton(
-            new Button(
-                'Click to Open',
-                tooltip: new Tooltip('This is a tooltip message'),
+            (new Button('Click to Open'))->tooltip(
+                new Tooltip('This is a tooltip message'),
             ),
         );
 

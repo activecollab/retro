@@ -52,8 +52,7 @@ class ButtonBlock extends WrapContentBlock implements ButtonBlockInterface
                 : 'button',
             style: $style,
             width: $width,
-            tooltip: $this->getTooltipInstance($tooltip),
-        ))->variant($variant);
+        ))->variant($variant)->tooltip($tooltip);
 
         if ($size) {
             $button->size($size);
@@ -94,19 +93,6 @@ class ButtonBlock extends WrapContentBlock implements ButtonBlockInterface
         }
 
         return $this->getDefaultButtonType();
-    }
-
-    private function getTooltipInstance(TooltipInterface|string|null $tooltip): ?TooltipInterface
-    {
-        if ($tooltip instanceof TooltipInterface) {
-            return $tooltip;
-        }
-
-        if ($tooltip) {
-            return new Tooltip($tooltip);
-        }
-
-        return null;
     }
 
     protected function allowButtonTypeOverride(): bool
