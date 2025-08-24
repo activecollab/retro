@@ -17,6 +17,7 @@ use ActiveCollab\Retro\UI\Common\Property\WithExplainerInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithIdInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithLabelInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithNameInterface;
+use ActiveCollab\Retro\UI\Common\Property\WithPlaceholderInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithRequiredLabelInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithRequiredNameInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithSizeInterface;
@@ -647,12 +648,16 @@ class ShoelaceRenderer implements RendererInterface
             $initialAttributes['label'] = $element->getLabel();
         }
 
-        if ($element instanceof WithSizeInterface && $element->getSize()) {
-            $initialAttributes['size'] = $element->getSize()->value;
+        if ($element instanceof WithPlaceholderInterface && $element->getPlaceholder()) {
+            $initialAttributes['placeholder'] = $element->getPlaceholder();
         }
 
         if ($element instanceof WithExplainerInterface && $element->getExplainer()) {
             $initialAttributes['help-text'] = $element->getExplainer();
+        }
+
+        if ($element instanceof WithSizeInterface && $element->getSize()) {
+            $initialAttributes['size'] = $element->getSize()->value;
         }
 
         foreach ($extensions as $extension) {

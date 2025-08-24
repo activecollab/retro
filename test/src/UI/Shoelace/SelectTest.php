@@ -53,13 +53,14 @@ class SelectTest extends TestCase
                 'option_1',
                 new Option('Option 1', 'option_1'),
                 new Option('Option 2', 'option_2'),
-            ))->explainer('Choose wisely')
+            ))->placeholder('Holding place')->explainer('Choose wisely')
         );
 
         $this->assertStringStartsWith('<sl-select', $renderedSelect);
         $this->assertStringContainsString('name="test"', $renderedSelect);
         $this->assertStringContainsString('label="Test"', $renderedSelect);
         $this->assertStringContainsString('value="option_1"', $renderedSelect);
+        $this->assertStringContainsString('placeholder="Holding place"', $renderedSelect);
         $this->assertStringContainsString('help-text="Choose wisely"', $renderedSelect);
         $this->assertStringContainsString('<sl-option value="option_1">Option 1</sl-option>', $renderedSelect);
         $this->assertStringContainsString('<sl-option value="option_2">Option 2</sl-option>', $renderedSelect);
