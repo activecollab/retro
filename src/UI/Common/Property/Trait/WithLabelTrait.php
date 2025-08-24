@@ -25,4 +25,9 @@ trait WithLabelTrait
     {
         return $this->label;
     }
+
+    public function labelIsAttribute(): bool
+    {
+        return true;
+    }
 }

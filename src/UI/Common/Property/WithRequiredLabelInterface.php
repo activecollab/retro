@@ -14,4 +14,5 @@ interface WithRequiredLabelInterface
 {
     public function label(string $label): static;
     public function getLabel(): string;
+    public function labelIsAttribute(): bool;
 }

@@ -14,6 +14,10 @@ use ActiveCollab\Retro\TemplatedUI\ComponentIdResolver\ComponentIdResolverInterf
 use ActiveCollab\Retro\UI\Action\ActionInterface;
 use ActiveCollab\Retro\UI\Button\ButtonInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithIdInterface;
+use ActiveCollab\Retro\UI\Common\Property\WithLabelInterface;
+use ActiveCollab\Retro\UI\Common\Property\WithNameInterface;
+use ActiveCollab\Retro\UI\Common\Property\WithRequiredLabelInterface;
+use ActiveCollab\Retro\UI\Common\Property\WithRequiredNameInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithSizeInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithTooltipInterface;
 use ActiveCollab\Retro\UI\Common\Variant;
@@ -28,7 +32,8 @@ use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Form\Radio\RadioGroupInterface;
 use ActiveCollab\Retro\UI\Form\Radio\RadioInterface;
-use ActiveCollab\Retro\UI\Form\Select\Element\OptionInterface;
+use ActiveCollab\Retro\UI\Form\Select\Element\ElementInterface as SelectElementInterface;
+use ActiveCollab\Retro\UI\Form\Select\Element\OptionInterface as SelectOptionInterface;
 use ActiveCollab\Retro\UI\Form\Select\SelectInterface;
 use ActiveCollab\Retro\UI\Indicator\BadgeInterface;
 use ActiveCollab\Retro\UI\Indicator\IconInterface;
@@ -150,10 +155,6 @@ class ShoelaceRenderer implements RendererInterface
         $attributes = [
             'name' => $icon->getIconName(),
         ];
-
-        if ($icon->getLabel()) {
-            $attributes['label'] = $icon->getLabel();
-        }
 
         foreach ($extensions as $extension) {
             $attributes = $extension->extendAttributes($attributes);
@@ -406,13 +407,43 @@ class ShoelaceRenderer implements RendererInterface
     ): string
     {
         return $this->wrapOutput(
-            '',
+            sprintf(
+                '%s%s%s',
+                $this->openHtmlTag(
+                    'sl-select',
+                    $this->prepareAttributes(
+                        $select,
+                        [
+                            'value' => $select->getValue(),
+                        ],
+                        null,
+                        ...$extensions,
+                    ),
+                ),
+                $this->renderSelectContent($select),
+                $this->closeHtmlTag('sl-select'),
+            ),
             $select,
         );
     }
 
+    private function renderSelectContent(SelectInterface $select): string
+    {
+        if ($select->getPreRenderedElement()) {
+            return $select->getPreRenderedElement()->renderUsingRenderer($this);
+        }
+
+        return implode(
+            '',
+            array_map(
+                fn (SelectElementInterface $selectElement): string => $selectElement->renderUsingRenderer($this),
+                $select->getElements(),
+            ),
+        );
+    }
+
     public function renderSelectOption(
-        OptionInterface $option,
+        SelectOptionInterface $option,
         RenderingExtensionInterface ...$extensions,
     ): string
     {
@@ -428,8 +459,6 @@ class ShoelaceRenderer implements RendererInterface
     ): string
     {
         $attributes = [
-            'name' => $radioGroup->getName(),
-            'label' => $radioGroup->getLabel(),
             'value' => $radioGroup->getValue(),
         ];
 
@@ -546,9 +575,7 @@ class ShoelaceRenderer implements RendererInterface
                     'sl-drawer',
                     $this->prepareAttributes(
                         $drawer,
-                        [
-                            'label' => $drawer->getLabel(),
-                        ],
+                        [],
                         null,
                         ...$extensions,
                     )
@@ -594,6 +621,16 @@ class ShoelaceRenderer implements RendererInterface
             $initialAttributes['id'] = $element->getId();
         }
 
+        if ($element instanceof WithRequiredNameInterface
+            || ($element instanceof WithNameInterface && $element->getName())
+        ) {
+            $initialAttributes['name'] = $element->getName();
+        }
+
+        if ($this->shouldRenderLabelAttribute($element)) {
+            $initialAttributes['label'] = $element->getLabel();
+        }
+
         if ($element instanceof WithSizeInterface && $element->getSize()) {
             $initialAttributes['size'] = $element->getSize()->value;
         }
@@ -603,5 +640,20 @@ class ShoelaceRenderer implements RendererInterface
         }
 
         return $initialAttributes;
+    }
+
+    private function shouldRenderLabelAttribute(ElementInterface $element): bool
+    {
+        if (!$element instanceof WithRequiredLabelInterface
+            && !$element instanceof WithLabelInterface
+        ) {
+            return false; // Does not have a label.
+        }
+
+        if (!$element->labelIsAttribute()) {
+            return false; // Label is not an attribute.
+        }
+
+        return $element instanceof WithRequiredLabelInterface || !empty($element->getLabel());
     }
 }
