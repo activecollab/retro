@@ -13,6 +13,8 @@ namespace ActiveCollab\Retro\UI\Renderer;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Form\Radio\RadioGroupInterface;
 use ActiveCollab\Retro\UI\Form\Radio\RadioInterface;
+use ActiveCollab\Retro\UI\Form\Select\Element\OptionInterface;
+use ActiveCollab\Retro\UI\Form\Select\SelectInterface;
 use ActiveCollab\Retro\UI\Indicator\BadgeInterface;
 use ActiveCollab\Retro\UI\Button\ButtonInterface;
 use ActiveCollab\Retro\UI\Dropdown\DropdownInterface;
@@ -80,6 +82,16 @@ interface RendererInterface
 
     public function renderTab(
         TabInterface $tab,
+        RenderingExtensionInterface ...$extensions,
+    ): string;
+
+    public function renderSelect(
+        SelectInterface $select,
+        RenderingExtensionInterface ...$extensions,
+    ): string;
+
+    public function renderSelectOption(
+        OptionInterface $option,
         RenderingExtensionInterface ...$extensions,
     ): string;
 

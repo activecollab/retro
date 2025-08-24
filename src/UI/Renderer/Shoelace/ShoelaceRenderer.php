@@ -28,6 +28,8 @@ use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Form\Radio\RadioGroupInterface;
 use ActiveCollab\Retro\UI\Form\Radio\RadioInterface;
+use ActiveCollab\Retro\UI\Form\Select\Element\OptionInterface;
+use ActiveCollab\Retro\UI\Form\Select\SelectInterface;
 use ActiveCollab\Retro\UI\Indicator\BadgeInterface;
 use ActiveCollab\Retro\UI\Indicator\IconInterface;
 use ActiveCollab\Retro\UI\Indicator\InfoBoxInterface;
@@ -395,6 +397,28 @@ class ShoelaceRenderer implements RendererInterface
                 $this->closeHtmlTag('sl-tab-panel'),
             ),
             $tab,
+        );
+    }
+
+    public function renderSelect(
+        SelectInterface $select,
+        RenderingExtensionInterface ...$extensions,
+    ): string
+    {
+        return $this->wrapOutput(
+            '',
+            $select,
+        );
+    }
+
+    public function renderSelectOption(
+        OptionInterface $option,
+        RenderingExtensionInterface ...$extensions,
+    ): string
+    {
+        return $this->wrapOutput(
+            '',
+            $option,
         );
     }
 
