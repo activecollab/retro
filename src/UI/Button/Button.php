@@ -35,15 +35,11 @@ class Button implements ButtonInterface
     public function __construct(
         private IconInterface|PreRenderedElementInterface|string $content,
         private ?ActionInterface $action = null,
-        ?AdornmentInterface $leftAdornment = null,
-        ?AdornmentInterface $rightAdornment = null,
         private ?string $type = null,
         private ?ButtonStyle $style = null,
         private ?Width $width = null,
     )
     {
-        $this->leftAdornment = $leftAdornment;
-        $this->rightAdornment = $rightAdornment;
     }
 
     public function getContent(): IconInterface|PreRenderedElementInterface|string
