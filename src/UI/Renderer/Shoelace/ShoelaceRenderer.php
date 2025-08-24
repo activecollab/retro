@@ -128,9 +128,9 @@ class ShoelaceRenderer implements RendererInterface
             sprintf(
                 '%s%s%s%s%s',
                 $this->openHtmlTag('sl-button', $attributes),
-                $this->renderButtonContent($button),
                 $button->getLeftAdornment()?->renderUsingRenderer($this, new Slot('prefix')) ?? '',
                 $button->getRightAdornment()?->renderUsingRenderer($this, new Slot('suffix')) ?? '',
+                $this->renderButtonContent($button),
                 $this->closeHtmlTag('sl-button'),
             ),
             $button,
