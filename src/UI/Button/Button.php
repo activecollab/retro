@@ -39,10 +39,8 @@ class Button implements ButtonInterface
         private ?string $type = null,
         private ?ButtonStyle $style = null,
         private ?Width $width = null,
-        ?TooltipInterface $tooltip = null,
     )
     {
-        $this->tooltip = $tooltip;
     }
 
     public function getContent(): IconInterface|PreRenderedElementInterface|string
