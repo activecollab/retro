@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\TemplatedUI\Select;
 
+use ActiveCollab\Retro\UI\Common\AdornmentInterface;
 use ActiveCollab\Retro\UI\Form\Select\Element\Option;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\TemplatedUI\Tag\Tag;
@@ -22,13 +23,18 @@ class OptionTag extends Tag
     {
     }
 
-    public function render(string $label, mixed $value): string
+    public function render(
+        string $label,
+        mixed $value,
+        ?AdornmentInterface $leftAdornment,
+        ?AdornmentInterface $rightAdornment,
+    ): string
     {
         return $this->renderer->renderSelectOption(
-            new Option(
+            (new Option(
                 $label,
                 $value,
-            ),
+            ))->adornments($leftAdornment, $rightAdornment),
         );
     }
 }
