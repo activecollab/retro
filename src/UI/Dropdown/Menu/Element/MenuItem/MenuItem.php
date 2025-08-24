@@ -12,40 +12,31 @@ namespace ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuItem;
 
 use ActiveCollab\Retro\UI\Action\ActionInterface;
 use ActiveCollab\Retro\UI\Common\AdornmentInterface;
+use ActiveCollab\Retro\UI\Common\Property\Trait\WithAdornmentsTrait;
+use ActiveCollab\Retro\UI\Common\Property\Trait\WithRequiredLabelTrait;
 use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuElement;
-use ActiveCollab\Retro\UI\Dropdown\Menu\MenuInterface;
 use ActiveCollab\TemplatedUI\Helper\HtmlHelpersTrait;
 
-class MenuItem extends MenuElement
+class MenuItem extends MenuElement implements MenuItemInterface
 {
     use HtmlHelpersTrait;
+    use WithRequiredLabelTrait;
+    use WithAdornmentsTrait;
 
     public function __construct(
-        private string $label,
+        string $label,
         private ?ActionInterface $action = null,
-        private ?AdornmentInterface $leftAdornment = null,
-        private ?AdornmentInterface $rightAdornment = null,
+        ?AdornmentInterface $leftAdornment = null,
+        ?AdornmentInterface $rightAdornment = null,
     )
     {
-    }
-
-    public function getLabel(): string
-    {
-        return $this->label;
+        $this->label = $label;
+        $this->leftAdornment = $leftAdornment;
+        $this->rightAdornment = $rightAdornment;
     }
 
     public function getAction(): ?ActionInterface
     {
         return $this->action;
-    }
-
-    public function getLeftAdornment(): ?AdornmentInterface
-    {
-        return $this->leftAdornment;
-    }
-
-    public function getRightAdornment(): ?AdornmentInterface
-    {
-        return $this->rightAdornment;
     }
 }
