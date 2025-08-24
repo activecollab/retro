@@ -36,6 +36,8 @@ use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Form\Radio\RadioGroupInterface;
 use ActiveCollab\Retro\UI\Form\Radio\RadioInterface;
 use ActiveCollab\Retro\UI\Form\Select\Element\ElementInterface as SelectElementInterface;
+use ActiveCollab\Retro\UI\Form\Select\Element\OptionGroupInterface;
+use ActiveCollab\Retro\UI\Form\Select\Element\OptionInterface;
 use ActiveCollab\Retro\UI\Form\Select\Element\OptionInterface as SelectOptionInterface;
 use ActiveCollab\Retro\UI\Form\Select\SelectInterface;
 use ActiveCollab\Retro\UI\Indicator\BadgeInterface;
@@ -445,6 +447,36 @@ class ShoelaceRenderer implements RendererInterface
             array_map(
                 fn (SelectElementInterface $selectElement): string => $selectElement->renderUsingRenderer($this),
                 $select->getElements(),
+            ),
+        );
+    }
+
+    public function renderSelectOptionGroup(
+        OptionGroupInterface $optionGroup,
+        RenderingExtensionInterface ...$extensions,
+    ): string
+    {
+        return $this->wrapOutput(
+            sprintf(
+                '<small>%s</small>%s',
+                $this->sanitizeForHtml($optionGroup->getLabel()),
+                $this->renderSelectOptionGroupContent($optionGroup),
+            ),
+            $optionGroup,
+        );
+    }
+
+    private function renderSelectOptionGroupContent(OptionGroupInterface $optionGroup): string
+    {
+        if ($optionGroup->getPreRenderedElement()) {
+            return $optionGroup->getPreRenderedElement()->renderUsingRenderer($this);
+        }
+
+        return implode(
+            '',
+            array_map(
+                fn (OptionInterface $selectOption): string => $selectOption->renderUsingRenderer($this),
+                $optionGroup->getOptions(),
             ),
         );
     }

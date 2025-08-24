@@ -13,6 +13,7 @@ namespace ActiveCollab\Retro\UI\Renderer;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Form\Radio\RadioGroupInterface;
 use ActiveCollab\Retro\UI\Form\Radio\RadioInterface;
+use ActiveCollab\Retro\UI\Form\Select\Element\OptionGroupInterface;
 use ActiveCollab\Retro\UI\Form\Select\Element\OptionInterface;
 use ActiveCollab\Retro\UI\Form\Select\SelectInterface;
 use ActiveCollab\Retro\UI\Indicator\BadgeInterface;
@@ -87,6 +88,11 @@ interface RendererInterface
 
     public function renderSelect(
         SelectInterface $select,
+        RenderingExtensionInterface ...$extensions,
+    ): string;
+
+    public function renderSelectOptionGroup(
+        OptionGroupInterface $optionGroup,
         RenderingExtensionInterface ...$extensions,
     ): string;
 
