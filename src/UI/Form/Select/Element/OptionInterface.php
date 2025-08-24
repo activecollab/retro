@@ -10,10 +10,11 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Form\Select\Element;
 
+use ActiveCollab\Retro\UI\Common\Property\WithAdornmentsInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithRequiredLabelInterface;
 use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
 
-interface OptionInterface extends RenderableElementInterface, ElementInterface, WithRequiredLabelInterface
+interface OptionInterface extends RenderableElementInterface, ElementInterface, WithRequiredLabelInterface, WithAdornmentsInterface
 {
     public function getValue(): mixed;
 }

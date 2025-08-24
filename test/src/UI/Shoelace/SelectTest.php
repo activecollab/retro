@@ -15,6 +15,8 @@ use ActiveCollab\Retro\Test\Base\TestCase;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
 use ActiveCollab\Retro\UI\Form\Select\Element\Option;
 use ActiveCollab\Retro\UI\Form\Select\Select;
+use ActiveCollab\Retro\UI\Indicator\Badge;
+use ActiveCollab\Retro\UI\Indicator\Icon;
 use ActiveCollab\Retro\UI\Renderer\Shoelace\ShoelaceRenderer;
 
 class SelectTest extends TestCase
@@ -79,5 +81,20 @@ class SelectTest extends TestCase
         $this->assertStringContainsString('name="test"', $renderedSelect);
         $this->assertStringContainsString('<option value="option_1">Option 1</option>', $renderedSelect);
         $this->assertStringEndsWith('</sl-select>', $renderedSelect);
+    }
+
+    public function testWillRenderOptionWithAdornments(): void
+    {
+        $renderedSelectOption = $this->renderer->renderSelectOption(
+            (new Option('Option 1', 'option_1'))->adornments(
+                new Icon('star'),
+                new Badge('15'),
+            ),
+        );
+
+        $this->assertStringStartsWith('<sl-option', $renderedSelectOption);
+        $this->assertStringContainsString('<sl-icon name="star" slot="prefix"></sl-icon>', $renderedSelectOption);
+        $this->assertStringContainsString('<sl-badge variant="primary" slot="suffix">15</sl-badge>', $renderedSelectOption);
+        $this->assertStringEndsWith('</sl-option>', $renderedSelectOption);
     }
 }

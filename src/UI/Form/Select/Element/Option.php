@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Form\Select\Element;
 
+use ActiveCollab\Retro\UI\Common\Property\Trait\WithAdornmentsTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithRequiredLabelTrait;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
@@ -17,6 +18,7 @@ use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 class Option implements OptionInterface
 {
     use WithRequiredLabelTrait;
+    use WithAdornmentsTrait;
 
     public function __construct(
         string $label,

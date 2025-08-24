@@ -456,7 +456,7 @@ class ShoelaceRenderer implements RendererInterface
     {
         return $this->wrapOutput(
             sprintf(
-                '%s%s%s',
+                '%s%s%s%s%s',
                 $this->openHtmlTag(
                     'sl-option',
                     $this->prepareAttributes(
@@ -468,6 +468,8 @@ class ShoelaceRenderer implements RendererInterface
                         ...$extensions,
                     )
                 ),
+                $option->getLeftAdornment()?->renderUsingRenderer($this, new Slot('prefix')) ?? '',
+                $option->getRightAdornment()?->renderUsingRenderer($this, new Slot('suffix')) ?? '',
                 $this->sanitizeForHtml($option->getLabel()),
                 $this->closeHtmlTag('sl-option'),
             ),
