@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Form\Select;
 
+use ActiveCollab\Retro\UI\Common\Property\Trait\WithExplainerTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithLabelTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithNameTrait;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
@@ -22,6 +23,7 @@ class Select implements SelectInterface
 {
     use WithNameTrait;
     use WithLabelTrait;
+    use WithExplainerTrait;
 
     private ?PreRenderedElementInterface $preRenderedElement = null;
     private array $elements = [];

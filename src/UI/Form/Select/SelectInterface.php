@@ -10,13 +10,14 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Form\Select;
 
+use ActiveCollab\Retro\UI\Common\Property\WithExplainerInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithLabelInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithNameInterface;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
 use ActiveCollab\Retro\UI\Form\Select\Element\ElementInterface;
 
-interface SelectInterface extends RenderableElementInterface, WithNameInterface, WithLabelInterface
+interface SelectInterface extends RenderableElementInterface, WithNameInterface, WithLabelInterface, WithExplainerInterface
 {
     public function getValue(): mixed;
     public function getPreRenderedElement(): ?PreRenderedElementInterface;

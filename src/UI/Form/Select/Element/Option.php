@@ -31,6 +31,11 @@ class Option implements OptionInterface
         return $this->value;
     }
 
+    public function labelIsAttribute(): bool
+    {
+        return false;
+    }
+
     public function renderUsingRenderer(
         RendererInterface $renderer,
         RenderingExtensionInterface ...$extensions,

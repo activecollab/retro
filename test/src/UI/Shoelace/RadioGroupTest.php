@@ -39,13 +39,14 @@ class RadioGroupTest extends TestCase
                 'Radio Group Label',
                 54321,
                 new Radio('Option 1', 12345, true),
-            ))->size(Size::LARGE),
+            ))->size(Size::LARGE)->explainer('Choose wisely'),
         );
 
         $this->assertStringStartsWith('<sl-radio-group', $renderedRadioGroup);
         $this->assertStringEndsWith('</sl-radio-group>', $renderedRadioGroup);
         $this->assertStringContainsString('size="large"', $renderedRadioGroup);
-        $this->assertStringContainsString('radio-group-name', $renderedRadioGroup);
+        $this->assertStringContainsString('name="radio-group-name"', $renderedRadioGroup);
+        $this->assertStringContainsString('help-text="Choose wisely"', $renderedRadioGroup);
         $this->assertStringContainsString('Radio Group Label', $renderedRadioGroup);
         $this->assertStringContainsString('54321', $renderedRadioGroup);
     }

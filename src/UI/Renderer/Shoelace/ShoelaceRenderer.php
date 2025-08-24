@@ -13,6 +13,7 @@ namespace ActiveCollab\Retro\UI\Renderer\Shoelace;
 use ActiveCollab\Retro\TemplatedUI\ComponentIdResolver\ComponentIdResolverInterface;
 use ActiveCollab\Retro\UI\Action\ActionInterface;
 use ActiveCollab\Retro\UI\Button\ButtonInterface;
+use ActiveCollab\Retro\UI\Common\Property\WithExplainerInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithIdInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithLabelInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithNameInterface;
@@ -406,6 +407,12 @@ class ShoelaceRenderer implements RendererInterface
         RenderingExtensionInterface ...$extensions,
     ): string
     {
+        $attributes = [];
+
+        if ($select->getValue() !== null) {
+            $attributes['value'] = $select->getValue();
+        }
+
         return $this->wrapOutput(
             sprintf(
                 '%s%s%s',
@@ -413,9 +420,7 @@ class ShoelaceRenderer implements RendererInterface
                     'sl-select',
                     $this->prepareAttributes(
                         $select,
-                        [
-                            'value' => $select->getValue(),
-                        ],
+                        $attributes,
                         null,
                         ...$extensions,
                     ),
@@ -448,7 +453,22 @@ class ShoelaceRenderer implements RendererInterface
     ): string
     {
         return $this->wrapOutput(
-            '',
+            sprintf(
+                '%s%s%s',
+                $this->openHtmlTag(
+                    'sl-option',
+                    $this->prepareAttributes(
+                        $option,
+                        [
+                            'value' => $option->getValue(),
+                        ],
+                        null,
+                        ...$extensions,
+                    )
+                ),
+                $this->sanitizeForHtml($option->getLabel()),
+                $this->closeHtmlTag('sl-option'),
+            ),
             $option,
         );
     }
@@ -461,10 +481,6 @@ class ShoelaceRenderer implements RendererInterface
         $attributes = [
             'value' => $radioGroup->getValue(),
         ];
-
-        if ($radioGroup->getExplainer()) {
-            $attributes['help-text'] = $radioGroup->getExplainer();
-        }
 
         return $this->wrapOutput(
             sprintf(
@@ -633,6 +649,10 @@ class ShoelaceRenderer implements RendererInterface
 
         if ($element instanceof WithSizeInterface && $element->getSize()) {
             $initialAttributes['size'] = $element->getSize()->value;
+        }
+
+        if ($element instanceof WithExplainerInterface && $element->getExplainer()) {
+            $initialAttributes['help-text'] = $element->getExplainer();
         }
 
         foreach ($extensions as $extension) {
