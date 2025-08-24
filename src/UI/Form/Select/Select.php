@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\UI\Form\Select;
 
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithExplainerTrait;
+use ActiveCollab\Retro\UI\Common\Property\Trait\WithInjectedAttributesTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithLabelTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithNameTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithPlaceholderTrait;
@@ -28,6 +29,7 @@ class Select implements SelectInterface
     use WithPlaceholderTrait;
     use WithExplainerTrait;
     use WithSizeTrait;
+    use WithInjectedAttributesTrait;
 
     private ?PreRenderedElementInterface $preRenderedElement = null;
     private array $elements = [];

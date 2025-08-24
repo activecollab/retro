@@ -15,6 +15,7 @@ use ActiveCollab\Retro\UI\Action\ActionInterface;
 use ActiveCollab\Retro\UI\Button\ButtonInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithExplainerInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithIdInterface;
+use ActiveCollab\Retro\UI\Common\Property\WithInjectedAttributesInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithLabelInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithNameInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithPlaceholderInterface;
@@ -658,6 +659,10 @@ class ShoelaceRenderer implements RendererInterface
 
         if ($element instanceof WithSizeInterface && $element->getSize()) {
             $initialAttributes['size'] = $element->getSize()->value;
+        }
+
+        if ($element instanceof WithInjectedAttributesInterface && $element->getInjectAttributeName()) {
+            $initialAttributes[$element->getInjectAttributeName()] = '';
         }
 
         foreach ($extensions as $extension) {

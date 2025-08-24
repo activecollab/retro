@@ -28,8 +28,8 @@ class SelectBlock extends WrapContentBlock
     public function render(
         string $content,
         string $name,
-        string $label,
         mixed $value = null,
+        ?string $label = null,
         ?string $placeholder = null,
         ?string $helpText = null,
         ?Size $size = null,
@@ -46,7 +46,7 @@ class SelectBlock extends WrapContentBlock
                 $label,
                 $value,
                 new PreRenderedElement($content),
-            ))->placeholder($placeholder)->explainer($helpText)->size($size)->size($size),
+            ))->placeholder($placeholder)->explainer($helpText)->size($size)->size($size)->injectAttributeName('x-inject-form-field-attributes'),
         );
     }
 }
