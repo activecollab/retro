@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace ActiveCollab\Retro\UI\Button;
 
 use ActiveCollab\Retro\TemplatedUI\Property\ButtonStyle;
+use ActiveCollab\Retro\UI\Common\Property\Trait\WithAdornmentsTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithIdTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithSizeTrait;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithTooltipTrait;
@@ -20,7 +21,6 @@ use ActiveCollab\Retro\UI\Common\AdornmentInterface;
 use ActiveCollab\Retro\UI\Common\Property\Trait\WithVariantTrait;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Indicator\IconInterface;
-use ActiveCollab\Retro\UI\Indicator\Tooltip\TooltipInterface;
 use ActiveCollab\Retro\UI\Renderer\RendererInterface;
 use ActiveCollab\Retro\UI\Renderer\RenderingExtensionInterface;
 
@@ -30,17 +30,20 @@ class Button implements ButtonInterface
     use WithSizeTrait;
     use WithTooltipTrait;
     use WithVariantTrait;
+    use WithAdornmentsTrait;
 
     public function __construct(
         private IconInterface|PreRenderedElementInterface|string $content,
         private ?ActionInterface $action = null,
-        private ?AdornmentInterface $leftAdornment = null,
-        private ?AdornmentInterface $rightAdornment = null,
+        ?AdornmentInterface $leftAdornment = null,
+        ?AdornmentInterface $rightAdornment = null,
         private ?string $type = null,
         private ?ButtonStyle $style = null,
         private ?Width $width = null,
     )
     {
+        $this->leftAdornment = $leftAdornment;
+        $this->rightAdornment = $rightAdornment;
     }
 
     public function getContent(): IconInterface|PreRenderedElementInterface|string
@@ -51,16 +54,6 @@ class Button implements ButtonInterface
     public function getAction(): ?ActionInterface
     {
         return $this->action;
-    }
-
-    public function getLeftAdornment(): ?AdornmentInterface
-    {
-        return $this->leftAdornment;
-    }
-
-    public function getRightAdornment(): ?AdornmentInterface
-    {
-        return $this->rightAdornment;
     }
 
     public function getType(): ?string
