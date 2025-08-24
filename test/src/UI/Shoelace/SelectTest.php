@@ -14,6 +14,7 @@ use ActiveCollab\Retro\TemplatedUI\ComponentIdResolver\ComponentIdResolverInterf
 use ActiveCollab\Retro\Test\Base\TestCase;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
 use ActiveCollab\Retro\UI\Form\Select\Element\Option;
+use ActiveCollab\Retro\UI\Form\Select\Element\OptionGroup;
 use ActiveCollab\Retro\UI\Form\Select\Select;
 use ActiveCollab\Retro\UI\Indicator\Badge;
 use ActiveCollab\Retro\UI\Indicator\Icon;
@@ -96,5 +97,20 @@ class SelectTest extends TestCase
         $this->assertStringContainsString('<sl-icon name="star" slot="prefix"></sl-icon>', $renderedSelectOption);
         $this->assertStringContainsString('<sl-badge variant="primary" slot="suffix">15</sl-badge>', $renderedSelectOption);
         $this->assertStringEndsWith('</sl-option>', $renderedSelectOption);
+    }
+
+    public function testWillRenderOptionGroup(): void
+    {
+        $renderedOptionGroup = $this->renderer->renderSelectOptionGroup(
+            new OptionGroup(
+                'Group 1',
+                new Option('Option 1', 'option_1'),
+                new Option('Option 2', 'option_2'),
+            ),
+        );
+
+        $this->assertStringContainsString('<small>Group 1</small>', $renderedOptionGroup);
+        $this->assertStringContainsString('<sl-option value="option_1">Option 1</sl-option>', $renderedOptionGroup);
+        $this->assertStringContainsString('<sl-option value="option_2">Option 2</sl-option>', $renderedOptionGroup);
     }
 }
