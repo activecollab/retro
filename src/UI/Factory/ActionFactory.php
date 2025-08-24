@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace ActiveCollab\Retro\UI\Action\Factory;
+namespace ActiveCollab\Retro\UI\Factory;
 
 use ActiveCollab\Retro\UI\Action\GoToPage;
 use ActiveCollab\Retro\UI\Action\MakeDeleteRequest;
