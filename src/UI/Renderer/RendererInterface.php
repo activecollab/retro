@@ -10,7 +10,10 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Renderer;
 
+use ActiveCollab\Retro\UI\Common\DividerInterface;
+use ActiveCollab\Retro\UI\Element\ElementInterface;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
+use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
 use ActiveCollab\Retro\UI\Form\Radio\RadioGroupInterface;
 use ActiveCollab\Retro\UI\Form\Radio\RadioInterface;
 use ActiveCollab\Retro\UI\Form\Select\Element\OptionGroupInterface;
@@ -33,6 +36,11 @@ interface RendererInterface
 {
     public function renderPreRenderedContent(
         PreRenderedElementInterface $preRenderedElement,
+        RenderingExtensionInterface ...$extensions,
+    ): string;
+
+    public function renderDivider(
+        RenderableElementInterface&DividerInterface $divider,
         RenderingExtensionInterface ...$extensions,
     ): string;
 

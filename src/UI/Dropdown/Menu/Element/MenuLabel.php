@@ -12,7 +12,7 @@ namespace ActiveCollab\Retro\UI\Dropdown\Menu\Element;
 
 use ActiveCollab\TemplatedUI\Helper\HtmlHelpersTrait;
 
-class Label extends MenuElement
+class MenuLabel extends MenuElement
 {
     use HtmlHelpersTrait;
 

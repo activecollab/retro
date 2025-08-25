@@ -13,6 +13,8 @@ namespace ActiveCollab\Retro\Test\UI\Shoelace;
 use ActiveCollab\Retro\TemplatedUI\ComponentIdResolver\ComponentIdResolverInterface;
 use ActiveCollab\Retro\Test\Base\TestCase;
 use ActiveCollab\Retro\UI\Action\GoToPage;
+use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuLabel;
+use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuDivider;
 use ActiveCollab\Retro\UI\Indicator\Badge;
 use ActiveCollab\Retro\UI\Button\Button;
 use ActiveCollab\Retro\UI\Dropdown\Dropdown;
@@ -49,6 +51,24 @@ class DropdownMenuTest extends TestCase
         $this->assertStringContainsString('<sl-button', $renderedDropdown);
         $this->assertStringContainsString('slot="trigger"', $renderedDropdown);
         $this->assertStringContainsString('<sl-menu', $renderedDropdown);
+    }
+
+    public function testWillRenderMenu(): void
+    {
+        $renderedMenu = $this->renderer->renderMenu(
+            new Menu(
+                new MenuLabel('Options'),
+                new MenuItem('Edit'),
+                new MenuDivider(),
+                new MenuItem('Delete'),
+            ),
+        );
+
+        $this->assertStringStartsWith('<sl-menu', $renderedMenu);
+        $this->assertStringContainsString('<sl-menu-label>Options</sl-menu-label>', $renderedMenu);
+        $this->assertStringContainsString('<sl-divider></sl-divider>', $renderedMenu);
+        $this->assertStringContainsString('<sl-menu-item>Delete</sl-menu-item>', $renderedMenu);
+        $this->assertStringEndsWith('</sl-menu>', $renderedMenu);
     }
 
     public function testMenuItemWillGoToPage(): void

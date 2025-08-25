@@ -13,6 +13,7 @@ namespace ActiveCollab\Retro\UI\Renderer\Shoelace;
 use ActiveCollab\Retro\TemplatedUI\ComponentIdResolver\ComponentIdResolverInterface;
 use ActiveCollab\Retro\UI\Action\ActionInterface;
 use ActiveCollab\Retro\UI\Button\ButtonInterface;
+use ActiveCollab\Retro\UI\Common\DividerInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithExplainerInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithIdInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithInjectedAttributesInterface;
@@ -26,13 +27,14 @@ use ActiveCollab\Retro\UI\Common\Property\WithTooltipInterface;
 use ActiveCollab\Retro\UI\Common\Variant;
 use ActiveCollab\Retro\UI\Dropdown\DropdownInterface;
 use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuDivider;
-use ActiveCollab\Retro\UI\Dropdown\Menu\Element\Label;
+use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuLabel;
 use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuElementInterface;
 use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuItem\MenuItem;
 use ActiveCollab\Retro\UI\Dropdown\Menu\MenuInterface;
 use ActiveCollab\Retro\UI\Element\ElementInterface;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
+use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
 use ActiveCollab\Retro\UI\Form\Radio\RadioGroupInterface;
 use ActiveCollab\Retro\UI\Form\Radio\RadioInterface;
 use ActiveCollab\Retro\UI\Form\Select\Element\ElementInterface as SelectElementInterface;
@@ -73,6 +75,17 @@ class ShoelaceRenderer implements RendererInterface
         return $this->wrapOutput(
             $preRenderedElement->getPreRenderedContent(),
             $preRenderedElement,
+        );
+    }
+
+    public function renderDivider(
+        RenderableElementInterface&DividerInterface $divider,
+        RenderingExtensionInterface ...$extensions,
+    ): string
+    {
+        return $this->wrapOutput(
+            '<sl-divider></sl-divider>',
+            $divider,
         );
     }
 
@@ -283,6 +296,10 @@ class ShoelaceRenderer implements RendererInterface
         RenderingExtensionInterface ...$extensions,
     ): string
     {
+        if ($menuElement instanceof MenuDivider) {
+            return $this->renderDivider($menuElement, ...$extensions);
+        }
+
         if ($menuElement instanceof MenuItem) {
             $attributes = [];
 
@@ -307,14 +324,7 @@ class ShoelaceRenderer implements RendererInterface
             );
         }
 
-        if ($menuElement instanceof MenuDivider) {
-            return $this->wrapOutput(
-                '<sl-divider></sl-divider>',
-                $menuElement,
-            );
-        }
-
-        if ($menuElement instanceof Label) {
+        if ($menuElement instanceof MenuLabel) {
             return $this->wrapOutput(
                 sprintf(
                     '%s%s%s',
