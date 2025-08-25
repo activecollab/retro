@@ -14,7 +14,7 @@ use ActiveCollab\Retro\UI\Common\Property\WithRequiredLabelInterface;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElementInterface;
 use ActiveCollab\Retro\UI\Element\RenderableElementInterface;
 
-interface OptionGroupInterface extends RenderableElementInterface, WithRequiredLabelInterface
+interface OptionGroupInterface extends RenderableElementInterface, ElementInterface, WithRequiredLabelInterface
 {
     public function getPreRenderedElement(): ?PreRenderedElementInterface;
 

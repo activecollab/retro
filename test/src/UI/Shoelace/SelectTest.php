@@ -15,6 +15,7 @@ use ActiveCollab\Retro\Test\Base\TestCase;
 use ActiveCollab\Retro\UI\Element\PreRendered\PreRenderedElement;
 use ActiveCollab\Retro\UI\Form\Select\Element\Option;
 use ActiveCollab\Retro\UI\Form\Select\Element\OptionGroup;
+use ActiveCollab\Retro\UI\Form\Select\Element\SelectDivider;
 use ActiveCollab\Retro\UI\Form\Select\Select;
 use ActiveCollab\Retro\UI\Indicator\Badge;
 use ActiveCollab\Retro\UI\Indicator\Icon;
@@ -52,8 +53,14 @@ class SelectTest extends TestCase
             (new Select(
                 'test',
                 'option_1',
-                new Option('Option 1', 'option_1'),
-                new Option('Option 2', 'option_2'),
+                new OptionGroup(
+                    'Options',
+                    new Option('Option 1', 'option_1'),
+                    new Option('Option 2', 'option_2'),
+                ),
+                new SelectDivider(),
+                new Option('Option 3', 'option_3'),
+                new Option('Option 4', 'option_4'),
             ))->label('Test')->placeholder('Holding place')->explainer('Choose wisely')
         );
 
@@ -63,8 +70,12 @@ class SelectTest extends TestCase
         $this->assertStringContainsString('value="option_1"', $renderedSelect);
         $this->assertStringContainsString('placeholder="Holding place"', $renderedSelect);
         $this->assertStringContainsString('help-text="Choose wisely"', $renderedSelect);
+        $this->assertStringContainsString('<small>Options</small>', $renderedSelect);
         $this->assertStringContainsString('<sl-option value="option_1">Option 1</sl-option>', $renderedSelect);
         $this->assertStringContainsString('<sl-option value="option_2">Option 2</sl-option>', $renderedSelect);
+        $this->assertStringContainsString('<sl-divider></sl-divider>', $renderedSelect);
+        $this->assertStringContainsString('<sl-option value="option_3">Option 3</sl-option>', $renderedSelect);
+        $this->assertStringContainsString('<sl-option value="option_4">Option 4</sl-option>', $renderedSelect);
         $this->assertStringEndsWith('</sl-select>', $renderedSelect);
     }
 
