@@ -25,7 +25,7 @@ use ActiveCollab\Retro\UI\Common\Property\WithSizeInterface;
 use ActiveCollab\Retro\UI\Common\Property\WithTooltipInterface;
 use ActiveCollab\Retro\UI\Common\Variant;
 use ActiveCollab\Retro\UI\Dropdown\DropdownInterface;
-use ActiveCollab\Retro\UI\Dropdown\Menu\Element\Divider;
+use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuDivider;
 use ActiveCollab\Retro\UI\Dropdown\Menu\Element\Label;
 use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuElementInterface;
 use ActiveCollab\Retro\UI\Dropdown\Menu\Element\MenuItem\MenuItem;
@@ -307,7 +307,7 @@ class ShoelaceRenderer implements RendererInterface
             );
         }
 
-        if ($menuElement instanceof Divider) {
+        if ($menuElement instanceof MenuDivider) {
             return $this->wrapOutput(
                 '<sl-divider></sl-divider>',
                 $menuElement,

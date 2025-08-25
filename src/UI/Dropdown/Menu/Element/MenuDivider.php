@@ -10,6 +10,6 @@ declare(strict_types=1);
 
 namespace ActiveCollab\Retro\UI\Dropdown\Menu\Element;
 
-class Divider extends MenuElement
+class MenuDivider extends MenuElement
 {
 }
