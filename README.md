@@ -138,3 +138,11 @@ class LoginService extends Service
     }
 }
 ```
+
+## UI
+
+Why would it be desirable to describe UI with PHP? Several reasons:
+
+1. It's component library agnostic. When composed using basic elements, UI can be rendered using any component library. Shoelace is currently included, but it can be any UI kit that works with web components or plain HTML,
+2. It's decoupled from template engine. Templating engine provides tags and blocks, like `{Button}`, or `{Badge}`, to make writing of templates easier. Actual HTML rendering is done by the component library specific renderer, and you can switch to a different component library simply by changing which renderer is being used, without touching the templates,
+3. UI can be prepared in different layers of the application, not just in templates. Instead of having many checks, calculations, and manipulation in templates, you can simply "ask" entities, services, or utilities to provide you UI description that you just render in templates.
