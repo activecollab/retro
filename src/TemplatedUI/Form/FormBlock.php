@@ -56,7 +56,7 @@ class FormBlock extends WrapContentBlock
         $formAttributes = [
             'id' => $formId,
             'action' => $action,
-            'method' => 'POST',
+            'method' => $catchAllParameters?->getParameter('method') ?? 'POST',
             'autocomplete' => $autocomplete ? 'on' : 'off',
         ];
 
