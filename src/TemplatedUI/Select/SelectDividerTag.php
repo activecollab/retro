@@ -8,11 +8,11 @@
 
 declare(strict_types=1);
 
-namespace ActiveCollab\Retro\TemplatedUI;
+namespace ActiveCollab\Retro\TemplatedUI\Select;
 
 use ActiveCollab\TemplatedUI\Tag\Tag;
 
-class DividerTag extends Tag
+class SelectDividerTag extends Tag
 {
     public function render(): string
     {
