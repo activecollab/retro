@@ -20,6 +20,6 @@ abstract class MenuElement implements MenuElementInterface
         RenderingExtensionInterface ...$extensions,
     ): string
     {
-        return $renderer->renderMenuItem($this, ...$extensions);
+        return $renderer->renderMenuElement($this, ...$extensions);
     }
 }

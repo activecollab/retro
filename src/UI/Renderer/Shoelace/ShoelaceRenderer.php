@@ -278,7 +278,7 @@ class ShoelaceRenderer implements RendererInterface
         );
     }
 
-    public function renderMenuItem(
+    public function renderMenuElement(
         MenuElementInterface $menuElement,
         RenderingExtensionInterface ...$extensions,
     ): string

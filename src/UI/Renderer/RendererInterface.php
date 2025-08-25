@@ -56,7 +56,7 @@ interface RendererInterface
         RenderingExtensionInterface ...$extensions,
     ): string;
 
-    public function renderMenuItem(
+    public function renderMenuElement(
         MenuElementInterface $menuElement,
         RenderingExtensionInterface ...$extensions,
     ): string;
