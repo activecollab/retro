@@ -22,7 +22,7 @@ class TemplateUtilsCommand extends RetroCommand
     {
         parent::configure();
 
-        $this->setDescription('List all available template utils');
+        $this->setDescription('List all available template utils.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
