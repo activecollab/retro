@@ -107,7 +107,7 @@ abstract class Service implements ServiceInterface
 
     protected function processingExceptionToResult(
         Exception $exception,
-        FormDataInterface $formData = null,
+        ?FormDataInterface $formData = null,
     ): InvalidFormDataInterface|RequestProcessingFailedInterface
     {
         if ($formData) {

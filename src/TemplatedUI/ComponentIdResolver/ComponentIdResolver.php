@@ -15,7 +15,7 @@ class ComponentIdResolver implements ComponentIdResolverInterface
     private array $ids = [];
 
     public function getUniqueId(
-        string $prefix = null,
+        ?string $prefix = null,
         bool $variableNameSafe = true,
     ): string
     {

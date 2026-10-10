@@ -55,7 +55,7 @@ class ErrorHandler extends BaseErrorHandler
     private function serializeException(
         Throwable $exception,
         string $argument_name = 'exception',
-        array $context = null
+        ?array $context = null
     ): array {
         if (empty($context)) {
             $context = [];

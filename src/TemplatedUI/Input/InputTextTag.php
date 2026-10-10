@@ -20,8 +20,8 @@ class InputTextTag extends InputTag
 {
     public function render(
         string $name,
-        string $placeholder = null,
-        string $helpText = null,
+        ?string $placeholder = null,
+        ?string $helpText = null,
         ?Size $size = null,
         ?FormDataInterface $formData = null,
         ?CatchAllParametersInterface $catchAllParameters = null,

@@ -37,14 +37,14 @@ class FormBlock extends WrapContentBlock
     public function render(
         string $action,
         string $content,
-        string $id = null,
-        string $target = null,
-        string $swap = null,
+        ?string $id = null,
+        ?string $target = null,
+        ?string $swap = null,
         bool $autocomplete = false,
         bool $pushUrl = true,
-        ServiceResultInterface $serviceProcessingResult = null,
-        FormDataInterface $formData = null,
-        CatchAllParametersInterface $catchAllParameters = null,
+        ?ServiceResultInterface $serviceProcessingResult = null,
+        ?FormDataInterface $formData = null,
+        ?CatchAllParametersInterface $catchAllParameters = null,
     ): string
     {
         $formId = $id ?? $this->componentIdResolver->getUniqueId('form');
@@ -89,8 +89,8 @@ class FormBlock extends WrapContentBlock
     }
 
     private function renderErrorsHeader(
-        FormDataInterface $formData = null,
-        ServiceResultInterface $serviceProcessingResult = null,
+        ?FormDataInterface $formData = null,
+        ?ServiceResultInterface $serviceProcessingResult = null,
     ): string
     {
         if (empty($serviceProcessingResult) && empty($formData)) {

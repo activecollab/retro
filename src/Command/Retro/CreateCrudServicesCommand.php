@@ -487,7 +487,7 @@ class CreateCrudServicesCommand extends RetroCommand
     private function appendContextGetterMethod(
         TypeInterface $model,
         ClassType|InterfaceType $appendTo,
-        string $body = null,
+        ?string $body = null,
     ): void
     {
         $contextGetterMethod = $appendTo
@@ -759,7 +759,7 @@ class CreateCrudServicesCommand extends RetroCommand
     private function appendProcessRequestMethodForAddService(
         ClassType|InterfaceType $appendTo,
         ?TypeInterface $serviceContext,
-        string $body = null,
+        ?string $body = null,
     ): void
     {
         $processMethod = $appendTo
@@ -991,7 +991,7 @@ class CreateCrudServicesCommand extends RetroCommand
         ClassType|InterfaceType $appendTo,
         ?TypeInterface $serviceContext,
         TypeInterface $model,
-        string $body = null,
+        ?string $body = null,
     ): void
     {
         $processMethod = $appendTo
@@ -1175,7 +1175,7 @@ class CreateCrudServicesCommand extends RetroCommand
         ClassType|InterfaceType $appendTo,
         ?TypeInterface $serviceContext,
         TypeInterface $model,
-        string $body = null,
+        ?string $body = null,
     ): void
     {
         $processMethod = $appendTo

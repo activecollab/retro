@@ -19,9 +19,9 @@ class TextareaTag extends FormFieldTag
 {
     public function render(
         string $name,
-        string $value = null,
-        string $placeholder = null,
-        string $helpText = null,
+        ?string $value = null,
+        ?string $placeholder = null,
+        ?string $helpText = null,
         string $resize = 'auto',
         ?Size $size = null,
         ?CatchAllParametersInterface $catchAllParameters = null,

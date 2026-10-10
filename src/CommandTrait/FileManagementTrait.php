@@ -18,7 +18,7 @@ trait FileManagementTrait
     protected function mustCreateDir(
         string $path,
         OutputInterface $output,
-        string $pathRelativeTo = null
+        ?string $pathRelativeTo = null
     ): void
     {
         if (is_dir($path)) {
@@ -63,7 +63,7 @@ trait FileManagementTrait
         string $filePath,
         string $content,
         OutputInterface $output,
-        string $pathRelativeTo = null,
+        ?string $pathRelativeTo = null,
     ): void
     {
         if (is_file($filePath)) {
@@ -108,7 +108,7 @@ trait FileManagementTrait
         array $useStatements,
         string $content,
         OutputInterface $output,
-        string $pathRelativeTo = null,
+        ?string $pathRelativeTo = null,
     ): void
     {
         if (is_file($filePath)) {

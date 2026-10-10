@@ -27,7 +27,7 @@ trait EntityAwareNodeMiddleware
     protected function getEntityFromRequest(
         ServerRequestInterface $request,
         string $entityType,
-        string $routeArgumentName = null,
+        ?string $routeArgumentName = null,
     ): ?EntityInterface
     {
         return $this->getEntityFromId(
@@ -48,7 +48,7 @@ trait EntityAwareNodeMiddleware
     protected function getEntityFromQuery(
         ServerRequestInterface $request,
         string $entityType,
-        string $queryArgumentName = null,
+        ?string $queryArgumentName = null,
     ): ?EntityInterface
     {
         if ($queryArgumentName === null) {

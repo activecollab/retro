@@ -20,7 +20,7 @@ interface FormDataInterface
         ServerRequestInterface $request,
         string $fieldName,
         string $default = '',
-        callable $modifier = null,
+        ?callable $modifier = null,
     ): string;
 
     public function extractTrimmedStringFromRequest(
